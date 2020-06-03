@@ -1,0 +1,44 @@
+﻿{
+  "version": "1.0.0",
+  "files": [
+    {
+      "filename": "CenoClient.exe"
+    },
+    {
+      "filename": "Query_v1.dll"
+    },
+    {
+      "filename": "WebBrowser.dll"
+    },
+    {
+      "filename": "CenoSip.dll"
+    },
+    {
+      "filename": "WebSocket_v1.dll"
+    },
+    {
+      "filename": "CenoSocket.dll"
+    },
+    {
+      "filename": "DataBaseUtil.dll"
+    },
+    {
+      "filename": "Core_v1.dll"
+    },
+    {
+      "filename": "Common.dll"
+    },
+    {
+      "filename": "Cmn_v1.dll"
+    },
+    {
+      "filename": "Model_v1.dll"
+    },
+    {
+      "filename": "DataBaseModel.dll"
+    },
+    {
+      "filename": "CenoQnviccub.dll"
+    }
+  ]
+}

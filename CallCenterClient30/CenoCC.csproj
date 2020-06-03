@@ -1,0 +1,946 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D4EF0BD0-B7D8-4B5D-9584-A6F19F6CED96}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CenoCC</RootNamespace>
+    <AssemblyName>CenoClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tubiao48.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>4214760BC01B53D75A5E3FFCF7AD31486A41F29A</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>CenoCC_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="LumiSoft.Net, Version=2.0.6861.32430, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\LumiSoft.Net.Plus\LumiSoft.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MetroFramework.Design, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.12\lib\net40\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="QuartzTypeLib">
+      <HintPath>..\packages\QuartzTypeLib.1.0.0.0\QuartzTypeLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CusEvent.cs" />
+    <Compile Include="MainFormClass.cs" />
+    <Compile Include="Main\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Login_hs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Login_hs.Designer.cs">
+      <DependentUpon>Login_hs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Login_yx.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Login_yx.Designer.cs">
+      <DependentUpon>Login_yx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\m_wMemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\m_wMemo.Designer.cs">
+      <DependentUpon>m_wMemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\convert\convert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\convert\convert.designer.cs">
+      <DependentUpon>convert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\multiAssign.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\multiAssign.designer.cs">
+      <DependentUpon>multiAssign.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\update.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\update.Designer.cs">
+      <DependentUpon>update.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\IMS.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\IMS.designer.cs">
+      <DependentUpon>IMS.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimit.designer.cs">
+      <DependentUpon>diallimit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimitCreate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimitCreate.designer.cs">
+      <DependentUpon>diallimitCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimitSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\diallimitSearch.designer.cs">
+      <DependentUpon>diallimitSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\cmnset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\cmnset.designer.cs">
+      <DependentUpon>cmnset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\editdiallimit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\editdiallimit.Designer.cs">
+      <DependentUpon>editdiallimit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\gatewayCreate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\gatewayCreate.Designer.cs">
+      <DependentUpon>gatewayCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\parameter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\parameter.designer.cs">
+      <DependentUpon>parameter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\gateway\gateway.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\gateway\gateway.designer.cs">
+      <DependentUpon>gateway.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\gateway\gatewaySearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\gateway\gatewaySearch.designer.cs">
+      <DependentUpon>gatewaySearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\play\MediaPlayerFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\play\MediaPlayerFrm.designer.cs">
+      <DependentUpon>MediaPlayerFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\power\powerall.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\power\powerall.Designer.cs">
+      <DependentUpon>powerall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\Fc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\Fc.Designer.cs">
+      <DependentUpon>Fc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\RecReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\RecReport.Designer.cs">
+      <DependentUpon>RecReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\RecReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\RecReportSearch.Designer.cs">
+      <DependentUpon>RecReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_CallerDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_CallerDisplay.Designer.cs">
+      <DependentUpon>Args_CallerDisplay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_DialSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_DialSet.Designer.cs">
+      <DependentUpon>Args_DialSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\sharelist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\sharelist.Designer.cs">
+      <DependentUpon>sharelist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\shareSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\shareSearch.Designer.cs">
+      <DependentUpon>shareSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\ShareNumber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\ShareNumber.Designer.cs">
+      <DependentUpon>ShareNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\shareset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\share\shareset.Designer.cs">
+      <DependentUpon>shareset.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userBaseInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userBaseInfo.Designer.cs">
+      <DependentUpon>userBaseInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userEdit.Designer.cs">
+      <DependentUpon>userEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_cs\h_xls.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\h_xml.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\m_cExcel.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\m_cPhone.cs" />
+    <Compile Include="_Main_Extend_v1\Setting\ArgsfrmSimple.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\ArgsfrmSimple.Designer.cs">
+      <DependentUpon>ArgsfrmSimple.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\CallRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\CallRecord.Designer.cs">
+      <DependentUpon>CallRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LoadRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\LoadRecord.Designer.cs">
+      <DependentUpon>LoadRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\PhoneNumPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\PhoneNumPanel.Designer.cs">
+      <DependentUpon>PhoneNumPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Tab_Title.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\Tab_Title.Designer.cs">
+      <DependentUpon>Tab_Title.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Main_Frm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\Main_Frm.Designer.cs">
+      <DependentUpon>Main_Frm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\MinChat.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\MinChat.Designer.cs">
+      <DependentUpon>MinChat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\SettingFrm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\SettingFrm.designer.cs">
+      <DependentUpon>SettingFrm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ParamInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SessionControl.cs" />
+    <Compile Include="SessionTimer.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="_Main_Extend_v1\About\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\About\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_cs\H_FTP.cs" />
+    <Compile Include="_Main_Extend_v1\Report\DownLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\DownLoad.Designer.cs">
+      <DependentUpon>DownLoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Device.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Device.Designer.cs">
+      <DependentUpon>Args_Device.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_NoAnswer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_NoAnswer.Designer.cs">
+      <DependentUpon>Args_NoAnswer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Safe.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Safe.Designer.cs">
+      <DependentUpon>Args_Safe.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_MultiNetwork.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_MultiNetwork.Designer.cs">
+      <DependentUpon>Args_MultiNetwork.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Web.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Web.Designer.cs">
+      <DependentUpon>Args_Web.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Record.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Setting\Args_Record.Designer.cs">
+      <DependentUpon>Args_Record.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\user.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\user.designer.cs">
+      <DependentUpon>user.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\user\userSearch.designer.cs">
+      <DependentUpon>userSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_item.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_item.Designer.cs">
+      <DependentUpon>_item.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\Report.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\Report.Designer.cs">
+      <DependentUpon>Report.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\ReportSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\Report\ReportSearch.Designer.cs">
+      <DependentUpon>ReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_metorform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_metorform.Designer.cs">
+      <DependentUpon>_metorform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_form.Designer.cs">
+      <DependentUpon>_form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_index.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_index.Designer.cs">
+      <DependentUpon>_index.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_no.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_no.Designer.cs">
+      <DependentUpon>_no.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_search.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_am\_search.Designer.cs">
+      <DependentUpon>_search.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_cs\d_multi.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\h_deal.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\h_io.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\h_txt.cs" />
+    <Compile Include="_Main_Extend_v1\_cs\m_cPower.cs" />
+    <Compile Include="_Main_Extend_v1\_uc\_queryLeft.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_uc\_queryLeft.Designer.cs">
+      <DependentUpon>_queryLeft.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_uc\_ucPager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\_uc\_ucPager.Designer.cs">
+      <DependentUpon>_ucPager.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Main\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Login_hs.resx">
+      <DependentUpon>Login_hs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Login_yx.resx">
+      <DependentUpon>Login_yx.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\m_wMemo.resx">
+      <DependentUpon>m_wMemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\convert\convert.resx">
+      <DependentUpon>convert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\multiAssign.resx">
+      <DependentUpon>multiAssign.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\update.resx">
+      <DependentUpon>update.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\IMS.resx">
+      <DependentUpon>IMS.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\diallimit.resx">
+      <DependentUpon>diallimit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\diallimitcreate.resx">
+      <DependentUpon>diallimitCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\diallimitSearch.resx">
+      <DependentUpon>diallimitSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\cmnset.resx">
+      <DependentUpon>cmnset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\editdiallimit.resx">
+      <DependentUpon>editdiallimit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\gatewayCreate.resx">
+      <DependentUpon>gatewayCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\parameter.resx">
+      <DependentUpon>parameter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\gateway\gateway.resx">
+      <DependentUpon>gateway.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\gateway\gatewaySearch.resx">
+      <DependentUpon>gatewaySearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\play\MediaPlayerFrm.resx">
+      <DependentUpon>MediaPlayerFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\power\powerall.resx">
+      <DependentUpon>powerall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\Fc.resx">
+      <DependentUpon>Fc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\RecReport.resx">
+      <DependentUpon>RecReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\RecReportSearch.resx">
+      <DependentUpon>RecReportSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\ArgsfrmSimple.resx">
+      <DependentUpon>ArgsfrmSimple.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\CallRecord.resx">
+      <DependentUpon>CallRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LoadRecord.resx">
+      <DependentUpon>LoadRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Main_Frm.resx">
+      <DependentUpon>Main_Frm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\MinChat.resx">
+      <DependentUpon>MinChat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\PhoneNumPanel.resx">
+      <DependentUpon>PhoneNumPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\SettingFrm.resx">
+      <DependentUpon>SettingFrm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\Tab_Title.resx">
+      <DependentUpon>Tab_Title.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\About\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\DownLoad.resx">
+      <DependentUpon>DownLoad.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_Device.resx">
+      <DependentUpon>Args_Device.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_CallerDisplay.resx">
+      <DependentUpon>Args_CallerDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_DialSet.resx">
+      <DependentUpon>Args_DialSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_NoAnswer.resx">
+      <DependentUpon>Args_NoAnswer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_Safe.resx">
+      <DependentUpon>Args_Safe.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_MultiNetwork.resx">
+      <DependentUpon>Args_MultiNetwork.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_Web.resx">
+      <DependentUpon>Args_Web.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Setting\Args_Record.resx">
+      <DependentUpon>Args_Record.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\share\sharelist.resx">
+      <DependentUpon>sharelist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\share\shareSearch.resx">
+      <DependentUpon>shareSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\share\ShareNumber.resx">
+      <DependentUpon>ShareNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\share\shareset.resx">
+      <DependentUpon>shareset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\user\user.resx">
+      <DependentUpon>user.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\user\userBaseInfo.resx">
+      <DependentUpon>userBaseInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\user\userEdit.resx">
+      <DependentUpon>userEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\user\userSearch.resx">
+      <DependentUpon>userSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_item.resx">
+      <DependentUpon>_item.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\Report.resx">
+      <DependentUpon>Report.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\Report\ReportSearch.resx">
+      <DependentUpon>ReportSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_form.resx">
+      <DependentUpon>_form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_index.resx">
+      <DependentUpon>_index.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_metorform.resx">
+      <DependentUpon>_metorform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_no.resx">
+      <DependentUpon>_no.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_am\_search.resx">
+      <DependentUpon>_search.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_uc\_queryLeft.resx">
+      <DependentUpon>_queryLeft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\_uc\_ucPager.resx">
+      <DependentUpon>_ucPager.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Log4Net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Audio\a_ring.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\a_hungup.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\busy.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\a_dial.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\cmn.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\calling.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\hangup.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\a_calling.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\Incalling.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\a_keep.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\onhold.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\ring.wav" />
+    <Content Include="Audio\ringing.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\40.png" />
+    <Content Include="Resources\bg.png" />
+    <Content Include="Resources\bohaopan.png" />
+    <None Include="Resources\fuwuqi.png" />
+    <None Include="Resources\exit.png" />
+    <None Include="Resources\shezhi.png" />
+    <None Include="Resources\LOGO.png" />
+    <None Include="Resources\Center_Top_Right_Right_Hover.png" />
+    <None Include="Resources\power_-_restart.png" />
+    <None Include="Resources\calculator_remove.png" />
+    <None Include="Resources\calculator_accept.png" />
+    <None Include="Resources\calculator_add.png" />
+    <None Include="Resources\hs_background.png" />
+    <None Include="Resources\k24.png" />
+    <None Include="Resources\cog.png" />
+    <None Include="Resources\computer_go.png" />
+    <None Include="Resources\folder.png" />
+    <Content Include="Resources\list.jpg" />
+    <None Include="Resources\telsetting.bmp" />
+    <None Include="Resources\sound_off.png" />
+    <None Include="Resources\sound.png" />
+    <None Include="Resources\sound_on.png" />
+    <Content Include="Resources\Login_Bg.png" />
+    <None Include="Resources\s24.png" />
+    <Content Include="Resources\Setting1.png" />
+    <Content Include="Resources\Setting_Hover.png" />
+    <Content Include="Resources\telsettimg2.png" />
+    <Content Include="Resources\telsetting.jpg" />
+    <Content Include="Resources\tubiao16.ico" />
+    <Content Include="Resources\tubiao48.ico" />
+    <Content Include="Resources\user.png" />
+    <None Include="Resources\user1.png" />
+    <None Include="Resources\yx.jpg" />
+    <None Include="Resources\微信图片_20191011171918.png" />
+    <None Include="Resources\xsd.gif" />
+    <Content Include="Update.sql" />
+    <None Include="Resources\systemset.png" />
+    <None Include="Resources\WebBrowser_Bg.png" />
+    <None Include="Resources\Top_Right.png" />
+    <None Include="Resources\Top_Center.png" />
+    <None Include="Resources\Center_Left.png" />
+    <None Include="Resources\Center_Right.png" />
+    <None Include="Resources\Bottom_Left.png" />
+    <None Include="Resources\Bottom_Right.png" />
+    <None Include="Resources\Bottom_Center.png" />
+    <None Include="Resources\Center_Top_bg.png" />
+    <None Include="Resources\Center_Top_Left.png" />
+    <None Include="Resources\Center_Top_Right_Left.png" />
+    <None Include="Resources\Center_Top_Right_Right.png" />
+    <None Include="Resources\Center_Top_Right_Center.png" />
+    <None Include="Resources\Top_Right_Button.png" />
+    <None Include="Resources\Top_Tab.png" />
+    <None Include="Resources\Top_Left.png" />
+    <None Include="Resources\Top_Right_MinBtn.png" />
+    <None Include="Resources\Top_Right_MaxBtn.png" />
+    <None Include="Resources\Top_Right_MaxBtn_Hover.png" />
+    <None Include="Resources\Top_Right_CloseBtn.png" />
+    <None Include="Resources\Top_Right_CloseBtn_Hover.png" />
+    <None Include="Resources\HangUp.png" />
+    <None Include="Resources\PickUp.png" />
+    <None Include="Resources\ie.png" />
+    <None Include="Resources\CallRecord.png" />
+    <None Include="Resources\Report.png" />
+    <None Include="Resources\RecordLoad.png" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\Center_Top_Left_Back.png" />
+    <None Include="Resources\Center_Top_Left_Back_Hover.png" />
+    <Content Include="Resources\Top_Right_MinBtn_Hover.png" />
+    <None Include="Resources\Top_Tab_1.png" />
+    <Content Include="Resources\Tubiao_Blue.png" />
+    <Content Include="Resources\Tubiao_Green.png" />
+    <Content Include="tubiao48.ico" />
+    <None Include="Resources\Tubiao.png" />
+    <None Include="Resources\bohaopan1.png" />
+    <Content Include="Resources\chunsebj3_p.jpg" />
+    <Content Include="Resources\close_Btn.png" />
+    <Content Include="Resources\Close_Btn_Hover.png" />
+    <Content Include="Resources\databg.png" />
+    <Content Include="Resources\databg1.png" />
+    <None Include="Resources\Login_Bg1.png" />
+    <Content Include="Resources\min_Btn.png" />
+    <Content Include="Resources\Min_Btn_hover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CenoQnviccub\CenoQnviccub.csproj">
+      <Project>{C3F873C7-D929-492A-8970-0F5CE0B52923}</Project>
+      <Name>CenoQnviccub</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CenoSip\CenoSip.csproj">
+      <Project>{BE502165-8899-4BF8-B371-85D8F33D4C20}</Project>
+      <Name>CenoSip</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CenoSocket\CenoSocket.csproj">
+      <Project>{9620BBBF-DCC1-4D22-85BC-1E3F01C2BE2B}</Project>
+      <Name>CenoSocket</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cmn_v1\Cmn_v1.csproj">
+      <Project>{2f110c17-da31-4642-86cd-d54618272d3f}</Project>
+      <Name>Cmn_v1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{F3E430BC-4CFB-4FA8-AEF2-2042A9EB956E}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core_v1\Core_v1.csproj">
+      <Project>{94e986af-5284-4651-baca-bb1f284a32d5}</Project>
+      <Name>Core_v1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataBaseModel\DataBaseModel.csproj">
+      <Project>{7149C7E8-22B0-458C-9CB5-83277285CDB7}</Project>
+      <Name>DataBaseModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataBaseUtil\DataBaseUtil.csproj">
+      <Project>{3B7E35E2-8EFC-4CFC-BEA5-85FF2CCEF846}</Project>
+      <Name>DataBaseUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model_v1\Model_v1.csproj">
+      <Project>{535d5ee0-b010-409c-8777-7abeb360919d}</Project>
+      <Name>Model_v1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Query_v1\Query_v1.csproj">
+      <Project>{d9a93582-d397-421b-b22b-888e0fa78608}</Project>
+      <Name>Query_v1</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebBrowser\WebBrowser.csproj">
+      <Project>{434A2D9B-DD3E-434A-AF45-298EB35BCF5A}</Project>
+      <Name>WebBrowser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebSocket_v1\WebSocket_v1.csproj">
+      <Project>{eca2ab5e-b8e4-48b4-9296-92cc4f87c760}</Project>
+      <Name>WebSocket_v1</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

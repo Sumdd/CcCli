@@ -129,7 +129,7 @@ namespace CenoSip {
                         case "Disposed":
                             break;
                         case "Terminated":
-                            Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)2);
+                            Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)1, (IntPtr)2);
                             break;
                         case "Terminating":
                             break;
@@ -254,8 +254,8 @@ namespace CenoSip {
                         } else {
                             e.ServerTransaction.SendResponse(SipParam.m_pStack.CreateResponse(SIP_ResponseCodes.x481_Call_Transaction_Does_Not_Exist, e.Request));
                         }
-                        if(CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING)
-                            Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)1);
+                        if (CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING)
+                            Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)1, (IntPtr)1);
                         break;
                     case SIP_Methods.INVITE:
 
@@ -269,7 +269,11 @@ namespace CenoSip {
                             //    return;
                             //}
 
-                            if(CCFactory.IsInCall) {
+                            string m_sCaller = "Unknown";
+                            string m_sCallee = "Unknown";
+                            SipStack.m_fGetErEe(e, out m_sCaller, out m_sCallee);
+
+                            if (CCFactory.IsInCall) {
                                 e.ServerTransaction.SendResponse(SipParam.m_pStack.CreateResponse(SIP_ResponseCodes.x600_Busy_Everywhere, e.Request));
                                 return;
                             }
@@ -324,16 +328,8 @@ namespace CenoSip {
                             Log.Instance.Success($"[CenoSip][SipStack][m_pStack_RequestReceived][媒体协商成功]");
 
                             if(CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == -1) {
-                                SIP_t_From from = e.Request.From;
-                                var Uri = from.Address.Uri.ToString();
-                                var Phone = String.Empty;
-                                if(from.Address.IsSipOrSipsUri) {
-                                    Phone = Uri.Split(':')[1].Split('@')[0];
-                                } else {
-                                    Phone = Uri;
-                                }
                                 CCFactory.ChInfo[CCFactory.CurrentCh].uCallType = 2;
-                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING, Marshal.StringToHGlobalAnsi(Phone), (IntPtr)0);
+                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING, Marshal.StringToHGlobalAnsi(m_sCaller), Marshal.StringToHGlobalAnsi(m_sCallee));
                             } else {
                                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK, (IntPtr)0, (IntPtr)0);
                             }
@@ -779,6 +775,39 @@ namespace CenoSip {
                         dialog.Stack.Logger.AddText("Dialog [id='" + dialog.ID + "'] ACK send for 2xx response failed: " + x.Message + ".");
                     }
                 }
+            }
+        }
+        #endregion
+
+        #region ***处理主叫被叫
+        private static void m_fGetErEe(SIP_RequestReceivedEventArgs e, out string m_sCaller, out string m_sCallee)
+        {
+            m_sCaller = "Unknown";
+            m_sCallee = "Unknown";
+            try
+            {
+                SIP_t_From from = e.Request.From;
+                if (from.Address.DisplayName.Contains("To"))
+                {
+                    string[] m_lCallErEe = from.Address.DisplayName.Split(new string[] { "To" }, StringSplitOptions.None);
+                    m_sCaller = m_lCallErEe[0];
+                    m_sCallee = m_lCallErEe[1];
+                }
+                else
+                {
+                    string m_sCallerUri = from.Address.Uri.ToString();
+                    if (from.Address.IsSipOrSipsUri) m_sCaller = m_sCallerUri.Split(':')[1].Split('@')[0];
+                    else m_sCaller = m_sCallerUri;
+
+                    SIP_t_To to = e.Request.To;
+                    string m_sCalleeUri = to.Address.Uri.ToString();
+                    if (to.Address.IsSipOrSipsUri) m_sCallee = m_sCalleeUri.Split(':')[1].Split('@')[0];
+                    else m_sCallee = m_sCalleeUri;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoSip][SipStack][m_fGetErEe][Exception][{ex.Message}]");
             }
         }
         #endregion

@@ -42,6 +42,10 @@ namespace CenoCC {
                 m_pDataRow2["ID"] = 1;
                 m_pDataRow2["Name"] = "共享号码";
                 m_pDataTable.Rows.Add(m_pDataRow2);
+                DataRow m_pDataRow3 = m_pDataTable.NewRow();
+                m_pDataRow3["ID"] = 2;
+                m_pDataRow3["Name"] = "申请式";
+                m_pDataTable.Rows.Add(m_pDataRow3);
                 this.cbxCommon.BeginUpdate();
                 this.cbxCommon.DataSource = m_pDataTable;
                 this.cbxCommon.ValueMember = "ID";
@@ -72,6 +76,31 @@ namespace CenoCC {
                 this.cbxLimitCallRule.ValueMember = "ID";
                 this.cbxLimitCallRule.DisplayMember = "Name";
                 this.cbxLimitCallRule.EndUpdate();
+            }
+            #endregion
+
+            #region ***自动根据区号加拨前缀
+            {
+                DataTable m_pDataTable = new DataTable();
+                m_pDataTable.Columns.Add("ID", typeof(int));
+                m_pDataTable.Columns.Add("Name", typeof(string));
+                DataRow m_pDataRow1 = m_pDataTable.NewRow();
+                m_pDataRow1["ID"] = -1;
+                m_pDataRow1["Name"] = "来源客户端";
+                m_pDataTable.Rows.Add(m_pDataRow1);
+                DataRow m_pDataRow2 = m_pDataTable.NewRow();
+                m_pDataRow2["ID"] = 1;
+                m_pDataRow2["Name"] = "启用";
+                m_pDataTable.Rows.Add(m_pDataRow2);
+                DataRow m_pDataRow3 = m_pDataTable.NewRow();
+                m_pDataRow3["ID"] = 0;
+                m_pDataRow3["Name"] = "禁用";
+                m_pDataTable.Rows.Add(m_pDataRow3);
+                this.cbxPrefixDealFlag.BeginUpdate();
+                this.cbxPrefixDealFlag.DataSource = m_pDataTable;
+                this.cbxPrefixDealFlag.ValueMember = "ID";
+                this.cbxPrefixDealFlag.DisplayMember = "Name";
+                this.cbxPrefixDealFlag.EndUpdate();
             }
             #endregion
 
@@ -113,12 +142,14 @@ namespace CenoCC {
                 try {
                     var as_sql = $@"select ifnull((select v from dial_parameter where k='areacode' limit 1),'') as areacode,
 	                                       ifnull((select v from dial_parameter where k='areaname' limit 1),'') as areaname,
-                                           ifnull((select v from dial_parameter where k='dialprefix' limit 1),'') as dialprefix;";
+                                           ifnull((select v from dial_parameter where k='dialprefix' limit 1),'') as dialprefix,
+                                           ifnull((select v from dial_parameter where k='diallocalprefix' limit 1),'') as diallocalprefix;";
                     var dt = MySQL_Method.BindTable(as_sql);
                     if(dt.Rows.Count > 0) {
                         this.txtAreaCode.Text = dt.Rows[0]["areacode"].ToString();
                         this.txtAreaName.Text = dt.Rows[0]["areaname"].ToString();
                         this.txtDialPrefix.Text = dt.Rows[0]["dialprefix"].ToString();
+                        this.txtDialLocalPrefix.Text = dt.Rows[0]["diallocalprefix"].ToString();
                     }
                 } catch(Exception ex) {
                     Log.Instance.Error($"cmnset init error:{ex.Message}");
@@ -140,6 +171,7 @@ namespace CenoCC {
                         + $"update dial_parameter set v='{this.txtAreaCode.Text}' where k='areacode';\r\n"
                         + $"update dial_parameter set v='{this.txtAreaName.Text}' where k='areaname';\r\n"
                         + $"update dial_parameter set v='{this.txtDialPrefix.Text}' where k='dialprefix';\r\n"
+                        + $"update dial_parameter set v='{this.txtDialLocalPrefix.Text}' where k='diallocalprefix';\r\n"
                         ;
                     this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "修改");
                 } catch(Exception ex) {
@@ -188,7 +220,8 @@ namespace CenoCC {
                         + $"update dial_limit set\r\n"
                         + $"areacode='{this.txtAreaCode.Text}',\r\n"
                         + $"areaname='{this.txtAreaName.Text}',\r\n"
-                        + $"dialprefix='{this.txtDialPrefix.Text}'\r\n"
+                        + $"dialprefix='{this.txtDialPrefix.Text}',\r\n"
+                        + $"diallocalprefix='{this.txtDialLocalPrefix.Text}'\r\n"
                         + $"where isdel=0\r\n"
                         + $"{as_sql_append}";
                     this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "设置立即生效");
@@ -379,6 +412,57 @@ namespace CenoCC {
                 catch (Exception ex)
                 {
                     Log.Instance.Error($"cmnset btnLimitCallRule_Click error:{ex.Message}");
+                }
+                finally
+                {
+                    this._common_ = false;
+                }
+            })).Start();
+        }
+
+        private void btnPrefixDealFlag_Click(object sender, EventArgs e)
+        {
+            if (this._common_)
+                return;
+            Button btn = (Button)sender;
+            if (btn.Name == "btnPrefixDealFlagSelect" && this._entity?.list?.SelectedItems?.Count <= 0)
+            {
+                MessageBox.Show("没有任何选中项");
+                return;
+            }
+            string m_sMsgBodyStr = btn.Name == "btnPrefixDealFlagSelect" ? "确定修改选中项的自动根据区号加拨前缀参数吗?" : "确定修改全部的自动根据区号加拨前缀参数吗?";
+            if (!Cmn.MsgQ(m_sMsgBodyStr))
+                return;
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                this._common_ = true;
+                try
+                {
+                    var as_sql_append = string.Empty;
+                    if (btn.Name == "btnPrefixDealFlagSelect" && this._entity != null && this._entity.list.SelectedItems.Count > 0)
+                    {
+                        var idlist = new List<string>();
+                        foreach (ListViewItem item in this._entity.list.SelectedItems)
+                        {
+                            idlist.Add(item.SubItems["id"].Text);
+                        }
+                        as_sql_append = $"and id in ({string.Join(",", idlist.ToArray())})";
+                    }
+
+                    ///根据查询条件查询出所有ID
+                    if (string.IsNullOrWhiteSpace(as_sql_append))
+                    {
+                        as_sql_append = this._entity.m_fQueryList();
+                    }
+
+                    var as_sql = $"update dial_limit set prefixdealflag={this.cbxPrefixDealFlag.SelectedValue} where isdel=0 {as_sql_append};";
+                    this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "修改自动根据区号加拨前缀");
+                    if (this.SearchEvent != null)
+                        this.SearchEvent(this, null);
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"cmnset btnPrefixDealFlag_Click error:{ex.Message}");
                 }
                 finally
                 {

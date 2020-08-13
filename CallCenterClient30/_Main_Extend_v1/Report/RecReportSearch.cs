@@ -87,6 +87,8 @@ namespace CenoCC
             this.startSpeakTimeKey.thisDefult("通话时长起", this.startSpeakTimeKey.Name, ">=", false);
             this.endSpeakTimeKey.thisDefult("通话时长止", this.endSpeakTimeKey.Name, "<=", false);
             this.reportTypeKey.thisDefult("统计类型", this.reportTypeKey.Name, "=", false);
+            this.reportSumAreaKey.thisDefult("统计范围类别", this.reportSumAreaKey.Name, "=", false);
+            this.teamKey.thisDefult("部门", this.teamKey.Name, "=", false);
         }
         /// <summary>
         /// 加载查询参数默认值
@@ -126,7 +128,7 @@ namespace CenoCC
                 }
                 catch (Exception ex)
                 {
-                    Log.Instance.Error($"diallimit FillSeatUser:{ex.Message}");
+                    Log.Instance.Error($"RecReportSearch FillSeatUser:{ex.Message}");
                 }
             })).Start();
 
@@ -165,6 +167,62 @@ namespace CenoCC
                 if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("reportType"))
                     this.reportTypeValue.SelectedValue = this.senderEntity.args["reportType"];
             }
+
+            //统计范围类别
+            {
+                DataTable m_pDataTable = new DataTable();
+                m_pDataTable.Columns.Add("ID", typeof(string));
+                m_pDataTable.Columns.Add("Name", typeof(string));
+                DataRow m_pDataRow1 = m_pDataTable.NewRow();
+                m_pDataRow1["ID"] = "typeUa";
+                m_pDataRow1["Name"] = "每坐席";
+                m_pDataTable.Rows.Add(m_pDataRow1);
+                DataRow m_pDataRow2 = m_pDataTable.NewRow();
+                m_pDataRow2["ID"] = "typeTeam";
+                m_pDataRow2["Name"] = "每部门";
+                m_pDataTable.Rows.Add(m_pDataRow2);
+                this.reportSumAreaValue.BeginUpdate();
+                this.reportSumAreaValue.DataSource = m_pDataTable;
+                this.reportSumAreaValue.ValueMember = "ID";
+                this.reportSumAreaValue.DisplayMember = "Name";
+                this.reportSumAreaValue.EndUpdate();
+
+                ///统计范围类别
+                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("reportSumArea"))
+                    this.reportSumAreaValue.SelectedValue = this.senderEntity.args["reportSumArea"];
+            }
+            //部门
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                try
+                {
+                    var dt = m_cEsyMySQL.m_fGetTeam();
+                    var dr = dt.NewRow();
+                    dr["ID"] = -1;
+                    dr["n"] = "全部";
+                    dt.Rows.InsertAt(dr, 0);
+
+                    if (!this.IsDisposed)
+                    {
+                        this.BeginInvoke(new MethodInvoker(() =>
+                        {
+                            this.teamValue.BeginUpdate();
+                            this.teamValue.DataSource = dt;
+                            this.teamValue.DisplayMember = "n";
+                            this.teamValue.ValueMember = "ID";
+                            this.teamValue.EndUpdate();
+
+                            //部门
+                            if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("team"))
+                                this.agentValue.SelectedValue = this.senderEntity.args["team"];
+                        }));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"RecReportSearch FillTeam:{ex.Message}");
+                }
+            })).Start();
         }
         /// <summary>
         /// 从缓存中提取查询参数
@@ -263,124 +321,14 @@ namespace CenoCC
             //统计类型
             var reportType = this.reportTypeValue.SelectedValue;
             this.senderEntity.args.Add("reportType", reportType);
+            //统计范围类别
+            var reportSumArea = this.reportSumAreaValue.SelectedValue;
+            this.senderEntity.args.Add("reportSumArea", reportSumArea);
+            //部门
+            var team = this.teamValue.SelectedValue;
+            this.senderEntity.args.Add("team", team);
             this.delayTimer.Start();
         }
-
-        #region 拼接电话类型参数
-        /// <summary>
-        /// 拼接电话类型参数
-        /// </summary>
-        private void H_Args_Ct()
-        {
-            bool hasCkc = false;
-            List<int?> _intList = new List<int?>() { -1 };
-            foreach (Control control in this.searchpanel.Controls)
-            {
-                if (control is CheckBox)
-                {
-                    CheckBox checkBox = (CheckBox)control;
-                    if (checkBox.Name.StartsWith("ckc_call") && checkBox.Checked)
-                    {
-                        hasCkc = true;
-                        if (checkBox.Tag != null)
-                        {
-                            string tag = checkBox.Tag.ToString();
-                            string[] _ids = tag.Split(',');
-                            foreach (string _id in _ids)
-                            {
-                                int id = Convert.ToInt32(_id);
-                                int? find = _intList.FirstOrDefault(x => x == id);
-                                if (find == null)
-                                {
-                                    _intList.Add(id);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (hasCkc)
-            {
-                bool hasCk = false;
-                foreach (Control control in this.searchpanel.Controls)
-                {
-                    if (control is CheckBox)
-                    {
-                        CheckBox checkBox = (CheckBox)control;
-                        if (checkBox.Name.StartsWith("ck_call") && checkBox.Checked)
-                        {
-                            hasCk = true;
-                            break;
-                        }
-                    }
-                }
-                if (hasCk)
-                    this.cutCallCkargs(_intList);
-                else
-                    this.senderEntity.args.Add("callArgs", string.Join(",", _intList));
-            }
-            else
-                this.appendCallCkargs(_intList);
-        }
-        private void appendCallCkargs(List<int?> _intList)
-        {
-            foreach (Control control in this.searchpanel.Controls)
-            {
-                if (control is CheckBox)
-                {
-                    CheckBox checkBox = (CheckBox)control;
-                    if (checkBox.Name.StartsWith("ck_call") && checkBox.Checked)
-                    {
-                        if (checkBox.Tag != null)
-                        {
-                            string tag = checkBox.Tag.ToString();
-                            string[] _ids = tag.Split(',');
-                            foreach (string _id in _ids)
-                            {
-                                int id = Convert.ToInt32(_id);
-                                int? find = _intList.FirstOrDefault(x => x == id);
-                                if (find == null)
-                                {
-                                    _intList.Add(id);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            var callArgs = string.Join(",", _intList);
-            this.senderEntity.args.Add("callArgs", callArgs);
-        }
-        private void cutCallCkargs(List<int?> _intList)
-        {
-            foreach (Control control in this.searchpanel.Controls)
-            {
-                if (control is CheckBox)
-                {
-                    CheckBox checkBox = (CheckBox)control;
-                    if (checkBox.Name.StartsWith("ck_call") && !checkBox.Checked)
-                    {
-                        if (checkBox.Tag != null)
-                        {
-                            string tag = checkBox.Tag.ToString();
-                            string[] _ids = tag.Split(',');
-                            foreach (string _id in _ids)
-                            {
-                                int id = Convert.ToInt32(_id);
-                                int? find = _intList.FirstOrDefault(x => x == id);
-                                if (find != null)
-                                {
-                                    _intList.Remove(find);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            var callArgs = string.Join(",", _intList);
-            this.senderEntity.args.Add("callArgs", callArgs);
-        }
-        #endregion
 
         #region 重写,这里可以不要,但是影响设计器显示
         /// <summary>

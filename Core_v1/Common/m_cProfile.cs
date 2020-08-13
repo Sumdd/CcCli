@@ -319,5 +319,22 @@ namespace Core_v1
             return Cmn_v1.Cmn.m_fReplaceIPv4(m_sString, m_sIPv4);
         }
         #endregion
+
+        #region ***通用的Api地址
+        public static string m_sApi
+        {
+            get
+            {
+                return $"http://{m_cProfile.server}:9464/api.asmx";
+            }
+        }
+        #endregion
+
+        #region ***独立共享接口
+        public static string m_fUseShareApi(string m_sUUID, int m_sTimeout = 5)
+        {
+            return $"{m_cProfile.m_sApi}/m_fUseShareApi?m_sUUID={m_sUUID}&m_sTimeout={m_sTimeout}";
+        }
+        #endregion
     }
 }

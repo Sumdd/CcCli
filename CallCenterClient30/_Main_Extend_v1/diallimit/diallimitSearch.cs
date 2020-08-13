@@ -306,6 +306,10 @@ namespace CenoCC
                 m_pDataRow2["ID"] = 1;
                 m_pDataRow2["Name"] = "共享号码";
                 m_pDataTable.Rows.Add(m_pDataRow2);
+                DataRow m_pDataRow3 = m_pDataTable.NewRow();
+                m_pDataRow3["ID"] = 2;
+                m_pDataRow3["Name"] = "申请式";
+                m_pDataTable.Rows.Add(m_pDataRow3);
                 this.isshareValue.BeginUpdate();
                 this.isshareValue.DataSource = m_pDataTable;
                 this.isshareValue.ValueMember = "ID";

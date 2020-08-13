@@ -8,6 +8,7 @@ namespace Common
     public static class AgentInfo
     {
         public static string AgentID;
+        public static string UniqueID;
         public static string AgentName;
         public static string LoginName;
         public static string LoginPassword;

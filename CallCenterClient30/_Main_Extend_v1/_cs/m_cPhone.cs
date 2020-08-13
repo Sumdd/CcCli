@@ -194,8 +194,9 @@ namespace CenoCC
             return m_lStrings;
         }
 
-        public static void m_fSetShow(string m_sPhoneNumberString)
+        public static void m_fSetShow(string m_sPhoneNumberString, out string m_sPhoneAddress, string m_sExtension = null)
         {
+            m_sPhoneAddress = "未知";
             try
             {
                 bool m_bIsNeedGetContact = false;
@@ -204,7 +205,8 @@ namespace CenoCC
                 string m_sZipCode = string.Empty;
                 List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(m_sPhoneNumberString, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode);
                 m_lStrings.Insert(0, AgentInfo.AgentID);
-                m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact);
+                m_sPhoneAddress = m_lStrings[4];
+                m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact, m_sExtension);
             }
             catch (Exception ex)
             {
@@ -212,7 +214,7 @@ namespace CenoCC
             }
         }
 
-        public static void m_fSetShow(List<string> m_lStrings, bool m_bIsNeedGetContact)
+        public static void m_fSetShow(List<string> m_lStrings, bool m_bIsNeedGetContact, string m_sExtension = null)
         {
             new System.Threading.Thread(() =>
             {
@@ -316,7 +318,17 @@ namespace CenoCC
 
                         MinChat._MinChat.PhoneNum_Contact_Lbl.Text = m_sShowString;
                         StringBuilder m_sbTipMsg = new StringBuilder();
-                        m_sbTipMsg.AppendLine($"号  码：{m_sPhoneNumberString}");
+
+                        string m_sNumberType = "去　电：";
+                        if (CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == 2)
+                        {
+                            m_sNumberType = "来　电：";
+                        }
+                        if (!string.IsNullOrWhiteSpace(m_sExtension))
+                        {
+                            m_sbTipMsg.AppendLine($"分机号：{m_sExtension}");
+                        }
+                        m_sbTipMsg.AppendLine($"{m_sNumberType}{m_sPhoneNumberString}");
                         m_sbTipMsg.AppendLine($"联系人：{m_sRealNameString}");
                         m_sbTipMsg.AppendLine($"归属地：{m_sPhoneAddressString}");
                         MinChat._MinChat.PhoneAddress_TT.SetToolTip(MinChat._MinChat.PhoneNum_Contact_Lbl, m_sbTipMsg.ToString());

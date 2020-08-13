@@ -33,12 +33,13 @@
             this.txtXML = new System.Windows.Forms.TextBox();
             this.txtModelLocation = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(432, 357);
+            this.btnOK.Location = new System.Drawing.Point(432, 440);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(40, 23);
             this.btnOK.TabIndex = 13;
@@ -89,15 +90,13 @@
             this.label2.ForeColor = System.Drawing.Color.Red;
             this.label2.Location = new System.Drawing.Point(12, 91);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(391, 106);
+            this.label2.Size = new System.Drawing.Size(460, 190);
             this.label2.TabIndex = 22;
-            this.label2.Text = "说明:对应的生成数据库中的电话号码、网关、软交换中的网关;\r\n$number$标记模板中号码位置;\r\n$password$标记模板中密码位置\r\n$ip$标记模板中" +
-    "IP\r\n$port$标记模板中端口\r\n$seconds$注册时长(可空,默认75秒)\r\n$account$绑定坐席登录账号(可空)\r\n$tnumber$真实号码" +
-    "(可空)";
+            this.label2.Text = resources.GetString("label2.Text");
             // 
             // txtXML
             // 
-            this.txtXML.Location = new System.Drawing.Point(13, 201);
+            this.txtXML.Location = new System.Drawing.Point(13, 284);
             this.txtXML.Multiline = true;
             this.txtXML.Name = "txtXML";
             this.txtXML.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -123,11 +122,23 @@
             this.label3.TabIndex = 25;
             this.label3.Text = "IMS模板导入";
             // 
+            // btnDownload
+            // 
+            this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDownload.Location = new System.Drawing.Point(336, 440);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(90, 23);
+            this.btnDownload.TabIndex = 26;
+            this.btnDownload.Text = "导入模板下载";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
             // IMS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 387);
+            this.ClientSize = new System.Drawing.Size(484, 473);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtModelLocation);
             this.Controls.Add(this.txtXML);
@@ -141,7 +152,7 @@
             this.MaximizeBox = false;
             this.Name = "IMS";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "IMS号码批量新增";
+            this.Text = "IMS号码批量新增(※已拓展※)";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,5 +168,6 @@
         private System.Windows.Forms.TextBox txtXML;
         private System.Windows.Forms.TextBox txtModelLocation;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnDownload;
     }
 }

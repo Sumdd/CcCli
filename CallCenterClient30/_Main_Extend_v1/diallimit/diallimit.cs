@@ -151,6 +151,8 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "a.areacode", Text = "区号", Width = 70, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.areaname", Text = "归属地", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.dialprefix", Text = "外地加拨", Width = 100, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.diallocalprefix", Text = "本地加拨", Width = 100, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.prefixdealflag", Text = "自动根据区号加拨前缀", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.ordernum", Text = "排序", Width = 70, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.dtmf", Text = "dtmf(按键)", Width = 170, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.LimitCallRule", Text = "呼入规则", Width = 125, ImageIndex = 0 });
@@ -203,12 +205,21 @@ namespace CenoCC {
 	a.isdel,
 	a.isuse,
     case a.isshare when 0 then b.loginname
-                           else '共享号码' end as loginname,
+                   when 1 then '共享号码'
+                   when 2 then '申请式'
+                   else        '未知'
+    end as loginname,
     case a.isshare when 0 then b.agentname
-                           else '共享号码' end as realname,
+                   when 1 then '共享号码'
+                   when 2 then '申请式'
+                   else        '未知'
+    end as realname,
 	-- b.loginname,
 	-- b.agentname as realname,
     a.dialprefix,
+    a.diallocalprefix,
+    a.prefixdealflag,
+    ifnull(d.AutoAddNumDialFlag,-1) as zflag,
     a.areacode,
     a.areaname,
     case when c.remark is null then c.gw_name
@@ -220,6 +231,8 @@ namespace CenoCC {
                     this.qop.FromSqlPart = @"from dial_limit as a
 left join call_agent as b
 on a.useuser = b.id
+left join call_clientparam as d
+on b.clientparamid = d.id
 left join call_gateway as c
 on c.uniqueid = a.gwuid";
                     this.qop.pager = this.ucPager.pager;
@@ -231,6 +244,7 @@ on c.uniqueid = a.gwuid";
                     this.qop.setQuery("a.areacode", "areacode");
                     this.qop.setQuery("a.areaname", "areaname");
                     this.qop.setQuery("a.dialprefix", "dialprefix");
+                    this.qop.setQuery("a.diallocalprefix", "diallocalprefix");
                     if (args != null && args.ContainsKey("dtmf"))
                         this.qop.appQuery($" AND IFNULL( IF ( a.dtmf = '', NULL, a.dtmf ), '{Call_ParamUtil.m_sDTMFSendMethod}' ) = '{args["dtmf"]}' ");
                     this.qop.setQuery("a.isuse", "isuse");
@@ -263,6 +277,38 @@ on c.uniqueid = a.gwuid";
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "areacode", Text = dr["areacode"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "areaname", Text = dr["areaname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "dialprefix", Text = dr["dialprefix"].ToString() });
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "diallocalprefix", Text = dr["diallocalprefix"].ToString() });
+                            //prefixdealflag
+                            int prefixdealflag = Convert.ToInt32(dr["prefixdealflag"]);
+                            ListViewItem.ListViewSubItem _prefixdealflag = new ListViewItem.ListViewSubItem();
+                            _prefixdealflag.Name = "prefixdealflag";
+                            switch (prefixdealflag)
+                            {
+                                case -1:
+                                    {
+                                        int zflag = Convert.ToInt32(dr["zflag"]);
+                                        _prefixdealflag.Text = (zflag == 1 ? "默认(启用)" : (zflag == 0 ? "默认(禁用)" : "-"));
+                                    }
+                                    break;
+                                case 0:
+                                    {
+                                        _prefixdealflag.Text = $"禁用";
+                                        _prefixdealflag.ForeColor = Color.Red;
+                                    }
+                                    break;
+                                case 1:
+                                    {
+                                        _prefixdealflag.Text = $"启用";
+                                        _prefixdealflag.ForeColor = Color.Green;
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        _prefixdealflag.Text = $"未知";
+                                    }
+                                    break;
+                            }
+                            listViewItem.SubItems.Add(_prefixdealflag);
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ordernum", Text = dr["ordernum"].ToString() });
                             //dtmf
                             if (dr["dtmf"].ToString() == Call_ParamUtil.inbound)
@@ -671,6 +717,17 @@ on c.uniqueid = a.gwuid";
                         return;
                     }
 
+                    ///<![CDATA[
+                    /// 追加导入真实号码功能
+                    /// 这里以绑定号码做基准机可
+                    /// ]]>
+                    if (useuser == -3)
+                    {
+                        this._quick_ = false;
+                        Cmn_v1.Cmn.MsgWran("导入真实号码正在开发中...");
+                        return;
+                    }
+
                     foreach(ListViewItem item in this.list.SelectedItems) {
                         idlist.Add(item.SubItems["id"].Text);
                         var loginname = item.SubItems["loginname"].Text;
@@ -746,11 +803,13 @@ on c.uniqueid = a.gwuid";
                     var idlist = new List<string>();
                     var gwuid = this.cboGateway.SelectedValue.ToString();
                     var gwname = this.cboGateway.Text;
+                    var nameList = new List<string>();
                     foreach (ListViewItem item in this.list.SelectedItems)
                     {
                         idlist.Add(item.SubItems["id"].Text);
+                        nameList.Add(item.SubItems["number"].Text);
                     }
-                    string m_sID = string.Join(",", idlist);
+                    string m_sID = string.Join(",", nameList);
                     if (DialogResult.Yes != MessageBox.Show(this, $"确定要将选中号码:{m_sID}设置为\"{gwname}\"网关吗?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                     {
                         this._gateway_ = false;

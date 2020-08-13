@@ -25,6 +25,8 @@
         private void InitializeComponent() {
             this.layout = new System.Windows.Forms.Panel();
             this.gb = new System.Windows.Forms.GroupBox();
+            this.ckbUseApply = new System.Windows.Forms.CheckBox();
+            this.ckbQNRegexNumber = new System.Windows.Forms.CheckBox();
             this.cbxIsUseCopyNumber = new System.Windows.Forms.CheckBox();
             this.cbxIsUseSpRandomTimeout = new System.Windows.Forms.CheckBox();
             this.cbxIsUseSpRandom = new System.Windows.Forms.CheckBox();
@@ -34,7 +36,6 @@
             this.ckbAutoAddDialNumFlag = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.ckbQNRegexNumber = new System.Windows.Forms.CheckBox();
             this.layout.SuspendLayout();
             this.gb.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nupWait)).BeginInit();
@@ -51,6 +52,7 @@
             // 
             // gb
             // 
+            this.gb.Controls.Add(this.ckbUseApply);
             this.gb.Controls.Add(this.ckbQNRegexNumber);
             this.gb.Controls.Add(this.cbxIsUseCopyNumber);
             this.gb.Controls.Add(this.cbxIsUseSpRandomTimeout);
@@ -62,10 +64,32 @@
             this.gb.Controls.Add(this.label1);
             this.gb.Location = new System.Drawing.Point(10, 10);
             this.gb.Name = "gb";
-            this.gb.Size = new System.Drawing.Size(400, 220);
+            this.gb.Size = new System.Drawing.Size(400, 252);
             this.gb.TabIndex = 2;
             this.gb.TabStop = false;
             this.gb.Text = "拨号设置";
+            // 
+            // ckbUseApply
+            // 
+            this.ckbUseApply.AutoSize = true;
+            this.ckbUseApply.Location = new System.Drawing.Point(74, 205);
+            this.ckbUseApply.Name = "ckbUseApply";
+            this.ckbUseApply.Size = new System.Drawing.Size(132, 16);
+            this.ckbUseApply.TabIndex = 14;
+            this.ckbUseApply.Text = "启用独立申请式号码";
+            this.ckbUseApply.UseVisualStyleBackColor = true;
+            this.ckbUseApply.CheckedChanged += new System.EventHandler(this.ckbUseApply_CheckedChanged);
+            // 
+            // ckbQNRegexNumber
+            // 
+            this.ckbQNRegexNumber.AutoSize = true;
+            this.ckbQNRegexNumber.Location = new System.Drawing.Point(74, 183);
+            this.ckbQNRegexNumber.Name = "ckbQNRegexNumber";
+            this.ckbQNRegexNumber.Size = new System.Drawing.Size(120, 16);
+            this.ckbQNRegexNumber.TabIndex = 13;
+            this.ckbQNRegexNumber.Text = "兼容32位加密号码";
+            this.ckbQNRegexNumber.UseVisualStyleBackColor = true;
+            this.ckbQNRegexNumber.CheckedChanged += new System.EventHandler(this.ckbQNRegexNumber_CheckedChanged);
             // 
             // cbxIsUseCopyNumber
             // 
@@ -98,9 +122,9 @@
             this.cbxIsUseSpRandom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbxIsUseSpRandom.Location = new System.Drawing.Point(74, 161);
             this.cbxIsUseSpRandom.Name = "cbxIsUseSpRandom";
-            this.cbxIsUseSpRandom.Size = new System.Drawing.Size(252, 16);
+            this.cbxIsUseSpRandom.Size = new System.Drawing.Size(192, 16);
             this.cbxIsUseSpRandom.TabIndex = 10;
-            this.cbxIsUseSpRandom.Text = "是否启用专线轮呼(当不使用共享号码生效)";
+            this.cbxIsUseSpRandom.Text = "是否启用专线轮呼(需禁用共享)";
             this.cbxIsUseSpRandom.UseVisualStyleBackColor = true;
             this.cbxIsUseSpRandom.CheckedChanged += new System.EventHandler(this.cbxIsUseSpRandom_CheckedChanged);
             // 
@@ -159,17 +183,6 @@
             this.label1.Size = new System.Drawing.Size(0, 12);
             this.label1.TabIndex = 1;
             // 
-            // ckbQNRegexNumber
-            // 
-            this.ckbQNRegexNumber.AutoSize = true;
-            this.ckbQNRegexNumber.Location = new System.Drawing.Point(74, 183);
-            this.ckbQNRegexNumber.Name = "ckbQNRegexNumber";
-            this.ckbQNRegexNumber.Size = new System.Drawing.Size(120, 16);
-            this.ckbQNRegexNumber.TabIndex = 13;
-            this.ckbQNRegexNumber.Text = "兼容32位加密号码";
-            this.ckbQNRegexNumber.UseVisualStyleBackColor = true;
-            this.ckbQNRegexNumber.CheckedChanged += new System.EventHandler(this.ckbQNRegexNumber_CheckedChanged);
-            // 
             // Args_DialSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -200,5 +213,6 @@
         private System.Windows.Forms.CheckBox cbxIsUseSpRandomTimeout;
         private System.Windows.Forms.CheckBox cbxIsUseCopyNumber;
         private System.Windows.Forms.CheckBox ckbQNRegexNumber;
+        private System.Windows.Forms.CheckBox ckbUseApply;
     }
 }

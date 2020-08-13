@@ -183,6 +183,7 @@ namespace CenoCC
                         try
                         {
                             AgentInfo.AgentID = m_pDataTable.Rows[0]["ID"].ToString();
+                            AgentInfo.UniqueID = m_pDataTable.Rows[0]["UniqueID"].ToString();
                             AgentInfo.AgentName = m_pDataTable.Rows[0]["AgentName"].ToString();
                             AgentInfo.LoginName = m_pDataTable.Rows[0]["LoginName"].ToString();
                             AgentInfo.LoginPassword = m_pDataTable.Rows[0]["LoginPassword"].ToString();

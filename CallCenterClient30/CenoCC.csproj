@@ -137,6 +137,10 @@
       <HintPath>..\packages\MySql.Data.6.9.12\lib\net40\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="QuartzTypeLib">
       <HintPath>..\packages\QuartzTypeLib.1.0.0.0\QuartzTypeLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -293,6 +297,24 @@
     </Compile>
     <Compile Include="_Main_Extend_v1\Report\RecReportSearch.Designer.cs">
       <DependentUpon>RecReportSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\routeOp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\routeOp.Designer.cs">
+      <DependentUpon>routeOp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\route.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\route.Designer.cs">
+      <DependentUpon>route.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\routeSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\route\routeSearch.Designer.cs">
+      <DependentUpon>routeSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="_Main_Extend_v1\Setting\Args_CallerDisplay.cs">
       <SubType>Form</SubType>
@@ -597,6 +619,15 @@
     <EmbeddedResource Include="_Main_Extend_v1\Report\RecReportSearch.resx">
       <DependentUpon>RecReportSearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\route\routeOp.resx">
+      <DependentUpon>routeOp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\route\route.resx">
+      <DependentUpon>route.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\route\routeSearch.resx">
+      <DependentUpon>routeSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\Setting\ArgsfrmSimple.resx">
       <DependentUpon>ArgsfrmSimple.cs</DependentUpon>
     </EmbeddedResource>
@@ -766,6 +797,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\40.png" />
+    <None Include="Resources\arrow_switch.png" />
     <Content Include="Resources\bg.png" />
     <Content Include="Resources\bohaopan.png" />
     <None Include="Resources\fuwuqi.png" />

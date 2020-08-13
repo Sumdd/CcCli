@@ -53,6 +53,10 @@ namespace CenoSocket
         /// 拨号状态:挂断
         /// </summary>
         public const string _bhzt_hang = "Hang";
+        /// <summary>
+        /// 来电时繁忙
+        /// </summary>
+        public const string _bhzt_call_busy = "Call_Busy";
         #endregion
         /// <summary>
         /// 自动外呼

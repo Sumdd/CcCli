@@ -3,6 +3,8 @@ using System.Windows.Forms;
 using System;
 using Common;
 using WebBrowser;
+using System.Runtime.InteropServices;
+
 namespace CenoCC
 {
 	partial class Main_Frm
@@ -504,32 +506,27 @@ namespace CenoCC
 			this.Close();
 		}
 
-		private void panel3_MouseDown(object sender, MouseEventArgs e)
-		{
-			if (e.Button == MouseButtons.Left)
-			{
-				mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-				leftFlag = true;                  //点击左键按下时标注为true;
-			}
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
 
+        [DllImport("user32.dll")]
+        public static extern bool SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
+
+        private void panel3_MouseDown(object sender, MouseEventArgs e)
+		{
+            if (e.Button == MouseButtons.Left && this.WindowState != FormWindowState.Maximized)
+            {
+                ReleaseCapture();
+                SendMessage(this.Handle, 0x0112, 0xF012, 0);
+            }
 		}
 
 		private void panel3_MouseMove(object sender, MouseEventArgs e)
 		{
-			if (leftFlag)
-			{
-				Point mouseSet = Control.MousePosition;
-				mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
-				Location = mouseSet;
-			}
 		}
 
 		private void panel3_MouseUp(object sender, MouseEventArgs e)
 		{
-			if (leftFlag)
-			{
-				leftFlag = false;//释放鼠标后标注为false;
-			}
 		}
 
 		private void Main_Frm_Load(object sender, EventArgs e)

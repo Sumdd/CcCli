@@ -33,7 +33,7 @@ namespace DataBaseUtil {
              */
 
             DataTable dt = new DataTable();
-            string SqlStr = string.Format("select a.ID, a.agentname,a.loginname,a.loginpassword,a.loginstate,a.agentnumber,a.agentpassword,a.lastloginip,a.ChannelID,a.usable,a.LinkUser,a.LU_LoginName,a.LU_Password,t.id as TeamID,t.teamname,ags.statetype,r.id as RoleID,r.rolename,c.ChNo"
+            string SqlStr = string.Format("select a.ID,a.UniqueID, a.agentname,a.loginname,a.loginpassword,a.loginstate,a.agentnumber,a.agentpassword,a.lastloginip,a.ChannelID,a.usable,a.LinkUser,a.LU_LoginName,a.LU_Password,t.id as TeamID,t.teamname,ags.statetype,r.id as RoleID,r.rolename,c.ChNo"
             + " from Call_Agent a left join Call_AgentState ags on a.stateid=ags.id left join Call_Role r on a.roleid=r.id left join Call_Team t on a.teamid=t.id left join Call_Channel c on a.ChannelID=c.ID"
                 + " where c.ChType = 16 and a.LoginName='{0}' and a.LoginPassWord='{1}'", UserName, Encrypt.EncryptString(UserPsw));
             dt = MySQL_Method.BindTable(SqlStr);

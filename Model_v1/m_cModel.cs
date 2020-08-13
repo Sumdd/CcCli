@@ -102,6 +102,10 @@ namespace Model_v1
         /// 用户管理查询
         /// </summary>
         public const string _data_user_search = "data_user_search";
+        /// <summary>
+        /// 路由查询
+        /// </summary>
+        public const string _data_route_search = "data_route_search";
     }
 
     public class DataPower
@@ -268,5 +272,53 @@ namespace Model_v1
         public const string _m_sGateway = "gateway";
         public const string _m_sInternal = "internal";
         public const string _m_sExternal = "external";
+    }
+
+    public class m_mShareApi
+    {
+        public int id
+        {
+            get; set;
+        }
+        public string unique_id
+        {
+            get; set;
+        }
+        public string gw_name
+        {
+            get; set;
+        }
+        public string caller_prefix
+        {
+            get; set;
+        }
+        public string caller_number
+        {
+            get; set;
+        }
+        public string callee_prefix
+        {
+            get; set;
+        }
+        public string call_server
+        {
+            get; set;
+        }
+        public string group_id
+        {
+            get; set;
+        }
+        public string remark
+        {
+            get; set;
+        }
+        public string creator
+        {
+            get; set;
+        }
+        public string create_time
+        {
+            get; set;
+        }
     }
 }

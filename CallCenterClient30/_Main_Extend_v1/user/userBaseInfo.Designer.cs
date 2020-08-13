@@ -47,11 +47,12 @@
             this.btnPassword = new System.Windows.Forms.Button();
             this.cboTeam = new System.Windows.Forms.ComboBox();
             this.cboRole = new System.Windows.Forms.ComboBox();
+            this.lblTips = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtUa
             // 
-            this.txtUa.Location = new System.Drawing.Point(152, 39);
+            this.txtUa.Location = new System.Drawing.Point(152, 60);
             this.txtUa.Name = "txtUa";
             this.txtUa.Size = new System.Drawing.Size(120, 21);
             this.txtUa.TabIndex = 2;
@@ -59,7 +60,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 42);
+            this.label4.Location = new System.Drawing.Point(12, 63);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 12);
             this.label4.TabIndex = 1;
@@ -67,7 +68,7 @@
             // 
             // txtLoginName
             // 
-            this.txtLoginName.Location = new System.Drawing.Point(152, 95);
+            this.txtLoginName.Location = new System.Drawing.Point(152, 116);
             this.txtLoginName.Name = "txtLoginName";
             this.txtLoginName.Size = new System.Drawing.Size(120, 21);
             this.txtLoginName.TabIndex = 5;
@@ -75,7 +76,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 98);
+            this.label1.Location = new System.Drawing.Point(12, 119);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 12);
             this.label1.TabIndex = 4;
@@ -84,7 +85,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 154);
+            this.label2.Location = new System.Drawing.Point(12, 175);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(29, 12);
             this.label2.TabIndex = 7;
@@ -93,7 +94,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 210);
+            this.label3.Location = new System.Drawing.Point(12, 231);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(29, 12);
             this.label3.TabIndex = 10;
@@ -101,7 +102,7 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(152, 263);
+            this.txtPassword.Location = new System.Drawing.Point(152, 284);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(120, 21);
             this.txtPassword.TabIndex = 14;
@@ -110,7 +111,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 266);
+            this.label5.Location = new System.Drawing.Point(12, 287);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 12);
             this.label5.TabIndex = 13;
@@ -118,7 +119,7 @@
             // 
             // btnRole
             // 
-            this.btnRole.Location = new System.Drawing.Point(197, 234);
+            this.btnRole.Location = new System.Drawing.Point(197, 255);
             this.btnRole.Name = "btnRole";
             this.btnRole.Size = new System.Drawing.Size(75, 23);
             this.btnRole.TabIndex = 12;
@@ -129,7 +130,7 @@
             // 
             // btnTeam
             // 
-            this.btnTeam.Location = new System.Drawing.Point(197, 178);
+            this.btnTeam.Location = new System.Drawing.Point(197, 199);
             this.btnTeam.Name = "btnTeam";
             this.btnTeam.Size = new System.Drawing.Size(75, 23);
             this.btnTeam.TabIndex = 9;
@@ -140,7 +141,7 @@
             // 
             // btnUa
             // 
-            this.btnUa.Location = new System.Drawing.Point(197, 66);
+            this.btnUa.Location = new System.Drawing.Point(197, 87);
             this.btnUa.Name = "btnUa";
             this.btnUa.Size = new System.Drawing.Size(75, 23);
             this.btnUa.TabIndex = 3;
@@ -151,7 +152,7 @@
             // 
             // btnLoginName
             // 
-            this.btnLoginName.Location = new System.Drawing.Point(197, 122);
+            this.btnLoginName.Location = new System.Drawing.Point(197, 143);
             this.btnLoginName.Name = "btnLoginName";
             this.btnLoginName.Size = new System.Drawing.Size(75, 23);
             this.btnLoginName.TabIndex = 6;
@@ -163,7 +164,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 293);
+            this.label6.Location = new System.Drawing.Point(12, 314);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 15;
@@ -171,7 +172,7 @@
             // 
             // txtConfirmPassword
             // 
-            this.txtConfirmPassword.Location = new System.Drawing.Point(152, 290);
+            this.txtConfirmPassword.Location = new System.Drawing.Point(152, 311);
             this.txtConfirmPassword.Name = "txtConfirmPassword";
             this.txtConfirmPassword.Size = new System.Drawing.Size(120, 21);
             this.txtConfirmPassword.TabIndex = 16;
@@ -181,7 +182,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.Color.Red;
-            this.label7.Location = new System.Drawing.Point(12, 15);
+            this.label7.Location = new System.Drawing.Point(12, 36);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(59, 12);
             this.label7.TabIndex = 0;
@@ -189,7 +190,7 @@
             // 
             // txtCurrentPassword
             // 
-            this.txtCurrentPassword.Location = new System.Drawing.Point(152, 12);
+            this.txtCurrentPassword.Location = new System.Drawing.Point(152, 33);
             this.txtCurrentPassword.Name = "txtCurrentPassword";
             this.txtCurrentPassword.Size = new System.Drawing.Size(120, 21);
             this.txtCurrentPassword.TabIndex = 0;
@@ -197,7 +198,7 @@
             // 
             // btnPassword
             // 
-            this.btnPassword.Location = new System.Drawing.Point(197, 317);
+            this.btnPassword.Location = new System.Drawing.Point(197, 338);
             this.btnPassword.Name = "btnPassword";
             this.btnPassword.Size = new System.Drawing.Size(75, 23);
             this.btnPassword.TabIndex = 19;
@@ -210,7 +211,7 @@
             // 
             this.cboTeam.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTeam.FormattingEnabled = true;
-            this.cboTeam.Location = new System.Drawing.Point(152, 152);
+            this.cboTeam.Location = new System.Drawing.Point(152, 173);
             this.cboTeam.Name = "cboTeam";
             this.cboTeam.Size = new System.Drawing.Size(120, 20);
             this.cboTeam.TabIndex = 8;
@@ -219,16 +220,26 @@
             // 
             this.cboRole.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRole.FormattingEnabled = true;
-            this.cboRole.Location = new System.Drawing.Point(152, 208);
+            this.cboRole.Location = new System.Drawing.Point(152, 229);
             this.cboRole.Name = "cboRole";
             this.cboRole.Size = new System.Drawing.Size(120, 20);
             this.cboRole.TabIndex = 11;
+            // 
+            // lblTips
+            // 
+            this.lblTips.AutoSize = true;
+            this.lblTips.Location = new System.Drawing.Point(14, 13);
+            this.lblTips.Name = "lblTips";
+            this.lblTips.Size = new System.Drawing.Size(11, 12);
+            this.lblTips.TabIndex = 20;
+            this.lblTips.Text = "-";
             // 
             // userBaseInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 352);
+            this.ClientSize = new System.Drawing.Size(284, 371);
+            this.Controls.Add(this.lblTips);
             this.Controls.Add(this.cboRole);
             this.Controls.Add(this.cboTeam);
             this.Controls.Add(this.btnPassword);
@@ -276,5 +287,6 @@
         private System.Windows.Forms.Button btnPassword;
         private System.Windows.Forms.ComboBox cboTeam;
         private System.Windows.Forms.ComboBox cboRole;
+        private System.Windows.Forms.Label lblTips;
     }
 }

@@ -253,6 +253,13 @@ namespace Model_v1
         {
             get; set;
         }
+        /// <summary>
+        /// 共享号码的延申,不是直接使用,而是转接
+        /// </summary>
+        public int isshare
+        {
+            get; set;
+        }
     }
     public enum SHARE_NUM_STATUS
     {

@@ -21,6 +21,15 @@ namespace CenoSocket {
         public static string _bhzt_hang(string _reason = "拒接") {
             return _bhzt(M_WebSocket._bhzt_hang, _reason);
         }
+        /// <summary>
+        /// A或B挂断
+        /// </summary>
+        /// <param name="_ab"></param>
+        /// <returns></returns>
+        public static string _bhzt__hang(string _ab)
+        {
+            return _bhzt($"{_ab}{M_WebSocket._bhzt_hang}", AgentInfo.AgentID);
+        }
         public static string _zdwh(string m_sType = "") {
             return Call_SocketCommandUtil.SendCommonStr(M_WebSocket._zdwh, m_sType);
         }

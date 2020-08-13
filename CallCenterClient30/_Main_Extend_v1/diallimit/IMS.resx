@@ -135,6 +135,22 @@
   <metadata name="label2.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="label2.Text" xml:space="preserve">
+    <value>说明:对应的生成数据库中的电话号码、网关、软交换中的网关;
+$number$标记模板中号码位置;
+$password$标记模板中密码位置
+$ip$标记模板中IP
+$port$标记模板中端口(可空,默认5060)
+$seconds$注册时长(可空,默认75秒)
+$account$绑定坐席登录账号(可空)
+$tnumber$真实号码(可空)
+$name$网关名称,方便记忆(可空)
+$type$导入类型拓展代数和,默认为1(可空)
+-1.鉴权网关
+-2.非鉴权网关,如果模拟网关、无线网关等
+-4.号码可重复.
+-8.根据号码更新真实号码、所属坐席</value>
+  </data>
   <metadata name="txtXML.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -142,6 +158,9 @@
     <value>True</value>
   </metadata>
   <metadata name="label3.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="btnDownload.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

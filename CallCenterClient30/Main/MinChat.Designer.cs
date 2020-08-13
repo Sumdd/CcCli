@@ -57,6 +57,7 @@ namespace CenoCC {
             this.tsmiShareArea = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUser = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiGateway = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_route = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_Power = new System.Windows.Forms.ToolStripMenuItem();
             this.ShowDialPad_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -85,6 +86,7 @@ namespace CenoCC {
             this.dial_GlobelContextMenu_MI = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAddZeroDial = new System.Windows.Forms.ToolStripMenuItem();
             this.cancel_GlobelContextMenu_MI = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.CallInfo_Pnl.SuspendLayout();
             this.GlobleContextMenu.SuspendLayout();
@@ -110,6 +112,7 @@ namespace CenoCC {
             this.tsmiShareArea,
             this.tsmiUser,
             this.tsmiGateway,
+            this.tsmi_route,
             this.tsmi_Power,
             this.ShowDialPad_TSMI,
             this.toolStripSeparator2,
@@ -118,7 +121,7 @@ namespace CenoCC {
             this.Help_Tsmi,
             this.System_Tsmi});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 452);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 474);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // AgentInfo_TSMI
@@ -252,6 +255,15 @@ namespace CenoCC {
             this.tsmiGateway.Tag = "gateway";
             this.tsmiGateway.Text = "网关管理";
             this.tsmiGateway.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
+            // 
+            // tsmi_route
+            // 
+            this.tsmi_route.Image = global::CenoCC.Properties.Resources.arrow_switch;
+            this.tsmi_route.Name = "tsmi_route";
+            this.tsmi_route.Size = new System.Drawing.Size(200, 22);
+            this.tsmi_route.Tag = "route";
+            this.tsmi_route.Text = "路由管理";
+            this.tsmi_route.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // tsmi_Power
             // 
@@ -481,6 +493,13 @@ namespace CenoCC {
             this.cancel_GlobelContextMenu_MI.Size = new System.Drawing.Size(160, 22);
             this.cancel_GlobelContextMenu_MI.Text = "取消";
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "CenoCC";
+            this.notifyIcon.Visible = true;
+            // 
             // MinChat
             // 
             this.AllowDrop = true;
@@ -545,9 +564,6 @@ namespace CenoCC {
         private void ToolStripMenuItem_Click(object sender, EventArgs e) {
             switch(((ToolStripMenuItem)sender).Name) {
                 case "HangUp_Tmsi":
-                    if(CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == 2 && CCFactory.IsInCall && CCFactory.ChInfo[CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING) {
-                        InWebSocketMain.Send(M_Send._bhzt_hang());
-                    }
                     Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)1);
                     break;
                 case "Call_Tmsi":
@@ -690,10 +706,15 @@ namespace CenoCC {
                 case "tsmiGateway":
                     this.m_fOpenWebBrowser(new gateway(true));
                     break;
+                case "tsmi_route":
+                    this.m_fOpenWebBrowser(new route(true));
+                    break;
                 case "Register_Tsmi":
                     Log.Instance.Success($"[CenoCC][MinChat][ToolStripMenuItem_Click][SIP与WebSocket注册]");
                     InWebSocketMain.SetIsCanLogin(true);
                     InWebSocketMain.ReStart();
+                    ///发送一次强断信号
+                    InWebSocketMain.Send(M_Send._bhzt__hang("X"));
                     Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_DO_SIP_RESET, (IntPtr)0, (IntPtr)0);
                     break;
             }
@@ -897,7 +918,7 @@ namespace CenoCC {
 
                 if (Call_ClientParamUtil.m_bQNRegexNumber && _number.Length == 32)
                 {
-                    ///兼容加密号码
+                    ///兼容32位加密号码
                 }
                 else
                 {
@@ -922,9 +943,8 @@ namespace CenoCC {
 
                 this.BeginInvoke(new MethodInvoker(() => {
                     this.CallInfo_Pnl.Visible = true;
-                    ShowDialPad_TSMI.Enabled = false;
+                    ShowDialPad_TSMI.Enabled = true;
                     this.Width = 180;
-                    CallStatus_Lbl.Text = "拨号中";
                     CallTimeLength = 0;
                     this.DialTime_Lbl.Text = "00:00:00";
                     SessionNoAnswerFlagTimer.Start();
@@ -932,6 +952,8 @@ namespace CenoCC {
                     Call_Flag_Pnl.Visible = false;
                     SessionTimeLenTimer.Start();
                     CallStatus_Lbl.Text = "请稍后...";
+                    this.Call_Tmsi.Enabled = false;
+                    this.HangUp_Tmsi.Enabled = true;
                 }));
                
                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_LOAD_STATUS_UNAVAILABLE, Cmn.Sti(_number), (IntPtr)1000);
@@ -944,7 +966,7 @@ namespace CenoCC {
 
             this.BeginInvoke(new MethodInvoker(() => {
                 this.CallInfo_Pnl.Visible = true;
-                ShowDialPad_TSMI.Enabled = false;
+                ShowDialPad_TSMI.Enabled = true;
                 this.Width = 180;
                 CallStatus_Lbl.Text = "拨号中";
                 CallTimeLength = 0;
@@ -953,6 +975,8 @@ namespace CenoCC {
                 SessionFlagTimer.Stop();
                 Call_Flag_Pnl.Visible = false;
                 SessionTimeLenTimer.Start();
+                this.Call_Tmsi.Enabled = false;
+                this.HangUp_Tmsi.Enabled = true;
             }));
 
             SipMain.Stop();
@@ -976,8 +1000,9 @@ namespace CenoCC {
 
             ///<![CDATA[
             /// UsrData,自定义的字段的添加,以后就往这里放,尽量不动Socket命令表
+            /// 增加录音的关联字段UUID
             /// ]]>
-            string m_sUsrData = $"{(Call_ClientParamUtil.m_bQNRegexNumber ? "1" : "0")}|{m_sDt}&{m_sCardType}&{m_sZipCode}";
+            string m_sUsrData = $"{(Call_ClientParamUtil.m_bQNRegexNumber ? "1" : "0")}|{m_sDt}&{m_sCardType}&{m_sZipCode}|";
 
             string m_sPhoneAddressStr = m_lStrings[4];
             MinChat.m_PhoneNumber = m_lStrings[2];
@@ -1010,6 +1035,21 @@ namespace CenoCC {
                     m_lStrings.Add(_m_sUseNumber.Substring(Special.ADD_SHARE_.Length));
                 }
 
+                ///如果是独立服务,处理出来
+                if (_m_sUseNumber.StartsWith(Special.ADD_APISHARE_))
+                {
+                    m_lStrings.Add(Special.ApiShare);
+                    ///分割
+                    string[] m_lApiShare = _m_sUseNumber.Substring(Special.ADD_APISHARE_.Length).Split('&');
+                    m_lStrings.Add(m_lApiShare[0]);
+                    m_sUsrData += $"|{m_lApiShare[0]}&{m_lApiShare[1]}";
+                }
+                else
+                {
+                    ///追加自定义参数,全部补齐即可
+                    m_sUsrData += $"|&";
+                }
+
                 ///<![CDATA[
                 /// 追加UsrData
                 /// ]]>
@@ -1033,9 +1073,8 @@ namespace CenoCC {
                 m_lStrings.Add(m_sNumberType);
                 m_lStrings.Add(string.Empty);
 
-                ///<![CDATA[
-                /// 追加UsrData
-                /// ]]>
+                ///追加自定义参数,全部补齐即可
+                m_sUsrData += $"|&";
                 m_lStrings.Add(m_sUsrData);
 
                 InWebSocketMain.Send(Call_SocketCommandUtil.GetDialInfoStr(m_lStrings.ToArray()));
@@ -1049,7 +1088,7 @@ namespace CenoCC {
                 MinChat.m_pShareNumber = null;
             }
             MinChat.m_pShareNumber = new ShareNumber();
-            MinChat.m_pShareNumber.TransfEvent += (_m_sNumberType, _m_sTypeUUID, _m_bCancel) =>
+            MinChat.m_pShareNumber.TransfEvent += (_m_sNumberType, _m_sTypeUUID, _m_sTag, _m_bCancel) =>
             {
                 m_sNumberType = _m_sNumberType;
                 m_sTypeUUID = _m_sTypeUUID;
@@ -1061,9 +1100,8 @@ namespace CenoCC {
                     m_lStrings.Add(m_sNumberType);
                     m_lStrings.Add(m_sTypeUUID);
 
-                    ///<![CDATA[
-                    /// 追加UsrData
-                    /// ]]>
+                    ///追加自定义参数,全部补齐即可
+                    m_sUsrData += $"|{_m_sTypeUUID}&{_m_sTag}";
                     m_lStrings.Add(m_sUsrData);
 
                     InWebSocketMain.Send(Call_SocketCommandUtil.GetDialInfoStr(m_lStrings.ToArray()));
@@ -1076,7 +1114,7 @@ namespace CenoCC {
             if(CCFactory.ChInfo[CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
                 return;
             SipMain.Stop();
-            SessionControl.Phone_Temminate();
+            SessionControl.Phone_Temminate("A");
             CCFactory.ChInfo[CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
             ShowDialPad_TSMI.Enabled = true;
             SessionTimeLenTimer.Stop();
@@ -1301,5 +1339,7 @@ namespace CenoCC {
         private ToolStripMenuItem tsmiShareArea;
         private ToolStripMenuItem tsmi_Power;
         private ToolStripMenuItem tsmiGateway;
+        private ToolStripMenuItem tsmi_route;
+        public NotifyIcon notifyIcon;
     }
 }

@@ -47,11 +47,13 @@
             this.recordUpload = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.btnUpdUa = new System.Windows.Forms.Button();
             this.layout.SuspendLayout();
             this.SuspendLayout();
             // 
             // layout
             // 
+            this.layout.Controls.Add(this.btnUpdUa);
             this.layout.Controls.Add(this.btnBaseInfo);
             this.layout.Controls.Add(this.btnSIPEdit);
             this.layout.Controls.Add(this.btnWeb);
@@ -76,7 +78,7 @@
             // 
             this.btnBaseInfo.Location = new System.Drawing.Point(869, 10);
             this.btnBaseInfo.Name = "btnBaseInfo";
-            this.btnBaseInfo.Size = new System.Drawing.Size(70, 23);
+            this.btnBaseInfo.Size = new System.Drawing.Size(65, 23);
             this.btnBaseInfo.TabIndex = 19;
             this.btnBaseInfo.Tag = "user_baseinfo";
             this.btnBaseInfo.Text = "基本信息";
@@ -259,6 +261,17 @@
             // 
             this.openFileDialog.Filter = "文本文件|*.txt";
             // 
+            // btnUpdUa
+            // 
+            this.btnUpdUa.Location = new System.Drawing.Point(940, 10);
+            this.btnUpdUa.Name = "btnUpdUa";
+            this.btnUpdUa.Size = new System.Drawing.Size(37, 23);
+            this.btnUpdUa.TabIndex = 20;
+            this.btnUpdUa.Tag = "user_update_ua";
+            this.btnUpdUa.Text = "重载";
+            this.btnUpdUa.UseVisualStyleBackColor = true;
+            this.btnUpdUa.Click += new System.EventHandler(this.btnUpdUa_Click);
+            // 
             // user
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -297,5 +310,6 @@
         private System.Windows.Forms.Button btnWeb;
         private System.Windows.Forms.Button btnSIPEdit;
         private System.Windows.Forms.Button btnBaseInfo;
+        private System.Windows.Forms.Button btnUpdUa;
     }
 }

@@ -102,7 +102,9 @@ namespace CenoCC
             this.args.Add("endSpeakTimeMark", "<=");
             this.args.Add("endSpeakTime", $"23:59:59");
             this.args.Add("reportType", "typeSum");
+            this.args.Add("reportSumArea", "typeUa");
             this.args.Add("agent", "-1");
+            this.args.Add("team", "-1");
         }
 
         /// <summary>
@@ -112,8 +114,9 @@ namespace CenoCC
         {
             this.list.BeginUpdate();
             this.list.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "T2.RealName", Text = "姓名", Width = 75, ImageIndex = 0 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "T2.LoginName", Text = "登录名", Width = 90, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "T2.teamname", Text = "部门", Width = 75, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "T2.agentname", Text = "姓名", Width = 75, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "T2.loginname", Text = "登录名", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "T2.createtime", Text = "日期", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "T2.totalcount", Text = "总通话量", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "T2.totaltime", Text = "总通话时长", Width = 115, ImageIndex = 0 });
@@ -176,13 +179,38 @@ namespace CenoCC
                             break;
                     }
 
+                    //统计范围类别
+                    var reportSumArea = args["reportSumArea"].ToString();
+
+                    ///字段的变化
+                    string _m_sFiled = string.Empty;
+                    ///分组的变化
+                    string _m_sGroupBy = @"`call_agent`.`ID` AS `UserID`,`call_agent`.`AgentName` AS `RealName`,";
+
+                    switch (reportSumArea)
+                    {
+                        case "typeUa":
+                            {
+                                _m_sFiled = @"`call_agent`.`ID` AS `UserID`,`call_agent`.`AgentName` AS `RealName`,`call_agent`.`LoginName` AS `LoginName`,-1 AS `TeamID`,'-' AS `TeamName`,";
+                                _m_sGroupBy = @"UserID,RealName,LoginName,TeamID,TeamName";
+                            }
+                            break;
+                        case "typeTeam":
+                            {
+                                _m_sFiled = @"-1 AS `UserID`,'-' AS `RealName`,'-' AS `LoginName`,`call_team`.`ID` AS `TeamID`,`call_team`.`TeamName` AS `TeamName`,";
+                                _m_sGroupBy = @"UserID,RealName,LoginName,TeamID,TeamName";
+                            }
+                            break;
+                    }
+
                     PopedomArgs popedomArgs = new PopedomArgs();
                     popedomArgs.type = DataPowerType._data_phonestatistical_search;
                     popedomArgs.left.Add("`call_record`.`AgentID`");
                     string m_sPopedomSQL = m_cPower.m_fPopedomSQL(popedomArgs);
 
                     this.qop.FieldsSqlPart = $@"SELECT 
-    RealName AS agentname,
+    TeamName AS teamname,
+    agentname AS agentname,
     LoginName AS loginname,
     {m_sColumn}
     CAST( totalcount AS SIGNED ) AS totalcount,
@@ -199,7 +227,8 @@ namespace CenoCC
                     this.qop.FromSqlPart = $@"FROM
                 (
                 SELECT
-                    RealName,
+                    TeamName,
+                    RealName as agentname,
                     LoginName,
                     createtime,
                     SUM(1) AS totalcount,
@@ -216,16 +245,15 @@ namespace CenoCC
                 FROM
                     (
                         SELECT 
-                            `call_agent`.`ID` AS `UserID`,
-            	            `call_agent`.`AgentName` AS `RealName`,
-            	            `call_agent`.`LoginName` AS `LoginName`,
+                            {_m_sFiled}
                             `call_record`.`C_StartTime` AS `createtime`,
             	            `call_record`.`C_SpeakTime` AS `tlong`,
             	            `call_record`.`C_WaitTime` AS `wlong`,
                             (CASE WHEN( `call_record`.`CallType` = 3) THEN 1 WHEN( `call_record`.`CallType` = 1) THEN 2 ELSE 3 END) AS `Type` 
 
                         FROM
-                            ( `call_record` LEFT JOIN `call_agent` ON(( `call_record`.`AgentID` = `call_agent`.`ID` )))
+                            `call_record` LEFT JOIN `call_agent` ON `call_record`.`AgentID` = `call_agent`.`ID` 
+                            LEFT JOIN `call_team` ON `call_team`.`ID` = `call_agent`.`TeamID`
             WHERE (( `call_record`.`AgentID` <> -(1)) AND( `call_record`.`CallType` IN(1, 3, 4)) )
             AND `call_record`.`isshare` = 0 
             {m_sPopedomSQL}
@@ -234,11 +262,10 @@ namespace CenoCC
             AND ( ?useEndDateTime = 'false' OR `call_record`.`C_StartTime` <= ?endDateTime )
             AND ( ?useStartSpeakTime = 'false' OR `call_record`.`C_SpeakTime` >= TIME_TO_SEC(?startSpeakTime) )
             AND ( ?useEndSpeakTime = 'false' OR `call_record`.`C_SpeakTime` <= TIME_TO_SEC(?endSpeakTime) )
+            AND ( ?team = 0 OR ?team = -1 OR `call_team`.`ID` = ?team )
         ) AS T1
     GROUP BY
-        UserID,
-		RealName,
-	    LoginName
+        {_m_sGroupBy}
         {m_sGroupBy}
 	) AS T2";
 
@@ -258,6 +285,8 @@ namespace CenoCC
                     //通话时长止
                     this.qop.existQuery("useEndSpeakTime");
                     this.qop.existQuery("endSpeakTime");
+                    //部门
+                    this.qop.existQuery("team");
                     DataSet ds = this.qop.QdataSet();
                     //缓存当页数据,以便进行当前页录音下载
                     if (this.m_ds != null)
@@ -274,6 +303,7 @@ namespace CenoCC
                     foreach (DataRow dr in ds.Tables[1].Rows)
                     {
                         ListViewItem listViewItem = new ListViewItem($"{pageIndexStart++}");
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "teamname", Text = dr["teamname"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "agentname", Text = dr["agentname"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "loginname", Text = dr["loginname"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "createtime", Text = dr["createtime"].ToString() });
@@ -392,6 +422,7 @@ namespace CenoCC
                         DataSet m_pDataSet = new DataSet();
                         DataTable m_pDataTable = ds.Tables[0].Copy();
                         m_pDataSet.Tables.Add(m_pDataTable);
+                        m_pDataTable.Columns["teamname"].ColumnName = "部门";
                         m_pDataTable.Columns["agentname"].ColumnName = "姓名";
                         m_pDataTable.Columns["loginname"].ColumnName = "登录名";
                         m_pDataTable.Columns["createtime"].ColumnName = "日期";

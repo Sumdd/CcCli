@@ -24,7 +24,8 @@ namespace CenoCC {
 	                                               ifnull((select v from dial_parameter where k='limitthedial' limit 1),0) as limitthedial,
 	                                               ifnull((select v from dial_parameter where k='areacode' limit 1),'') as areacode,
 	                                               ifnull((select v from dial_parameter where k='areaname' limit 1),'') as areaname,
-	                                               ifnull((select v from dial_parameter where k='dialprefix' limit 1),'') as dialprefix;";
+	                                               ifnull((select v from dial_parameter where k='dialprefix' limit 1),'') as dialprefix,
+	                                               ifnull((select v from dial_parameter where k='diallocalprefix' limit 1),'') as diallocalprefix;";
 
                 DataTable as_parameter_dt = MySQL_Method.BindTable(as_parameter_sql);
                 string m_dtNow = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -43,9 +44,10 @@ namespace CenoCC {
                                               '{dr["areaname"]}' as areaname,
                                               '{gwuid}' as gwuid,
                                               '{dr["dialprefix"]}' as dialprefix,
+                                              '{dr["diallocalprefix"]}' as diallocalprefix,
                                                {isshare} as isshare");
                     }
-                    var as_insert_sql = $@"insert into dial_limit (id,number,adduser,addtime,limitcount,limitduration,limitthecount,limittheduration,limitthedial,areacode,areaname,gwuid,dialprefix,isshare)
+                    var as_insert_sql = $@"insert into dial_limit (id,number,adduser,addtime,limitcount,limitduration,limitthecount,limittheduration,limitthedial,areacode,areaname,gwuid,dialprefix,diallocalprefix,isshare)
                                            select * from ({string.Join("\r\nunion\r\n", as_list.ToArray())}) as a 
                                            where cast(a.number as char(20)) not in (select number from dial_limit as b where b.isdel = 0);";
                     return MySQL_Method.ExecuteNonQuery(as_insert_sql);

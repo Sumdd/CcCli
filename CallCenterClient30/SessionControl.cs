@@ -88,13 +88,18 @@ namespace CenoCC {
         /// <summary>
         /// stop dial
         /// </summary>
-        public static void Phone_Temminate() {
+        public static void Phone_Temminate(string ABHang) {
             if(CCFactory.ChInfo[MinChat.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
                 return;
 
-            switch(CCFactory._PhoneType) {
+            CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
+
+            switch (CCFactory._PhoneType) {
                 case GlobalData.PhoneType.SIP_SOFT_PHONE:
-                    SipMain.Teminate();
+                    {
+                        if (!string.IsNullOrWhiteSpace(ABHang)) WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._bhzt__hang(ABHang));
+                        SipMain.Teminate();
+                    }
                     break;
                 case GlobalData.PhoneType.TELEPHONE:
 
@@ -105,7 +110,6 @@ namespace CenoCC {
                 default:
                     break;
             }
-            CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
         }
         #endregion
 

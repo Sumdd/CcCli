@@ -12,9 +12,8 @@ namespace Common
     public class MoveForm : Form
     {
         #region 移动窗口
-        Point mouseOff;//鼠标移动位置变量      
-        bool leftFlag;//标签是否为左键  
-
+        Point mouseOff;
+        bool leftFlag;
         protected MoveForm()
         {
             this.MouseDown += new MouseEventHandler(MoveForm_MouseDown);
@@ -26,17 +25,16 @@ namespace Common
         {
             if (e.Button == MouseButtons.Left)
             {
-                mouseOff = new Point(-e.X, -e.Y); //得到变量的值
-                leftFlag = true;                  //点击左键按下时标注为true;
+                mouseOff = new Point(-e.X, -e.Y);
+                leftFlag = true;
             }
         }
-
         private void MoveForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (leftFlag)
             {
                 Point mouseSet = Control.MousePosition;
-                mouseSet.Offset(mouseOff.X, mouseOff.Y);  //设置移动后的位置
+                mouseSet.Offset(mouseOff.X, mouseOff.Y);
                 Location = mouseSet;
             }
         }
@@ -45,7 +43,7 @@ namespace Common
         {
             if (leftFlag)
             {
-                leftFlag = false;//释放鼠标后标注为false;
+                leftFlag = false;
             }
         }
         #endregion

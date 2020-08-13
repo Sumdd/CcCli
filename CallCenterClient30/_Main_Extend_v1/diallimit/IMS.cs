@@ -10,6 +10,7 @@ using DataBaseUtil;
 using Core_v1;
 using Cmn_v1;
 using Common;
+using System.Net;
 
 namespace CenoCC
 {
@@ -77,10 +78,21 @@ namespace CenoCC
                                 MessageBox.Show(this, "请检测是否包含 $ip$ 列");
                                 return;
                             }
+
+                            if (m_sModelString.Contains("$ip$") && m_pDataTable.Columns.Contains("$ip$") && m_pDataTable.Select(" ISNULL([$ip$],'')='' ")?.Count() > 0)
+                            {
+                                MessageBox.Show(this, "$ip$ 列非空");
+                                return;
+                            }
+
                             if (m_sModelString.Contains("$port$") && !m_pDataTable.Columns.Contains("$port$"))
                             {
-                                MessageBox.Show(this, "请检测是否包含 $port$ 列");
-                                return;
+                                ///自动添加5060即可
+                                m_pDataTable.Columns.Add("$port$", typeof(string));
+                                foreach (DataRow item in m_pDataTable.Rows)
+                                {
+                                    item["$port$"] = "5060";
+                                }
                             }
 
                             ///写网关至数据库
@@ -101,7 +113,7 @@ namespace CenoCC
                                 m_sErrMsgShow += $"{m_sErrMsg}\r\n";
                             }
                             //完成
-                            MessageBox.Show(this, $"IMS导入完成,{m_sErrMsgShow}如需要可将网关XML文件拷贝至对应位置\r\n请到“网关管理”手动点击“重载”按钮加载网关,如果为REGED即为注册成功.");
+                            MessageBox.Show(this, $"导入完成,{m_sErrMsgShow}如需要可将网关XML文件拷贝至对应位置\r\n请到“网关管理”手动点击“重载”按钮加载网关,如果为REGED即为注册成功.");
                         }
                         else
                         {
@@ -157,6 +169,39 @@ namespace CenoCC
 
                 ///替换XML内容
                 this.txtXML.Text = h_txt.read(txtModelLocation.Text);
+            }
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ///弹出位置选中框
+                string m_sFile = string.Empty;
+                SaveFileDialog m_sSaveDialog = new SaveFileDialog();
+                m_sSaveDialog.Filter = "电子表格|*.xls";
+                m_sSaveDialog.FileName = "ims.xls";
+                if (DialogResult.OK == m_sSaveDialog.ShowDialog())
+                {
+                    m_sFile = m_sSaveDialog.FileName.Replace("\\", "/");
+                }
+                else return;
+
+                if (System.IO.File.Exists(m_sFile)) System.IO.File.Delete(m_sFile);
+
+                string m_sHttp = Call_ParamUtil.SystemUpgradelPath;
+                using (var client = new WebClient())
+                {
+                    string m_sXls = $"{m_sHttp}/ims.xls";
+                    client.DownloadFile(new Uri(m_sXls), $"{m_sFile}");
+                }
+
+                Cmn_v1.Cmn.OpenFolderAndSelect(m_sFile);
+            }
+            catch (Exception ex)
+            {
+                Cmn_v1.Cmn.MsgWranThat(this, $"下载错误:{ex.Message}");
+                Log.Instance.Error($"[CenoCC][IMS][btnDownload_Click][Exception][{ex.Message}]");
             }
         }
     }

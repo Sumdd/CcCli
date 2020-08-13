@@ -48,14 +48,20 @@
             this.btnLimitCallRuleSelect = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.cbxLimitCallRule = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtDialLocalPrefix = new System.Windows.Forms.TextBox();
+            this.btnPrefixDealFlagAll = new System.Windows.Forms.Button();
+            this.btnPrefixDealFlagSelect = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cbxPrefixDealFlag = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(232, 146);
+            this.btnOK.Location = new System.Drawing.Point(232, 166);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(40, 23);
-            this.btnOK.TabIndex = 13;
+            this.btnOK.TabIndex = 8;
             this.btnOK.Tag = "diallimit_common_area_ok";
             this.btnOK.Text = "确定";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -63,10 +69,10 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(186, 146);
+            this.btnReset.Location = new System.Drawing.Point(186, 166);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(40, 23);
-            this.btnReset.TabIndex = 12;
+            this.btnReset.TabIndex = 7;
             this.btnReset.Tag = "diallimit_common_area_reset";
             this.btnReset.Text = "重置";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -74,10 +80,10 @@
             // 
             // btnUsing
             // 
-            this.btnUsing.Location = new System.Drawing.Point(24, 146);
+            this.btnUsing.Location = new System.Drawing.Point(24, 166);
             this.btnUsing.Name = "btnUsing";
             this.btnUsing.Size = new System.Drawing.Size(75, 23);
-            this.btnUsing.TabIndex = 10;
+            this.btnUsing.TabIndex = 5;
             this.btnUsing.Tag = "diallimit_common_area_all";
             this.btnUsing.Text = "全部生效";
             this.btnUsing.UseVisualStyleBackColor = true;
@@ -85,10 +91,10 @@
             // 
             // btnUsingSelect
             // 
-            this.btnUsingSelect.Location = new System.Drawing.Point(105, 146);
+            this.btnUsingSelect.Location = new System.Drawing.Point(105, 166);
             this.btnUsingSelect.Name = "btnUsingSelect";
             this.btnUsingSelect.Size = new System.Drawing.Size(75, 23);
-            this.btnUsingSelect.TabIndex = 11;
+            this.btnUsingSelect.TabIndex = 6;
             this.btnUsingSelect.Tag = "diallimit_common_area_select";
             this.btnUsingSelect.Text = "选中生效";
             this.btnUsingSelect.UseVisualStyleBackColor = true;
@@ -108,14 +114,14 @@
             this.txtAreaCode.Location = new System.Drawing.Point(152, 12);
             this.txtAreaCode.Name = "txtAreaCode";
             this.txtAreaCode.Size = new System.Drawing.Size(120, 21);
-            this.txtAreaCode.TabIndex = 15;
+            this.txtAreaCode.TabIndex = 1;
             // 
             // txtAreaName
             // 
             this.txtAreaName.Location = new System.Drawing.Point(152, 39);
             this.txtAreaName.Name = "txtAreaName";
             this.txtAreaName.Size = new System.Drawing.Size(120, 21);
-            this.txtAreaName.TabIndex = 16;
+            this.txtAreaName.TabIndex = 2;
             // 
             // label8
             // 
@@ -131,25 +137,25 @@
             this.txtDialPrefix.Location = new System.Drawing.Point(152, 66);
             this.txtDialPrefix.Name = "txtDialPrefix";
             this.txtDialPrefix.Size = new System.Drawing.Size(120, 21);
-            this.txtDialPrefix.TabIndex = 18;
+            this.txtDialPrefix.TabIndex = 3;
             // 
             // label2
             // 
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(12, 97);
+            this.label2.Location = new System.Drawing.Point(12, 117);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(260, 46);
             this.label2.TabIndex = 22;
-            this.label2.Text = "说明:显示默认配置,可操作多条。以区号来判断拨打的是否是外地号码以及是否加拨前缀。";
+            this.label2.Text = "说明:显示默认配置,可操作多条。以区号来判断拨打的是否是外地号码以及是否加拨外地前缀或是本地前缀";
             // 
             // cbxDtmf
             // 
             this.cbxDtmf.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDtmf.FormattingEnabled = true;
-            this.cbxDtmf.Location = new System.Drawing.Point(152, 198);
+            this.cbxDtmf.Location = new System.Drawing.Point(152, 218);
             this.cbxDtmf.Name = "cbxDtmf";
             this.cbxDtmf.Size = new System.Drawing.Size(120, 20);
-            this.cbxDtmf.TabIndex = 23;
+            this.cbxDtmf.TabIndex = 9;
             // 
             // label1
             // 
@@ -163,7 +169,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 201);
+            this.label3.Location = new System.Drawing.Point(12, 221);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(113, 12);
             this.label3.TabIndex = 24;
@@ -171,10 +177,10 @@
             // 
             // btnSelectDtmf
             // 
-            this.btnSelectDtmf.Location = new System.Drawing.Point(197, 224);
+            this.btnSelectDtmf.Location = new System.Drawing.Point(197, 244);
             this.btnSelectDtmf.Name = "btnSelectDtmf";
             this.btnSelectDtmf.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectDtmf.TabIndex = 25;
+            this.btnSelectDtmf.TabIndex = 11;
             this.btnSelectDtmf.Tag = "diallimit_common_dtmf_select";
             this.btnSelectDtmf.Text = "选中生效";
             this.btnSelectDtmf.UseVisualStyleBackColor = true;
@@ -182,10 +188,10 @@
             // 
             // btnAllDtmf
             // 
-            this.btnAllDtmf.Location = new System.Drawing.Point(116, 224);
+            this.btnAllDtmf.Location = new System.Drawing.Point(116, 244);
             this.btnAllDtmf.Name = "btnAllDtmf";
             this.btnAllDtmf.Size = new System.Drawing.Size(75, 23);
-            this.btnAllDtmf.TabIndex = 26;
+            this.btnAllDtmf.TabIndex = 10;
             this.btnAllDtmf.Tag = "diallimit_common_dtmf_all";
             this.btnAllDtmf.Text = "全部生效";
             this.btnAllDtmf.UseVisualStyleBackColor = true;
@@ -195,15 +201,15 @@
             // 
             this.cbxCommon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxCommon.FormattingEnabled = true;
-            this.cbxCommon.Location = new System.Drawing.Point(152, 269);
+            this.cbxCommon.Location = new System.Drawing.Point(152, 289);
             this.cbxCommon.Name = "cbxCommon";
             this.cbxCommon.Size = new System.Drawing.Size(120, 20);
-            this.cbxCommon.TabIndex = 27;
+            this.cbxCommon.TabIndex = 12;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 272);
+            this.label4.Location = new System.Drawing.Point(12, 292);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 12);
             this.label4.TabIndex = 28;
@@ -211,10 +217,10 @@
             // 
             // btnAllCommon
             // 
-            this.btnAllCommon.Location = new System.Drawing.Point(116, 295);
+            this.btnAllCommon.Location = new System.Drawing.Point(116, 315);
             this.btnAllCommon.Name = "btnAllCommon";
             this.btnAllCommon.Size = new System.Drawing.Size(75, 23);
-            this.btnAllCommon.TabIndex = 30;
+            this.btnAllCommon.TabIndex = 14;
             this.btnAllCommon.Tag = "diallimit_common_share_all";
             this.btnAllCommon.Text = "全部生效";
             this.btnAllCommon.UseVisualStyleBackColor = true;
@@ -222,10 +228,10 @@
             // 
             // btnSelectCommon
             // 
-            this.btnSelectCommon.Location = new System.Drawing.Point(197, 295);
+            this.btnSelectCommon.Location = new System.Drawing.Point(197, 315);
             this.btnSelectCommon.Name = "btnSelectCommon";
             this.btnSelectCommon.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectCommon.TabIndex = 29;
+            this.btnSelectCommon.TabIndex = 15;
             this.btnSelectCommon.Tag = "diallimit_common_share_select";
             this.btnSelectCommon.Text = "选中生效";
             this.btnSelectCommon.UseVisualStyleBackColor = true;
@@ -233,10 +239,10 @@
             // 
             // btnUpdateShare
             // 
-            this.btnUpdateShare.Location = new System.Drawing.Point(12, 295);
+            this.btnUpdateShare.Location = new System.Drawing.Point(12, 315);
             this.btnUpdateShare.Name = "btnUpdateShare";
             this.btnUpdateShare.Size = new System.Drawing.Size(98, 23);
-            this.btnUpdateShare.TabIndex = 31;
+            this.btnUpdateShare.TabIndex = 13;
             this.btnUpdateShare.Tag = "diallimit_common_share_update";
             this.btnUpdateShare.Text = "更新共享号码池";
             this.btnUpdateShare.UseVisualStyleBackColor = true;
@@ -244,10 +250,10 @@
             // 
             // btnLimitCallRuleAll
             // 
-            this.btnLimitCallRuleAll.Location = new System.Drawing.Point(116, 366);
+            this.btnLimitCallRuleAll.Location = new System.Drawing.Point(116, 386);
             this.btnLimitCallRuleAll.Name = "btnLimitCallRuleAll";
             this.btnLimitCallRuleAll.Size = new System.Drawing.Size(75, 23);
-            this.btnLimitCallRuleAll.TabIndex = 35;
+            this.btnLimitCallRuleAll.TabIndex = 17;
             this.btnLimitCallRuleAll.Tag = "diallimit_common_limitcallrule_all";
             this.btnLimitCallRuleAll.Text = "全部生效";
             this.btnLimitCallRuleAll.UseVisualStyleBackColor = true;
@@ -255,10 +261,10 @@
             // 
             // btnLimitCallRuleSelect
             // 
-            this.btnLimitCallRuleSelect.Location = new System.Drawing.Point(197, 366);
+            this.btnLimitCallRuleSelect.Location = new System.Drawing.Point(197, 386);
             this.btnLimitCallRuleSelect.Name = "btnLimitCallRuleSelect";
             this.btnLimitCallRuleSelect.Size = new System.Drawing.Size(75, 23);
-            this.btnLimitCallRuleSelect.TabIndex = 34;
+            this.btnLimitCallRuleSelect.TabIndex = 18;
             this.btnLimitCallRuleSelect.Tag = "diallimit_common_limitcallrule_select";
             this.btnLimitCallRuleSelect.Text = "选中生效";
             this.btnLimitCallRuleSelect.UseVisualStyleBackColor = true;
@@ -267,7 +273,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 343);
+            this.label5.Location = new System.Drawing.Point(12, 363);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 33;
@@ -277,16 +283,78 @@
             // 
             this.cbxLimitCallRule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxLimitCallRule.FormattingEnabled = true;
-            this.cbxLimitCallRule.Location = new System.Drawing.Point(152, 340);
+            this.cbxLimitCallRule.Location = new System.Drawing.Point(152, 360);
             this.cbxLimitCallRule.Name = "cbxLimitCallRule";
             this.cbxLimitCallRule.Size = new System.Drawing.Size(120, 20);
-            this.cbxLimitCallRule.TabIndex = 32;
+            this.cbxLimitCallRule.TabIndex = 16;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 96);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(101, 12);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "本地号码加拨前缀";
+            // 
+            // txtDialLocalPrefix
+            // 
+            this.txtDialLocalPrefix.Location = new System.Drawing.Point(152, 93);
+            this.txtDialLocalPrefix.Name = "txtDialLocalPrefix";
+            this.txtDialLocalPrefix.Size = new System.Drawing.Size(120, 21);
+            this.txtDialLocalPrefix.TabIndex = 4;
+            // 
+            // btnPrefixDealFlagAll
+            // 
+            this.btnPrefixDealFlagAll.Location = new System.Drawing.Point(116, 457);
+            this.btnPrefixDealFlagAll.Name = "btnPrefixDealFlagAll";
+            this.btnPrefixDealFlagAll.Size = new System.Drawing.Size(75, 23);
+            this.btnPrefixDealFlagAll.TabIndex = 20;
+            this.btnPrefixDealFlagAll.Tag = "diallimit_common_prefixdealflag_all";
+            this.btnPrefixDealFlagAll.Text = "全部生效";
+            this.btnPrefixDealFlagAll.UseVisualStyleBackColor = true;
+            this.btnPrefixDealFlagAll.Click += new System.EventHandler(this.btnPrefixDealFlag_Click);
+            // 
+            // btnPrefixDealFlagSelect
+            // 
+            this.btnPrefixDealFlagSelect.Location = new System.Drawing.Point(197, 457);
+            this.btnPrefixDealFlagSelect.Name = "btnPrefixDealFlagSelect";
+            this.btnPrefixDealFlagSelect.Size = new System.Drawing.Size(75, 23);
+            this.btnPrefixDealFlagSelect.TabIndex = 21;
+            this.btnPrefixDealFlagSelect.Tag = "diallimit_common_prefixdealflag_select";
+            this.btnPrefixDealFlagSelect.Text = "选中生效";
+            this.btnPrefixDealFlagSelect.UseVisualStyleBackColor = true;
+            this.btnPrefixDealFlagSelect.Click += new System.EventHandler(this.btnPrefixDealFlag_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(12, 434);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(125, 12);
+            this.label9.TabIndex = 41;
+            this.label9.Text = "自动根据区号加拨前缀";
+            // 
+            // cbxPrefixDealFlag
+            // 
+            this.cbxPrefixDealFlag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxPrefixDealFlag.FormattingEnabled = true;
+            this.cbxPrefixDealFlag.Location = new System.Drawing.Point(152, 431);
+            this.cbxPrefixDealFlag.Name = "cbxPrefixDealFlag";
+            this.cbxPrefixDealFlag.Size = new System.Drawing.Size(120, 20);
+            this.cbxPrefixDealFlag.TabIndex = 19;
             // 
             // cmnset
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 401);
+            this.ClientSize = new System.Drawing.Size(284, 496);
+            this.Controls.Add(this.btnPrefixDealFlagAll);
+            this.Controls.Add(this.btnPrefixDealFlagSelect);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.cbxPrefixDealFlag);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.txtDialLocalPrefix);
             this.Controls.Add(this.btnLimitCallRuleAll);
             this.Controls.Add(this.btnLimitCallRuleSelect);
             this.Controls.Add(this.label5);
@@ -345,5 +413,11 @@
         private System.Windows.Forms.Button btnLimitCallRuleSelect;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox cbxLimitCallRule;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtDialLocalPrefix;
+        private System.Windows.Forms.Button btnPrefixDealFlagAll;
+        private System.Windows.Forms.Button btnPrefixDealFlagSelect;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox cbxPrefixDealFlag;
     }
 }

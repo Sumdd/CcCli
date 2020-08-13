@@ -11,6 +11,7 @@ using Core_v1;
 using DataBaseUtil;
 using WebSocket_v1;
 using CenoSocket;
+using Common;
 
 namespace CenoCC
 {
@@ -20,18 +21,28 @@ namespace CenoCC
 
         public EventHandler SearchEvent;
         public user _entity;
-        public userBaseInfo()
+        private int m_uID = -1;
+        public userBaseInfo(int _m_uID)
         {
-            InitializeComponent();
+            this.m_uID = _m_uID;
 
-            ///操作权限
-            this.m_fLoadOperatePower(this.Controls);
+            InitializeComponent();
 
             ///加载
             this.HandleCreated += (a, b) =>
             {
                 this.m_fFill();
             };
+
+            ///设置模式提示标识
+            if (this.m_uID == -1)
+            {
+                this.lblTips.Text = "当前模式:批量编辑";
+            }
+            else
+            {
+                this.lblTips.Text = $"当前模式:单项编辑;ID:{m_uID}";
+            }
         }
 
         #region ***操作权限
@@ -46,9 +57,7 @@ namespace CenoCC
                         continue;
                     if (string.IsNullOrWhiteSpace(m_pButton.Tag.ToString()))
                         continue;
-                    if (m_cPower.Has(m_pButton.Tag.ToString()))
-                        m_pButton.Enabled = true;
-                    else
+                    if (!m_cPower.Has(m_pButton.Tag.ToString()))
                         m_pButton.Enabled = false;
                 }
                 else if (item.GetType() == typeof(Panel))
@@ -70,7 +79,7 @@ namespace CenoCC
                     {
                         string m_sTeam = string.Empty;
                         string m_sRole = string.Empty;
-                        int m_sID = 1000;
+                        int m_sID = -1;
                         if (this._entity?.list?.SelectedItems?.Count == 1)
                         {
                             ListViewItem m_pListViewItem = this._entity?.list?.SelectedItems[0];
@@ -81,38 +90,94 @@ namespace CenoCC
                             m_sID = Convert.ToInt32(m_pListViewItem.SubItems["id"].Text);
                         }
 
-                        if (m_sID == 1000)
+                        if (m_uID == -1)
                         {
-                            this.txtLoginName.Enabled = false;
+                            ///姓名不可批量更改
+                            this.btnUa.Enabled = false;
+                            ///登录名不可批量更改
                             this.btnLoginName.Enabled = false;
+                            ///密码不可批量更改
+                            this.btnPassword.Enabled = false;
+                        }
+                        else
+                        {
+                            if (m_sID == 1000)
+                            {
+                                ///姓名不可更改
+                                this.btnUa.Enabled = false;
+                                ///登录名不可更改
+                                this.btnLoginName.Enabled = false;
+                                ///密码不可更改
+                                this.btnPassword.Enabled = false;
+                            }
+
+                            ///如果当前为超级管理员
+                            if (AgentInfo.AgentID == 1000.ToString())
+                            {
+                                ///姓名可更改
+                                this.btnUa.Enabled = true;
+                                ///密码可修改
+                                this.btnPassword.Enabled = true;
+                            }
                         }
 
-                        this.BeginInvoke(new MethodInvoker(() =>
+                        this.Invoke(new MethodInvoker(() =>
                         {
                             this.cboTeam.BeginUpdate();
                             this.cboTeam.DataSource = m_cEsyMySQL.m_fGetTeam();
                             this.cboTeam.DisplayMember = "n";
                             this.cboTeam.ValueMember = "ID";
-                            if (!string.IsNullOrWhiteSpace(m_sTeam))
-                                this.cboTeam.SelectedValue = m_sTeam;
+
+                            if (m_uID == -1)
+                            {
+                                this.btnTeam.Enabled = true;
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrWhiteSpace(m_sTeam))
+                                    this.cboTeam.SelectedValue = m_sTeam;
+                                ///部门不可修改
+                                if (m_sID == 1000)
+                                {
+                                    this.btnTeam.Enabled = false;
+                                }
+                                ///超级管理员可修改
+                                if (AgentInfo.AgentID == 1000.ToString())
+                                {
+                                    this.btnTeam.Enabled = true;
+                                }
+                            }
+
                             this.cboTeam.EndUpdate();
                         }));
 
-                        this.BeginInvoke(new MethodInvoker(() =>
+                        this.Invoke(new MethodInvoker(() =>
                         {
                             this.cboRole.BeginUpdate();
                             this.cboRole.DataSource = m_cEsyMySQL.m_fGetRole();
                             this.cboRole.DisplayMember = "n";
                             this.cboRole.ValueMember = "ID";
-                            if (!string.IsNullOrWhiteSpace(m_sRole))
-                                this.cboRole.SelectedValue = m_sRole;
-                            if (m_sID == 1000)
+
+                            if (m_uID == -1)
                             {
-                                this.cboRole.Enabled = false;
-                                this.btnRole.Enabled = false;
+                                this.btnRole.Enabled = true;
                             }
+                            else
+                            {
+                                if (!string.IsNullOrWhiteSpace(m_sRole))
+                                    this.cboRole.SelectedValue = m_sRole;
+                                ///角色不可修改
+                                if (m_sID == 1000)
+                                {
+                                    this.btnRole.Enabled = false;
+                                }
+                            }
+
                             this.cboRole.EndUpdate();
                         }));
+
+                        ///操作权限
+                        this.m_fLoadOperatePower(this.Controls);
                     }
                     catch (Exception ex)
                     {
@@ -122,22 +187,70 @@ namespace CenoCC
             })).Start();
         }
 
-        public void m_fSetSelectInfo(string m_sUa, string m_sLoginName, string m_sTeamID, string m_sRoleID)
+        public void m_fSetSelectInfo(string m_sUa, string m_sLoginName, string m_sTeamID, string m_sRoleID, int m_sID)
         {
+            ///如果模式为直接进入,可以批量编辑部门与角色
+            if (this.m_uID == -1) return;
+
+            this.lblTips.Text = $"当前模式:单项编辑;ID:{m_sID}";
+            this.m_uID = m_sID;
+
             this.txtUa.Text = m_sUa;
             this.txtLoginName.Text = m_sLoginName;
             this.cboTeam.SelectedValue = m_sTeamID;
             this.cboRole.SelectedValue = m_sRoleID;
+
+            ///根据ID以及当前登录人来判断是否可以更改超级管理员的信息
+            if (m_sID == 1000)
+            {
+                ///姓名不可更改
+                this.btnUa.Enabled = false;
+                ///登录名不可更改
+                this.btnLoginName.Enabled = false;
+                ///部门不可修改
+                this.btnTeam.Enabled = false;
+                ///角色不可修改
+                this.btnRole.Enabled = false;
+                ///密码不可更改
+                this.btnPassword.Enabled = false;
+            }
+            else
+            {
+                ///姓名可更改
+                this.btnUa.Enabled = true;
+                ///登录名可更改
+                this.btnLoginName.Enabled = true;
+                ///部门可修改
+                this.btnTeam.Enabled = true;
+                ///角色可修改
+                this.btnRole.Enabled = true;
+                ///密码可更改
+                this.btnPassword.Enabled = true;
+            }
+
+            ///如果当前为超级管理员
+            if (AgentInfo.AgentID == 1000.ToString())
+            {
+                ///姓名可更改
+                this.btnUa.Enabled = true;
+                ///部门可修改
+                this.btnTeam.Enabled = true;
+                ///密码可修改
+                this.btnPassword.Enabled = true;
+            }
+
+            ///操作权限
+            this.m_fLoadOperatePower(this.Controls);
         }
 
         private void btnUa_Click(object sender, EventArgs e)
         {
-            if (this._entity?.list?.SelectedItems?.Count != 1)
+            if (m_uID == -1)
             {
-                MessageBox.Show(this, "请选择一行进行修改基本信息");
+                MessageBox.Show(this, "请选择一行进行姓名修改");
                 return;
             }
-            string m_sID = this._entity?.list?.SelectedItems[0]?.SubItems["id"]?.Text;
+            string m_sID = m_uID.ToString();
             string m_sUa = this.txtUa.Text.Trim();
             if (string.IsNullOrWhiteSpace(m_sUa))
             {
@@ -215,12 +328,12 @@ SELECT
 
         private void btnLoginName_Click(object sender, EventArgs e)
         {
-            if (this._entity?.list?.SelectedItems?.Count != 1)
+            if (m_uID == -1)
             {
-                MessageBox.Show(this, "请选择一行进行修改基本信息");
+                MessageBox.Show(this, "请选择一行进行登录名修改");
                 return;
             }
-            string m_sID = this._entity?.list?.SelectedItems[0]?.SubItems["id"]?.Text;
+            string m_sID = m_uID.ToString();
             string m_sLoginName = this.txtLoginName.Text.Trim();
             if (string.IsNullOrWhiteSpace(m_sLoginName))
             {
@@ -308,12 +421,34 @@ SELECT
 
         private void btnTeam_Click(object sender, EventArgs e)
         {
-            if (this._entity?.list?.SelectedItems?.Count != 1)
+            List<string> m_lID = new List<string>();
+            if (this.m_uID == -1)
             {
-                MessageBox.Show(this, "请选择一行进行修改基本信息");
+                if (this._entity?.list?.SelectedItems?.Count > 0)
+                {
+                    foreach (ListViewItem item in this._entity?.list?.SelectedItems)
+                    {
+                        m_lID.Add(item?.SubItems["id"]?.Text);
+                    }
+                }
+            }
+            else
+            {
+                m_lID.Add(this.m_uID.ToString());
+            }
+
+            if (m_lID.Count <= 0)
+            {
+                MessageBox.Show(this, "请至少选择一行进行部门修改");
                 return;
             }
-            string m_sID = this._entity?.list?.SelectedItems[0]?.SubItems["id"]?.Text;
+
+            if (m_lID.Contains(1000.ToString()) && AgentInfo.AgentID != 1000.ToString())
+            {
+                MessageBox.Show(this, "批量编辑部门时不可包含默认的超级管理员admin");
+                return;
+            }
+
             string m_sTeam = this.cboTeam.SelectedValue.ToString();
             if (string.IsNullOrWhiteSpace(m_sTeam))
             {
@@ -341,7 +476,7 @@ SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `call_agent` AS `T0` WHERE `T0`
 UPDATE `call_agent` 
 SET `call_agent`.`TeamID` = {m_sTeam} 
 WHERE
-	`call_agent`.`ID` = {m_sID} 
+	`call_agent`.`ID` IN ( {string.Join(",", m_lID)} )
 	AND @m_uCount = 1;
 SELECT
 	@m_uCount AS `status`,
@@ -391,12 +526,34 @@ SELECT
 
         private void btnRole_Click(object sender, EventArgs e)
         {
-            if (this._entity?.list?.SelectedItems?.Count != 1)
+            List<string> m_lID = new List<string>();
+            if (this.m_uID == -1)
             {
-                MessageBox.Show(this, "请选择一行进行修改基本信息");
+                if (this._entity?.list?.SelectedItems?.Count > 0)
+                {
+                    foreach (ListViewItem item in this._entity?.list?.SelectedItems)
+                    {
+                        m_lID.Add(item?.SubItems["id"]?.Text);
+                    }
+                }
+            }
+            else
+            {
+                m_lID.Add(this.m_uID.ToString());
+            }
+
+            if (m_lID.Count <= 0)
+            {
+                MessageBox.Show(this, "请至少选择一行进行部门修改");
                 return;
             }
-            string m_sID = this._entity?.list?.SelectedItems[0]?.SubItems["id"]?.Text;
+
+            if (m_lID.Contains(1000.ToString()))
+            {
+                MessageBox.Show(this, "批量编辑角色时不可包含默认的超级管理员admin");
+                return;
+            }
+
             string m_sRole = this.cboRole.SelectedValue.ToString();
             if (string.IsNullOrWhiteSpace(m_sRole))
             {
@@ -424,7 +581,7 @@ SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `call_agent` AS `T0` WHERE `T0`
 UPDATE `call_agent` 
 SET `call_agent`.`RoleID` = {m_sRole} 
 WHERE
-	`call_agent`.`ID` = {m_sID} 
+	`call_agent`.`ID` IN ( {string.Join(",", m_lID)} )
 	AND @m_uCount = 1;
 SELECT
 	@m_uCount AS `status`,
@@ -474,12 +631,12 @@ SELECT
 
         private void btnPassword_Click(object sender, EventArgs e)
         {
-            if (this._entity?.list?.SelectedItems?.Count != 1)
+            if (m_uID == -1)
             {
-                MessageBox.Show(this, "请选择一行进行修改基本信息");
+                MessageBox.Show(this, "请选择一行进行密码修改");
                 return;
             }
-            string m_sID = this._entity?.list?.SelectedItems[0]?.SubItems["id"]?.Text;
+            string m_sID = m_uID.ToString();
             string m_sCurrentPassword = this.txtCurrentPassword.Text;
             if (string.IsNullOrWhiteSpace(m_sCurrentPassword))
             {

@@ -66,6 +66,9 @@ namespace CenoCC {
                 case "网关管理":
                     Tab_title.TitlePic = global::CenoCC.Properties.Resources._40;
                     break;
+                case "路由管理":
+                    Tab_title.TitlePic = global::CenoCC.Properties.Resources.arrow_switch;
+                    break;
             }
             Tab_title.Top = 21;
             Tab_title.Left = ControlCount * Tab_title.Width;
@@ -245,7 +248,12 @@ namespace CenoCC {
                                 if (!m._ActiveFlag)
                                 {
                                     ActiveTab(m.ControlIndex);
-                                    tew = m._WebBrowser;
+
+                                    ///<![CDATA[
+                                    /// 修正BUG,非Web页面不做处理
+                                    /// ]]>
+                                    if (m.IsWebBrowser)
+                                        tew = m._WebBrowser;
                                 }
                             } else {
                                 DeleteTab(m.ControlIndex);
@@ -344,7 +352,15 @@ namespace CenoCC {
                             {
                                 _m_uIndex = _TabControl.Count - 1;
                             }
-                            ActiveTab(((MainFormClass)_TabControl[_m_uIndex]).ControlIndex);
+
+                            var mfc = ((MainFormClass)_TabControl[_m_uIndex]);
+                            ActiveTab(mfc.ControlIndex);
+
+                            ///<![CDATA[
+                            /// 修正BUG,非Web页面不做处理
+                            /// ]]>
+                            if (mfc.IsWebBrowser)
+                                tew = mfc._WebBrowser;
                         }
                     }
                 }

@@ -30,6 +30,10 @@
         {
             this.layout = new System.Windows.Forms.Panel();
             this.searchpanel = new System.Windows.Forms.Panel();
+            this.reportSumAreaKey = new CenoCC._queryLeft();
+            this.reportSumAreaValue = new System.Windows.Forms.ComboBox();
+            this.reportTypeKey = new CenoCC._queryLeft();
+            this.reportTypeValue = new System.Windows.Forms.ComboBox();
             this.agentKey = new CenoCC._queryLeft();
             this.agentValue = new System.Windows.Forms.ComboBox();
             this.endSpeakTimeValue = new System.Windows.Forms.DateTimePicker();
@@ -43,8 +47,8 @@
             this.btnCloseAfterSearch = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
-            this.reportTypeKey = new CenoCC._queryLeft();
-            this.reportTypeValue = new System.Windows.Forms.ComboBox();
+            this.teamKey = new CenoCC._queryLeft();
+            this.teamValue = new System.Windows.Forms.ComboBox();
             this.layout.SuspendLayout();
             this.searchpanel.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +71,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.searchpanel.AutoScroll = true;
+            this.searchpanel.Controls.Add(this.teamKey);
+            this.searchpanel.Controls.Add(this.teamValue);
+            this.searchpanel.Controls.Add(this.reportSumAreaKey);
+            this.searchpanel.Controls.Add(this.reportSumAreaValue);
             this.searchpanel.Controls.Add(this.reportTypeKey);
             this.searchpanel.Controls.Add(this.reportTypeValue);
             this.searchpanel.Controls.Add(this.agentKey);
@@ -83,6 +91,40 @@
             this.searchpanel.Name = "searchpanel";
             this.searchpanel.Size = new System.Drawing.Size(410, 360);
             this.searchpanel.TabIndex = 14;
+            // 
+            // reportSumAreaKey
+            // 
+            this.reportSumAreaKey.BackColor = System.Drawing.Color.Transparent;
+            this.reportSumAreaKey.Location = new System.Drawing.Point(10, 166);
+            this.reportSumAreaKey.Name = "reportSumAreaKey";
+            this.reportSumAreaKey.Size = new System.Drawing.Size(176, 20);
+            this.reportSumAreaKey.TabIndex = 16;
+            // 
+            // reportSumAreaValue
+            // 
+            this.reportSumAreaValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.reportSumAreaValue.FormattingEnabled = true;
+            this.reportSumAreaValue.Location = new System.Drawing.Point(192, 166);
+            this.reportSumAreaValue.Name = "reportSumAreaValue";
+            this.reportSumAreaValue.Size = new System.Drawing.Size(180, 20);
+            this.reportSumAreaValue.TabIndex = 17;
+            // 
+            // reportTypeKey
+            // 
+            this.reportTypeKey.BackColor = System.Drawing.Color.Transparent;
+            this.reportTypeKey.Location = new System.Drawing.Point(10, 140);
+            this.reportTypeKey.Name = "reportTypeKey";
+            this.reportTypeKey.Size = new System.Drawing.Size(176, 20);
+            this.reportTypeKey.TabIndex = 14;
+            // 
+            // reportTypeValue
+            // 
+            this.reportTypeValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.reportTypeValue.FormattingEnabled = true;
+            this.reportTypeValue.Location = new System.Drawing.Point(192, 140);
+            this.reportTypeValue.Name = "reportTypeValue";
+            this.reportTypeValue.Size = new System.Drawing.Size(180, 20);
+            this.reportTypeValue.TabIndex = 15;
             // 
             // agentKey
             // 
@@ -210,22 +252,22 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // reportTypeKey
+            // teamKey
             // 
-            this.reportTypeKey.BackColor = System.Drawing.Color.Transparent;
-            this.reportTypeKey.Location = new System.Drawing.Point(10, 140);
-            this.reportTypeKey.Name = "reportTypeKey";
-            this.reportTypeKey.Size = new System.Drawing.Size(176, 20);
-            this.reportTypeKey.TabIndex = 14;
+            this.teamKey.BackColor = System.Drawing.Color.Transparent;
+            this.teamKey.Location = new System.Drawing.Point(10, 192);
+            this.teamKey.Name = "teamKey";
+            this.teamKey.Size = new System.Drawing.Size(176, 20);
+            this.teamKey.TabIndex = 18;
             // 
-            // reportTypeValue
+            // teamValue
             // 
-            this.reportTypeValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.reportTypeValue.FormattingEnabled = true;
-            this.reportTypeValue.Location = new System.Drawing.Point(192, 140);
-            this.reportTypeValue.Name = "reportTypeValue";
-            this.reportTypeValue.Size = new System.Drawing.Size(180, 20);
-            this.reportTypeValue.TabIndex = 15;
+            this.teamValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.teamValue.FormattingEnabled = true;
+            this.teamValue.Location = new System.Drawing.Point(192, 192);
+            this.teamValue.Name = "teamValue";
+            this.teamValue.Size = new System.Drawing.Size(180, 20);
+            this.teamValue.TabIndex = 19;
             // 
             // RecReportSearch
             // 
@@ -260,5 +302,9 @@
         public System.Windows.Forms.Panel searchpanel;
         private _queryLeft reportTypeKey;
         private System.Windows.Forms.ComboBox reportTypeValue;
+        private _queryLeft reportSumAreaKey;
+        private System.Windows.Forms.ComboBox reportSumAreaValue;
+        private _queryLeft teamKey;
+        private System.Windows.Forms.ComboBox teamValue;
     }
 }

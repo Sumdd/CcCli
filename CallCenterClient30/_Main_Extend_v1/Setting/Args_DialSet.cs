@@ -30,6 +30,11 @@ namespace CenoCC
             this.cbxIsUseSpRandomTimeout.Checked = Call_ClientParamUtil.m_bIsUseSpRandomTimeout;
             this.nupWait.Value = Call_ClientParamUtil.m_uShareWait;
             this.ckbQNRegexNumber.Checked = Call_ClientParamUtil.m_bQNRegexNumber;
+            this.ckbUseApply.Checked = Call_ClientParamUtil.m_bUseApply;
+            if (!Call_ParamUtil.m_bUseApply)
+            {
+                this.ckbUseApply.Text = $"{this.ckbUseApply.Text}(该项服务未启用)";
+            }
             m_bFirst = false;
         }
 
@@ -142,6 +147,30 @@ namespace CenoCC
             catch (Exception ex)
             {
                 Log.Instance.Error($"[CenoCC][Args_DialSet][ckbQNRegexNumber_CheckedChanged][Exception][{ex.Message}]");
+            }
+        }
+
+        private void ckbUseApply_CheckedChanged(object sender, EventArgs e)
+        {
+            if (m_bFirst) return;
+            try
+            {
+                Call_ClientParamUtil.m_bUseApply = this.ckbUseApply.Checked;
+                Log.Instance.Success($"[CenoCC][Args_DialSet][ckbUseApply_CheckedChanged][{(Call_ClientParamUtil.m_bUseApply ? "启用" : "禁用")}独立申请式号码]");
+                Call_ParamUtil._m_bUseApply = null;
+                if (!Call_ParamUtil.m_bUseApply)
+                {
+                    if (!this.ckbUseApply.Text.Contains("(该项服务未启用)"))
+                        this.ckbUseApply.Text = $"{this.ckbUseApply.Text}(该项服务未启用)";
+                }
+                else
+                {
+                    this.ckbUseApply.Text = this.ckbUseApply.Text.Replace("(该项服务未启用)", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][Args_DialSet][ckbUseApply_CheckedChanged][Exception][{ex.Message}]");
             }
         }
     }

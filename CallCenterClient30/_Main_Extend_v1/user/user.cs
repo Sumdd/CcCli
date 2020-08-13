@@ -304,26 +304,34 @@ useuser
                     if (!Cmn.MsgQ("确定要重置选中用户的密码为0000吗?"))
                         return;
                     this._resetpwd_ = true;
-                    new System.Threading.Thread(new System.Threading.ThreadStart(() => {
+                    new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                    {
                         try
                         {
                             List<string> idlist = new List<string>();
                             foreach (ListViewItem item in this.list.SelectedItems)
                             {
-                                idlist.Add(item.SubItems["id"].Text);
+                                int m_sID = Convert.ToInt32(item.SubItems["id"].Text);
+                                idlist.Add(m_sID.ToString());
+                                ///如果含有超级管理员ID,而操作者非超级管理员,提示即可
+                                if (m_sID == 1000 && AgentInfo.AgentID != 1000.ToString())
+                                {
+                                    MessageBox.Show(this, "含有超级管理员项,不可重置,请重新选择!");
+                                    return;
+                                }
                             }
                             int i = Call_AgentUtil.m_fResetPwd(idlist);
                             if (i > 0)
                             {
                                 this.btnSearch.PerformClick();
                                 var msg = $"重置选中用户的密码完成";
-                                MessageBox.Show(msg);
+                                MessageBox.Show(this, msg);
                                 Log.Instance.Success(msg.Replace("\r\n", ";"));
                             }
                             else
                             {
                                 var msg = $"重置选中用户的密码失败";
-                                MessageBox.Show(msg);
+                                MessageBox.Show(this, msg);
                                 Log.Instance.Success(msg.Replace("\r\n", ";"));
                             }
                         }
@@ -586,6 +594,7 @@ SELECT
 	CONCAT( '\'', `call_agent`.`LoginName` ) AS `登录名`,
 	CONCAT( '\'', `call_agent`.`AgentName` ) AS `真实姓名`,
 	CONCAT( '\'', `dial_limit`.`number` ) AS `号码`,
+	CONCAT( '\'', `dial_limit`.`tnumber` ) AS `真实号码`,
 	CONCAT( '\'', `call_channel`.`ChNum` ) AS `分机号`,
 	CONCAT( '\'', `call_channel`.`SipServerIp` ) AS `分机SIP注册地址`,
 	CONCAT( '\'', `call_channel`.`ChPassword` ) AS `分机密码` 
@@ -679,10 +688,10 @@ ORDER BY
 
         private void btnBaseInfo_Click(object sender, EventArgs e)
         {
-            if (this.list?.SelectedItems?.Count != 1)
+            int m_uID = -1;
+            if (this.list?.SelectedItems?.Count == 1)
             {
-                MessageBox.Show(this, "请选择一项进行修改");
-                return;
+                m_uID = Convert.ToInt32(this.list?.SelectedItems[0]?.SubItems["id"].Text);
             }
 
             if (m_pUserBaseInfo != null && !m_pUserBaseInfo.IsDisposed)
@@ -693,7 +702,7 @@ ORDER BY
                 return;
             }
 
-            m_pUserBaseInfo = new userBaseInfo();
+            m_pUserBaseInfo = new userBaseInfo(m_uID);
             m_pUserBaseInfo._entity = this;
             m_pUserBaseInfo.SearchEvent = new EventHandler(this.GetListBody);
             m_pUserBaseInfo.Show(this);
@@ -704,8 +713,15 @@ ORDER BY
             if (this.m_pUserBaseInfo != null && !m_pUserBaseInfo.IsDisposed && this.list?.SelectedItems?.Count == 1)
             {
                 var m_pSelectItem = this.list?.SelectedItems[0];
-                this.m_pUserBaseInfo.m_fSetSelectInfo(m_pSelectItem.SubItems["agentname"].Text, m_pSelectItem.SubItems["loginname"].Text, m_pSelectItem.SubItems["teamid"].Text, m_pSelectItem.SubItems["roleid"].Text);
+                this.m_pUserBaseInfo.m_fSetSelectInfo(m_pSelectItem.SubItems["agentname"].Text, m_pSelectItem.SubItems["loginname"].Text, m_pSelectItem.SubItems["teamid"].Text, m_pSelectItem.SubItems["roleid"].Text, Convert.ToInt32(m_pSelectItem.SubItems["id"].Text));
             }
+        }
+
+        private void btnUpdUa_Click(object sender, EventArgs e)
+        {
+            ///重载用户信息,无需重启服务端
+            InWebSocketMain.Send(M_Send._zdwh("UpdUa"));
+            MessageBox.Show(this, "发送用户信息重载命令完成");
         }
     }
 }

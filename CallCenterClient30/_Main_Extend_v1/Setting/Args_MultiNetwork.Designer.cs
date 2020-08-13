@@ -28,7 +28,7 @@
             this.networkgb = new System.Windows.Forms.GroupBox();
             this.networkValue = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.reRegNowValue = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.layout.SuspendLayout();
             this.networkgb.SuspendLayout();
             this.SuspendLayout();
@@ -44,7 +44,7 @@
             // 
             // networkgb
             // 
-            this.networkgb.Controls.Add(this.reRegNowValue);
+            this.networkgb.Controls.Add(this.label2);
             this.networkgb.Controls.Add(this.networkValue);
             this.networkgb.Controls.Add(this.label1);
             this.networkgb.Location = new System.Drawing.Point(10, 10);
@@ -73,17 +73,14 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "网卡列表";
             // 
-            // reRegNowValue
+            // label2
             // 
-            this.reRegNowValue.AutoSize = true;
-            this.reRegNowValue.Checked = true;
-            this.reRegNowValue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.reRegNowValue.Location = new System.Drawing.Point(75, 46);
-            this.reRegNowValue.Name = "reRegNowValue";
-            this.reRegNowValue.Size = new System.Drawing.Size(132, 16);
-            this.reRegNowValue.TabIndex = 7;
-            this.reRegNowValue.Text = "转换网卡后重新注册";
-            this.reRegNowValue.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(74, 47);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(173, 12);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "需点击右键->退出->注册后生效";
             // 
             // Args_MultiNetwork
             // 
@@ -107,6 +104,6 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox networkValue;
-        private System.Windows.Forms.CheckBox reRegNowValue;
+        private System.Windows.Forms.Label label2;
     }
 }

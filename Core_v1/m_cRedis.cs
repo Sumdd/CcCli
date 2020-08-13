@@ -108,6 +108,9 @@ namespace Core_v1
                                                              //没有锁
                                                              &&
                                                              !m_lLockKeys.Contains($"{Redis2.m_sLockPrefix}:{r.uuid}")
+                                                             //类型
+                                                             &&
+                                                             r.isshare == 1
                                                              //排序
                                                              orderby r.ordernum ascending, r.areaname ascending, r.number ascending
                                                              //暂时去掉同号码限呼逻辑

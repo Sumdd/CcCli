@@ -28,8 +28,33 @@ namespace CenoCC {
 
                     #region 摘机
                     case (int)ChannelInfo.APP_USER_STATUS.US_STATUS_PICKUP: {
-                            if(_MainChat.InvokeRequired) {
-                                _MainChat.BeginInvoke(new MethodInvoker(() => {
+
+                            ///Log.Instance.Debug(CCFactory.ChInfo[CCFactory.CurrentCh].chStatus.ToString());
+                            ///只有回铃声中、振铃中可以摘机
+                            if (CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING ||
+                                CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK)
+                            {
+                                if (_MainChat.InvokeRequired)
+                                {
+                                    _MainChat.BeginInvoke(new MethodInvoker(() =>
+                                    {
+                                        _MainChat.CallStatus_Lbl.Text = "通话中";
+                                        _MainChat.Width = 180;
+                                        MinChat.CallTimeLength = 0;
+                                        _MainChat.DialTime_Lbl.Text = "00:00:00";
+                                        MinChat.SessionNoAnswerFlagTimer.Stop();
+                                        _MainChat.NoAnswer_Flag_Pnl.Visible = false;
+                                        MinChat.SessionFlagTimer.Start();
+                                        MinChat.SessionTimeLenTimer.Start();
+                                        _MainChat.Call_Tmsi.Enabled = false;
+                                        _MainChat.HangUp_Tmsi.Enabled = true;
+                                        _MainChat.Hold_TSMI.Enabled = true;
+                                        _MainChat.Transfer_TSMI.Enabled = true;
+                                        _MainChat.ShowDialPad_TSMI.Enabled = true;
+                                    }));
+                                }
+                                else
+                                {
                                     _MainChat.CallStatus_Lbl.Text = "通话中";
                                     _MainChat.Width = 180;
                                     MinChat.CallTimeLength = 0;
@@ -43,27 +68,13 @@ namespace CenoCC {
                                     _MainChat.Hold_TSMI.Enabled = true;
                                     _MainChat.Transfer_TSMI.Enabled = true;
                                     _MainChat.ShowDialPad_TSMI.Enabled = true;
-                                }));
-                            } else {
-                                _MainChat.CallStatus_Lbl.Text = "通话中";
-                                _MainChat.Width = 180;
-                                MinChat.CallTimeLength = 0;
-                                _MainChat.DialTime_Lbl.Text = "00:00:00";
-                                MinChat.SessionNoAnswerFlagTimer.Stop();
-                                _MainChat.NoAnswer_Flag_Pnl.Visible = false;
-                                MinChat.SessionFlagTimer.Start();
-                                MinChat.SessionTimeLenTimer.Start();
-                                _MainChat.Call_Tmsi.Enabled = false;
-                                _MainChat.HangUp_Tmsi.Enabled = true;
-                                _MainChat.Hold_TSMI.Enabled = true;
-                                _MainChat.Transfer_TSMI.Enabled = true;
-                                _MainChat.ShowDialPad_TSMI.Enabled = true;
+                                }
+                                CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING;
+                                SipMain.Stop();
+                                if (m.LParam == (IntPtr)1)
+                                    SipParam.m_pCall.AcceptCall();
+                                Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][接听电话]");
                             }
-                            CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING;
-                            SipMain.Stop();
-                            if(m.LParam == (IntPtr)1)
-                                SipParam.m_pCall.AcceptCall();
-                            Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][接听电话]");
                         }
                         break;
                     #endregion
@@ -143,12 +154,13 @@ namespace CenoCC {
 
                     #region 来电、本地响铃
                     case (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING: {
-                            string Phone = Marshal.PtrToStringAnsi(m.WParam);
-                            if(_MainChat.InvokeRequired) {
+                            string m_sCaller = Marshal.PtrToStringAnsi(m.WParam);
+                            string m_sCallee = Marshal.PtrToStringAnsi(m.LParam);
+                            if (_MainChat.InvokeRequired) {
                                 _MainChat.BeginInvoke(new MethodInvoker(() => {
                                     _MainChat.CallStatus_Lbl.Text = "来电";
                                     MinChat.CallTimeLength = 0;
-                                    _MainChat.PhoneNum_Contact_Lbl.Text = Phone;
+                                    _MainChat.PhoneNum_Contact_Lbl.Text = m_sCaller;
                                     _MainChat.CallInfo_Pnl.Visible = true;
                                     _MainChat.Width = 180;
                                     _MainChat.DialTime_Lbl.Text = "00:00:00";
@@ -165,7 +177,7 @@ namespace CenoCC {
                             } else {
                                 _MainChat.CallStatus_Lbl.Text = "来电";
                                 MinChat.CallTimeLength = 0;
-                                _MainChat.PhoneNum_Contact_Lbl.Text = Phone;
+                                _MainChat.PhoneNum_Contact_Lbl.Text = m_sCaller;
                                 _MainChat.CallInfo_Pnl.Visible = true;
                                 _MainChat.Width = 180;
                                 _MainChat.DialTime_Lbl.Text = "00:00:00";
@@ -179,12 +191,21 @@ namespace CenoCC {
                                 _MainChat.Transfer_TSMI.Enabled = false;
                                 _MainChat.ShowDialPad_TSMI.Enabled = true;
                             }
-                            m_cPhone.m_fSetShow(Phone);
+
+                            string m_sPhoneAddress = "未知";
+                            m_cPhone.m_fSetShow(m_sCaller, out m_sPhoneAddress, m_sCallee);
+
+                            if (Call_ClientParamUtil.m_bIsSysMsgCall)
+                            {
+                                string m_sLParam = $"{m_sCaller},{m_sPhoneAddress},{m_sCallee}";
+                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_DO_ALTER, (IntPtr)0, Cmn.Sti(m_sLParam));
+                            }
+
                             CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING;
-                            CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder(Phone);
+                            CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder(m_sCaller);
                             SipMain.Stop();
                             SipMain.Play("Audio\\a_ring.wav", 20);
-                            Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][来电][{Phone}]");
+                            Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][来电][{m_sCaller}]");
                         }
                         break;
                     #endregion
@@ -193,6 +214,9 @@ namespace CenoCC {
                     case (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK: {
                             if (CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
                                 return;
+
+                            ///设置为回铃声中状态
+                            CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK;
 
                             if(_MainChat.InvokeRequired) {
                                 _MainChat.BeginInvoke(new MethodInvoker(() => {
@@ -232,16 +256,37 @@ namespace CenoCC {
                                 MinChat.m_pShareNumber = null;
                             }
                             #endregion
-
-                            SessionControl.Phone_Temminate();
-                            CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
-                            SipMain.Stop();
+                            ///状态放置在此位置
                             int ABI = (int)m.LParam;
-                            ///显示
+                            string ABHang = string.Empty;
                             string m_sText = "挂机";
-                            if (ABI == 2) m_sText = "对方挂机";
-                            else if (ABI == 3) m_sText = "Err黑名单";
-                            if(_MainChat.InvokeRequired) {
+                            if (ABI == 1)
+                            {
+                                ABHang = "A";
+                            }
+                            else if (ABI == 2)
+                            {
+                                ABHang = "B";
+                                m_sText = "对方挂机";
+                            }
+                            else if (ABI == 3)
+                            {
+                                m_sText = "Err黑名单";
+                            }
+                            else if (ABI == 4)
+                            {
+                                ABHang = "X";
+                                m_sText = "请重新拨号";
+                            }
+                            else if (ABI == -2)
+                            {
+                                m_sText = "对方挂机";
+                            }
+                            int m_uWParam = (int)m.WParam;
+                            if (m_uWParam == 1) ABHang = string.Empty;
+                            SessionControl.Phone_Temminate(ABHang);
+                            SipMain.Stop();
+                            if (_MainChat.InvokeRequired) {
                                 _MainChat.BeginInvoke(new MethodInvoker(() => {
                                     _MainChat.PhoneNum_Contact_Lbl.Tag = null;
                                     _MainChat.CallStatus_Lbl.Text = m_sText;
@@ -264,7 +309,7 @@ namespace CenoCC {
                             CCFactory.ChInfo[CCFactory.CurrentCh].szCalleeId = new StringBuilder();
                             CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder();
                             SipMain.Stop();
-                            if(ABI == 2)
+                            if (ABI == 2 || ABI == -2)
                                 SipMain.Play("Audio\\a_hungup.wav", 1);
                             CCFactory.IsInCall = false;
                             LogFile.Write(typeof(CusEvent), LOGLEVEL.INFO, m_sText);
@@ -621,6 +666,19 @@ namespace CenoCC {
                                     }
                                     Log.Instance.Success($"关闭呼叫保持");
                                 }
+                            }
+                        }
+                        break;
+                    #endregion
+
+                    #region ***弹屏
+                    case (int)ChannelInfo.APP_USER_STATUS.US_DO_ALTER:
+                        {
+                            string m_sMsg = Marshal.PtrToStringAnsi(m.LParam);
+                            string[] m_lMsg = m_sMsg?.Split(',');
+                            if (m_lMsg.Length > 2)
+                            {
+                                _MainChat.notifyIcon.ShowBalloonTip(0, $"分机号：{m_lMsg[2]}\r\n来　电：{m_lMsg[0]}\r\n归属地：{m_lMsg[1]}", $" ", ToolTipIcon.Info);
                             }
                         }
                         break;

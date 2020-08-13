@@ -44,6 +44,10 @@ namespace CenoCC {
                     m_pDataRow2["ID"] = 1;
                     m_pDataRow2["Name"] = "共享号码";
                     m_pDataTable.Rows.Add(m_pDataRow2);
+                    DataRow m_pDataRow3 = m_pDataTable.NewRow();
+                    m_pDataRow3["ID"] = 2;
+                    m_pDataRow3["Name"] = "申请式";
+                    m_pDataTable.Rows.Add(m_pDataRow3);
                     this.cbxShare.BeginUpdate();
                     this.cbxShare.DataSource = m_pDataTable;
                     this.cbxShare.ValueMember = "ID";
@@ -94,15 +98,40 @@ namespace CenoCC {
             try {
                 Regex _regex_ = new Regex("[0-9]{0,}");
                 if(
-                    !string.IsNullOrEmpty(this.startNumberValue.Text.Trim()) &&
+                    !string.IsNullOrWhiteSpace(this.startNumberValue.Text) &&
                     _regex_.IsMatch(this.startNumberValue.Text) &&
                     _regex_.IsMatch(this.endNumberValue.Text)
                     ) {
-                    if(string.IsNullOrEmpty(this.endNumberValue.Text.Trim()))
-                        this.endNumberValue.Text = this.startNumberValue.Text;
+
+                    ///前导变量
+                    string m_sPrefix = string.Empty;
+
+                    string endNumberValue = string.Empty;
+                    if (string.IsNullOrWhiteSpace(this.endNumberValue.Text))
+                        endNumberValue = this.startNumberValue.Text;
+                    else
+                        endNumberValue = this.endNumberValue.Text;
+
+                    ///处理前缀0问题,防止出错
+                    int m_uSld = this.startNumberValue.Text.TrimStart('0').Length;
+                    int m_uSly = this.startNumberValue.Text.Length;
+                    int m_uSlx = m_uSly - m_uSld;
+                    int m_uEld = endNumberValue.TrimStart('0').Length;
+                    int m_uEly = endNumberValue.Length;
+                    int m_uElx = m_uEly - m_uEld;
+                    ///判断有没有0前缀,有的话加入即可
+                    if (m_uSlx == m_uElx)
+                    {
+                        m_sPrefix = m_f0(m_uSlx);
+                    }
+                    else
+                    {
+                        Cmn_v1.Cmn.MsgWranThat(this, "开始号码起与结束号码止格式不对应");
+                        return;
+                    }
 
                     double _s_ = Convert.ToDouble(this.startNumberValue.Text);
-                    double _e_ = Convert.ToDouble(this.endNumberValue.Text);
+                    double _e_ = Convert.ToDouble(endNumberValue);
                     if(_e_ >= _s_) {
                         this._create_ = true;
                         /// <![CDATA[
@@ -115,7 +144,7 @@ namespace CenoCC {
                                 _dt_.Columns.Add("number", typeof(string));
                                 for(double i = _s_; i <= _e_; i++) {
                                     DataRow _dr_ = _dt_.NewRow();
-                                    _dr_["number"] = $"{this.txtPrefix.Text.Trim()}{i}";
+                                    _dr_["number"] = $"{m_sPrefix}{i}";
                                     _dt_.Rows.Add(_dr_);
                                 }
                                 int j = d_multi.iu(_dt_, AgentInfo.AgentID, "-1", Convert.ToInt32(this.cbxShare.SelectedValue), this.cbxGateway.SelectedValue.ToString());
@@ -123,7 +152,7 @@ namespace CenoCC {
                                     if(this.SearchEvent != null)
                                         this.SearchEvent(this, null);
                                 }
-                                string msg = $"号码{this.startNumberValue.Text}-{this.endNumberValue.Text}添加完成,成功{j}条";
+                                string msg = $"号码{this.startNumberValue.Text}-{endNumberValue}添加完成,成功{j}条";
                                 Log.Instance.Success($"diallimitCreate btnOk_Click:{msg}");
                                 MessageBox.Show($"{msg}");
                             } catch(Exception ex) {
@@ -142,6 +171,20 @@ namespace CenoCC {
                 Log.Instance.Error($"diallimitCreate btnOk_Click error:{ex.Message}");
                 this._create_ = false;
             }
+        }
+
+        private string m_f0(int m_uInt)
+        {
+            if (m_uInt > 0)
+            {
+                string m_sResult = "";
+                for (int i = 0; i < m_uInt; i++)
+                {
+                    m_sResult += "0";
+                }
+                return m_sResult;
+            }
+            return "";
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Common;
+using Core_v1;
 using DataBaseUtil;
 using Model_v1;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,12 +16,13 @@ namespace CenoCC
 {
     public partial class ShareNumber : _metorform
     {
-        public delegate void TransfDelegate(string m_sNumberType, string m_sTypeUUID, bool m_bCancel);
+        public delegate void TransfDelegate(string m_sNumberType, string m_sTypeUUID, string m_sTag, bool m_bCancel);
         public event TransfDelegate TransfEvent;
         private bool m_bCancel = true;
         private Timer m_pTimer;
         private int m_uWait = 5;
         private System.Threading.Thread m_pThread;
+        private int m_uSpecial = 0;
         public ShareNumber()
         {
             InitializeComponent();
@@ -37,9 +40,9 @@ namespace CenoCC
                     ///<![CDATA[
                     /// 如果设置了超时自动专线轮呼
                     /// ]]>
-                    if (Call_ClientParamUtil.m_bIsUseSpRandomTimeout)
+                    if (Call_ClientParamUtil.m_bIsUseSpRandomTimeout && Call_ClientParamUtil.m_bIsUseShare && this.m_uSpecial > 0)
                     {
-                        this.TransfEvent(Special.Common, string.Empty, this.m_bCancel = false);
+                        this.TransfEvent(Special.Common, string.Empty, string.Empty, this.m_bCancel = false);
                     }
                     this.Close();
                 }
@@ -55,7 +58,7 @@ namespace CenoCC
             if (Call_ClientParamUtil.m_uShareWait > 0)
             {
                 this.m_uWait = Call_ClientParamUtil.m_uShareWait;
-                this.lblWait.Text = $"{this.m_uWait}";
+                this.lblWait.Text = $"({this.m_uWait})";
                 this.m_pTimer.Start();
             }
             else
@@ -69,7 +72,8 @@ namespace CenoCC
             this.listView.BeginUpdate();
             this.listView.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
             this.listView.Columns.Add(new ColumnHeader() { Name = "area", Text = "区域", Width = 150 });
-            this.listView.Columns.Add(new ColumnHeader() { Name = "number", Text = "号码", Width = 150 });
+            this.listView.Columns.Add(new ColumnHeader() { Name = "tnumber", Text = "号码", Width = 150 });
+            //this.listView.Columns.Add(new ColumnHeader() { Name = "number", Text = "号码", Width = 150 });
             this.listView.EndUpdate();
         }
 
@@ -94,11 +98,16 @@ namespace CenoCC
                     foreach (DataRow item in m_pLoaclDataTable.Rows)
                     {
                         ListViewItem m_pListViewItem = new ListViewItem($"{++j}");
+                        string tnumber = item["tnumber"]?.ToString();
+                        if (string.IsNullOrWhiteSpace(tnumber)) tnumber = item["number"]?.ToString();
                         m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "area", Text = $"{item["areaname"]}({item["areacode"]})" });
+                        m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tnumber", Text = $"{tnumber}" });
                         m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = $"{item["number"]}" });
                         m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "isshare", Text = $"{Special.Common}" });
+                        m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tag", Text = $"" });
                         m_pLocalListViewGroup.Items.Add(m_pListViewItem);
                         this.listView.Items.Add(m_pListViewItem);
+                        this.m_uSpecial++;
                     }
                 }
                 this.listView.EndUpdate();
@@ -120,8 +129,10 @@ namespace CenoCC
                                 {
                                     ListViewItem m_pListViewItem = new ListViewItem($"{++j}");
                                     m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "area", Text = $"{item.areaname}({item.areacode})" });
+                                    m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tnumber", Text = $"{(!string.IsNullOrWhiteSpace(item.tnumber) ? item.tnumber : item.number)}" });
                                     m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = $"{item.number}" });
                                     m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "isshare", Text = $"{Special.Share}" });
+                                    m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tag", Text = $"" });
                                     m_lListViewItem.Add(m_pListViewItem);
                                 }
 
@@ -146,6 +157,75 @@ namespace CenoCC
                     }));
                     this.m_pThread.Start();
                 }
+
+                ///<![CDATA[
+                /// 独立申请式
+                /// ]]>
+                {
+                    #region ***追加独立服务中的共享号码
+                    if (Call_ParamUtil.m_bUseApply && Call_ClientParamUtil.m_bUseApply)
+                    {
+                        ///执行api加载号码,这里直接走自己的9464接口api,尽可能少调整客户端即可
+                        new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                        {
+                            try
+                            {
+                                ///得到参数
+                                string m_sResultString = H_Web.Get(m_cProfile.m_fUseShareApi(AgentInfo.UniqueID));
+                                string m_sErrMsg = "无返回";
+                                if (!string.IsNullOrWhiteSpace(m_sResultString))
+                                {
+                                    m_mResponseJSON _m_mResponseJSON = JsonConvert.DeserializeObject<m_mResponseJSON>(m_sResultString);
+                                    if (_m_mResponseJSON.status == 0)
+                                    {
+                                        m_sErrMsg = string.Empty;
+                                        List<m_mShareApi> m_lShareApi = JsonConvert.DeserializeObject<List<m_mShareApi>>(_m_mResponseJSON.result.ToString());
+                                        List<ListViewItem> m_lListViewItem = new List<ListViewItem>();
+
+                                        for (int i = 0; i < m_lShareApi.Count; i++)
+                                        {
+                                            m_mShareApi item = m_lShareApi[i];
+                                            if (string.IsNullOrWhiteSpace(item.gw_name)) continue;
+                                            ListViewItem m_pListViewItem = new ListViewItem($"{++j}");
+                                            m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "area", Text = $"()" });
+                                            m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tnumber", Text = $"{item.gw_name}" });
+                                            m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = $"{item.gw_name}" });
+                                            m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "isshare", Text = $"{Special.ApiShare}" });
+                                            m_pListViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tag", Text = $"{item.call_server}" });
+                                            m_lListViewItem.Add(m_pListViewItem);
+                                        }
+
+                                        if (m_lListViewItem != null && m_lListViewItem.Count > 0)
+                                        {
+                                            ListViewGroup m_pShareListViewGroup = new ListViewGroup("独立服务");
+                                            ListViewItem[] _m_lListViewItem = m_lListViewItem.ToArray();
+                                            this.Invoke(new MethodInvoker(() =>
+                                            {
+                                                this.listView.Groups.Add(m_pShareListViewGroup);
+                                                m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
+                                                this.listView.Items.AddRange(_m_lListViewItem);
+                                            }));
+                                        }
+                                    }
+                                    else m_sErrMsg = _m_mResponseJSON.msg;
+                                }
+                                else
+                                {
+                                    m_sErrMsg = "无返回";
+                                }
+                                if (!string.IsNullOrWhiteSpace(m_sErrMsg))
+                                {
+                                    Log.Instance.Warn($"[CenoCC][MinChat][DefWndProc][WM_DRAWCLIPBOARD][ShareApi][{m_sErrMsg}]");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][WM_DRAWCLIPBOARD][ShareApi][Exception][{ex.Message}]");
+                            }
+                        })).Start();
+                    }
+                    #endregion
+                }
             }
             catch (Exception ex)
             {
@@ -158,7 +238,7 @@ namespace CenoCC
             if (this.listView.SelectedItems.Count == 1)
             {
                 ListViewItem m_pListViewItem = this.listView.SelectedItems[0];
-                this.TransfEvent(m_pListViewItem.SubItems["isshare"].Text, m_pListViewItem.SubItems["number"].Text, this.m_bCancel = false);
+                this.TransfEvent(m_pListViewItem.SubItems["isshare"].Text, m_pListViewItem.SubItems["number"].Text, m_pListViewItem.SubItems["tag"].Text, this.m_bCancel = false);
             }
             this.Close();
         }
@@ -166,7 +246,7 @@ namespace CenoCC
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (this.m_bCancel)
-                this.TransfEvent(string.Empty, string.Empty, true);
+                this.TransfEvent(string.Empty, string.Empty, string.Empty, true);
             this.m_pTimer.Stop();
             if (this.m_pThread != null && this.m_pThread.IsAlive)
                 this.m_pThread?.Abort();

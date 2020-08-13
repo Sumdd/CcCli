@@ -218,7 +218,11 @@ namespace Common {
             /// <summary>
             /// 非注册(IP话机Web调用)
             /// </summary>
-            US_WEB_NOTREGISTER
+            US_WEB_NOTREGISTER,
+            /// <summary>
+            /// 弹屏
+            /// </summary>
+            US_DO_ALTER,
         }
     }
 }

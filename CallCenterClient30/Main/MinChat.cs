@@ -23,6 +23,7 @@ using Core_v1;
 using Cmn_v1;
 using System.Text.RegularExpressions;
 using Model_v1;
+using Newtonsoft.Json;
 //using WebSocket_v1;
 
 namespace CenoCC {
@@ -50,8 +51,8 @@ namespace CenoCC {
         public static System.Timers.Timer SessionNoAnswerFlagTimer;
 
         private static object m_oLoadNumberLock = new object();
-        private static bool m_bThreadLoadShare = false;
-        private static bool m_bCopying = false;
+        private static bool m_bShareCopying = false;
+        private static bool m_bApiShareCopying = false;
 
         public MinChat() {
             InitializeComponent();
@@ -132,14 +133,22 @@ namespace CenoCC {
                             try
                             {
                                 if (//进入条件
-                                    CopyFlag && Clipboard.ContainsText() && DataBaseUtil.Call_ClientParamUtil.m_bIsUseCopy && !m_bCopying &&
+                                    CopyFlag && Clipboard.ContainsText() && DataBaseUtil.Call_ClientParamUtil.m_bIsUseCopy &&
                                     CCFactory.ChInfo != null && CCFactory.ChInfo[CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE && !CCFactory.IsInCall
                                     )
                                 {
+                                    this.CopyFlag = false;
                                     string temp = Clipboard.GetText();
                                     string numbertemp = "";
 
-                                    #region ***融入加密号码判断
+                                    ///特殊指令前缀,无需进入
+                                    if (temp.Contains("[cpy1]"))
+                                    {
+                                        this.CopyFlag = true;
+                                        return;
+                                    }
+
+                                    #region ***融入32位加密号码判断
                                     bool m_bIsSureNumber = false;
                                     if (Call_ClientParamUtil.m_bQNRegexNumber)
                                     {
@@ -148,7 +157,6 @@ namespace CenoCC {
                                         {
                                             m_bIsSureNumber = true;
                                             numbertemp = temp;
-                                            ///MinChat.m_sSecretNumber = temp;
                                             number_GlobelContextMenu_MI.ReadOnly = true;
                                         }
                                     }
@@ -157,16 +165,17 @@ namespace CenoCC {
                                         Regex m_rReplaceRegex = new Regex("[^(0-9*#)]+");
                                         Regex m_rIsMatchRegex = new Regex("^[0-9*#]{3,20}$");
                                         temp = m_rReplaceRegex.Replace(temp, string.Empty);
-                                        if (m_rIsMatchRegex.IsMatch(temp)) m_bIsSureNumber = true;
-                                        number_GlobelContextMenu_MI.ReadOnly = true;
+                                        if (m_rIsMatchRegex.IsMatch(temp))
+                                        {
+                                            numbertemp = temp;
+                                            m_bIsSureNumber = true;
+                                            number_GlobelContextMenu_MI.ReadOnly = false;
+                                        }
                                     }
                                     #endregion
 
                                     if (m_bIsSureNumber)
                                     {
-                                        if (m_bCopying) return;
-                                        m_bCopying = true;
-
                                         //设置可修改号码
                                         this.number_GlobelContextMenu_MI.Text = numbertemp;
 
@@ -190,7 +199,6 @@ namespace CenoCC {
                                                 //是否显示加零拨打
                                                 if (Call_ClientParamUtil.m_bAutoAddNumDialFlag) this.tsmiAddZeroDial.Visible = false;
                                                 else this.tsmiAddZeroDial.Visible = true;
-                                                m_bCopying = false;
                                             }
                                             else
                                             {
@@ -200,9 +208,6 @@ namespace CenoCC {
                                                 {
                                                     //查询
                                                     DataTable m_pLoaclDataTable = m_cEsyMySQL.m_fGetLocalNumberList(AgentInfo.AgentID);
-                                                    int i = 1;
-                                                    bool m_bLoadLocal = true;
-                                                    bool m_bLoadShare = true;
                                                     //如果只有一个单线号码,不增加即可
                                                     if (m_pLoaclDataTable != null && m_pLoaclDataTable.Rows.Count > 0)
                                                     {
@@ -220,10 +225,16 @@ namespace CenoCC {
                                                                 foreach (DataRow item in m_pLoaclDataTable.Rows)
                                                                 {
                                                                     ToolStripMenuItem m_pLoaclToolStripMenuItem = new ToolStripMenuItem();
-                                                                    m_pLoaclToolStripMenuItem.Name = $"{Special.ADD_LOCAL_}{i}";
-                                                                    m_pLoaclToolStripMenuItem.Text = $"专线：{item["number"]}({item["areaname"]})";
+                                                                    string m_sName = $"{Special.ADD_LOCAL_}{item["number"]}";
+                                                                    if (this.GlobleContextMenu.Items.ContainsKey(m_sName)) continue;
+                                                                    m_pLoaclToolStripMenuItem.Name = m_sName;
+                                                                    string m_sArea = item["areaname"]?.ToString();
+                                                                    if (string.IsNullOrWhiteSpace(m_sArea)) m_sArea = "-";
+                                                                    string tnumber = item["tnumber"]?.ToString();
+                                                                    if (string.IsNullOrWhiteSpace(tnumber)) tnumber = item["number"]?.ToString();
+                                                                    m_pLoaclToolStripMenuItem.Text = $"专线：{tnumber}({m_sArea})";
                                                                     m_pLoaclToolStripMenuItem.Image = global::CenoCC.Properties.Resources.PickUp;
-                                                                    m_pLoaclToolStripMenuItem.Tag = $"{Special.ADD_LOCAL_}{item["number"]}";
+                                                                    m_pLoaclToolStripMenuItem.Tag = m_sName;
                                                                     m_pLoaclToolStripMenuItem.Click += new System.EventHandler(this.dial_GlobelContextMenu_MI_Click);
                                                                     int m_uCount = this.GlobleContextMenu.Items.Count - 1;
                                                                     this.GlobleContextMenu.Items.Insert(m_uCount, m_pLoaclToolStripMenuItem);
@@ -241,62 +252,54 @@ namespace CenoCC {
                                                             else this.tsmiAddZeroDial.Visible = true;
                                                         }
                                                     }
-                                                    else m_bLoadLocal = false;
                                                     //如果使用共享号码
-                                                    if (Call_ClientParamUtil.m_bIsUseShare)
+                                                    if (Call_ClientParamUtil.m_bIsUseShare && !m_bShareCopying)
                                                     {
-                                                        if (m_bThreadLoadShare)
+                                                        m_bShareCopying = true;
+                                                        new System.Threading.Thread(new System.Threading.ThreadStart(() =>
                                                         {
-                                                            m_bLoadShare = false;
-                                                            m_bThreadLoadShare = false;
-                                                        }
-                                                        else
-                                                        {
-                                                            m_bLoadShare = true;
-                                                            m_bThreadLoadShare = true;
-                                                            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                                                            try
                                                             {
-                                                                try
+                                                                List<share_number> m_lShareNumber = Core_v1.Redis2.m_fGetShareNumberList();
+                                                                if (m_lShareNumber != null && m_lShareNumber.Count > 0)
                                                                 {
-                                                                    List<share_number> m_lShareNumber = Core_v1.Redis2.m_fGetShareNumberList();
-                                                                    if (m_lShareNumber != null && m_lShareNumber.Count > 0)
+                                                                    lock (MinChat.m_oLoadNumberLock)
                                                                     {
-                                                                        lock (MinChat.m_oLoadNumberLock)
+                                                                        foreach (share_number m_pShareNumber in m_lShareNumber)
                                                                         {
-                                                                            foreach (share_number m_pShareNumber in m_lShareNumber)
+                                                                            ToolStripMenuItem m_pLoaclToolStripMenuItem = new ToolStripMenuItem();
+                                                                            string m_sName = $"{Special.ADD_SHARE_}{m_pShareNumber.number}";
+                                                                            if (this.GlobleContextMenu.Items.ContainsKey(m_sName)) continue;
+                                                                            m_pLoaclToolStripMenuItem.Name = m_sName;
+                                                                            string m_sArea = m_pShareNumber.areaname;
+                                                                            if (string.IsNullOrWhiteSpace(m_sArea)) m_sArea = "-";
+                                                                            string tnumber = m_pShareNumber.tnumber;
+                                                                            if (string.IsNullOrWhiteSpace(tnumber)) tnumber = m_pShareNumber.number;
+                                                                            m_pLoaclToolStripMenuItem.Text = $"共享：{tnumber}({m_sArea})";
+                                                                            m_pLoaclToolStripMenuItem.ForeColor = Color.Blue;
+                                                                            m_pLoaclToolStripMenuItem.Image = global::CenoCC.Properties.Resources.PickUp;
+                                                                            m_pLoaclToolStripMenuItem.Tag = m_sName;
+                                                                            m_pLoaclToolStripMenuItem.Click += new System.EventHandler(this.dial_GlobelContextMenu_MI_Click);
+                                                                            int m_uCount = this.GlobleContextMenu.Items.Count - 1;
+                                                                            this.Invoke(new MethodInvoker(() =>
                                                                             {
-                                                                                ToolStripMenuItem m_pLoaclToolStripMenuItem = new ToolStripMenuItem();
-                                                                                m_pLoaclToolStripMenuItem.Name = $"{Special.ADD_SHARE_}{i}";
-                                                                                m_pLoaclToolStripMenuItem.Text = $"共享：{m_pShareNumber.number}({m_pShareNumber.areaname})";
-                                                                                m_pLoaclToolStripMenuItem.ForeColor = Color.Blue;
-                                                                                m_pLoaclToolStripMenuItem.Image = global::CenoCC.Properties.Resources.PickUp;
-                                                                                m_pLoaclToolStripMenuItem.Tag = $"{Special.ADD_SHARE_}{m_pShareNumber.number}";
-                                                                                m_pLoaclToolStripMenuItem.Click += new System.EventHandler(this.dial_GlobelContextMenu_MI_Click);
-                                                                                int m_uCount = this.GlobleContextMenu.Items.Count - 1;
-                                                                                this.Invoke(new MethodInvoker(() =>
-                                                                                {
-                                                                                    this.GlobleContextMenu.Items.Insert(m_uCount, m_pLoaclToolStripMenuItem);
-                                                                                }));
-                                                                            }
+                                                                                this.GlobleContextMenu.Items.Insert(m_uCount, m_pLoaclToolStripMenuItem);
+                                                                            }));
                                                                         }
                                                                     }
                                                                 }
-                                                                catch (Exception ex)
-                                                                {
-                                                                    Core_v1.Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][Share][Thread][Exception][{ex.Message}]");
-                                                                }
-                                                                finally
-                                                                {
-                                                                    m_bThreadLoadShare = false;
-                                                                    m_bCopying = false;
-                                                                }
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                Core_v1.Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][Share][Thread][Exception][{ex.Message}]");
+                                                            }
+                                                            finally
+                                                            {
+                                                                m_bShareCopying = false;
+                                                            }
 
-                                                            })).Start();
-                                                        }
+                                                        })).Start();
                                                     }
-                                                    else m_bLoadShare = false;
-                                                    if (!m_bLoadShare) m_bCopying = false;
-                                                    if (!m_bLoadLocal && !m_bLoadShare) break;
                                                 }
                                                 catch (Exception ex)
                                                 {
@@ -305,6 +308,71 @@ namespace CenoCC {
                                                 }
                                                 #endregion
                                             }
+
+                                            ///独立与专线、共享号码之外
+                                            #region ***追加独立服务中的共享号码
+                                            if (Call_ParamUtil.m_bUseApply && Call_ClientParamUtil.m_bUseApply && !m_bApiShareCopying)
+                                            {
+                                                m_bApiShareCopying = true;
+                                                ///执行api加载号码,这里直接走自己的9464接口api,尽可能少调整客户端即可
+                                                new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                                                {
+                                                    try
+                                                    {
+                                                        ///得到参数
+                                                        string m_sResultString = H_Web.Get(m_cProfile.m_fUseShareApi(AgentInfo.UniqueID));
+                                                        string m_sErrMsg = "无返回";
+                                                        if (!string.IsNullOrWhiteSpace(m_sResultString))
+                                                        {
+                                                            m_mResponseJSON _m_mResponseJSON = JsonConvert.DeserializeObject<m_mResponseJSON>(m_sResultString);
+                                                            if (_m_mResponseJSON.status == 0)
+                                                            {
+                                                                m_sErrMsg = string.Empty;
+                                                                List<m_mShareApi> m_lShareApi = JsonConvert.DeserializeObject<List<m_mShareApi>>(_m_mResponseJSON.result.ToString());
+                                                                //加载独立号码
+                                                                lock (MinChat.m_oLoadNumberLock)
+                                                                {
+                                                                    for (int i = 0; i < m_lShareApi.Count; i++)
+                                                                    {
+                                                                        m_mShareApi item = m_lShareApi[i];
+                                                                        if (string.IsNullOrWhiteSpace(item.gw_name)) continue;
+                                                                        string m_sName = $"{Special.ADD_APISHARE_}{item.gw_name}&{item.call_server}";
+                                                                        if (this.GlobleContextMenu.Items.ContainsKey(m_sName)) continue;
+                                                                        ToolStripMenuItem m_pLoaclToolStripMenuItem = new ToolStripMenuItem();
+                                                                        m_pLoaclToolStripMenuItem.Name = m_sName;
+                                                                        m_pLoaclToolStripMenuItem.Text = $"服务：{item.gw_name}(-)";
+                                                                        m_pLoaclToolStripMenuItem.ForeColor = Color.Purple;
+                                                                        m_pLoaclToolStripMenuItem.Image = global::CenoCC.Properties.Resources.PickUp;
+                                                                        m_pLoaclToolStripMenuItem.Tag = m_sName;
+                                                                        m_pLoaclToolStripMenuItem.Click += new System.EventHandler(this.dial_GlobelContextMenu_MI_Click);
+                                                                        int m_uCount = this.GlobleContextMenu.Items.Count - 1;
+                                                                        this.GlobleContextMenu.Items.Insert(m_uCount, m_pLoaclToolStripMenuItem);
+                                                                    }
+                                                                }
+                                                            }
+                                                            else m_sErrMsg = _m_mResponseJSON.msg;
+                                                        }
+                                                        else
+                                                        {
+                                                            m_sErrMsg = "无返回";
+                                                        }
+                                                        if (!string.IsNullOrWhiteSpace(m_sErrMsg))
+                                                        {
+                                                            Log.Instance.Warn($"[CenoCC][MinChat][DefWndProc][WM_DRAWCLIPBOARD][ShareApi][{m_sErrMsg}]");
+                                                        }
+                                                    }
+                                                    catch (Exception ex)
+                                                    {
+                                                        Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][WM_DRAWCLIPBOARD][ShareApi][Exception][{ex.Message}]");
+                                                    }
+                                                    finally
+                                                    {
+                                                        m_bApiShareCopying = false;
+                                                    }
+
+                                                })).Start();
+                                            }
+                                            #endregion
                                         }
                                         else
                                         {
@@ -313,7 +381,6 @@ namespace CenoCC {
                                             //是否显示加零拨打
                                             if (Call_ClientParamUtil.m_bAutoAddNumDialFlag) this.tsmiAddZeroDial.Visible = false;
                                             else this.tsmiAddZeroDial.Visible = true;
-                                            m_bCopying = false;
                                         }
 
                                         Point p = GetPopupPosition();
@@ -326,6 +393,8 @@ namespace CenoCC {
                             catch (Exception ex)
                             {
                                 Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][Exception][{ex.Message}]");
+                                m_bShareCopying = false;
+                                m_bApiShareCopying = false;
                             }
                             #endregion
                             if (!CopyFlag) this.CopyFlag = true;
@@ -615,6 +684,9 @@ namespace CenoCC {
                 case ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING:
                     Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_PICKUP, (IntPtr)0, (IntPtr)1);
                     break;
+                ///case ChannelInfo.APP_USER_STATUS.US_STATUS_AUTOCALLING:
+                ///case ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK:
+                ///防止错误,测试强度小一点,防止挂不断问题
                 case ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING:
                     Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)1);
                     break;

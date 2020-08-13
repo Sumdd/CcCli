@@ -47,7 +47,7 @@ namespace DataBaseUtil {
         /// <param name="cmdText">cmdText</param>
         /// <param name="cmdParms">the number of affected rows</param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(string cmdText) {
+        public static int ExecuteNonQuery(string cmdText, bool m_bThrow = false) {
             MySqlCommand cmd = new MySqlCommand();
             try {
                 PrepareSqlTextCommand(ref cmd, cmdText, null);
@@ -55,6 +55,7 @@ namespace DataBaseUtil {
                 return val;
             } catch(Exception ex) {
                 Log.Instance.Error($"[DataBaseUtil][MySQL_Method][ExecuteNonQuery][Exception][{ex.Message}]");
+                if (m_bThrow) throw ex;
             } finally {
                 cmd.Connection.Close();
                 cmd.Connection.Dispose();

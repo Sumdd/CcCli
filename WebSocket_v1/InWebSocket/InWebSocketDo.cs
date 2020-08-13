@@ -139,12 +139,17 @@ namespace WebSocket_v1 {
                         case "":
                             Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_REFUSE, (IntPtr)0, (IntPtr)0);
                             break;
-                        /* 后期丰富原因 */
-                        case "busy":
-                        case "normal":
-                            break;
                         default:
-                            Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_DIALFAIL, (IntPtr)0, Cmn.Sti(_reason));
+                            ///增加通道繁忙强断逻辑
+                            if (_reason.Contains("Err通道繁忙") || _reason.Contains("Warn请重拨"))
+                            {
+                                _reason = "请重新拨号";
+                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)4);
+                            }
+                            else
+                            {
+                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_DIALFAIL, (IntPtr)0, Cmn.Sti(_reason));
+                            }
                             break;
                     }
                     break;
@@ -153,9 +158,12 @@ namespace WebSocket_v1 {
                     break;
                 case M_WebSocket._bhzt_hang:
                     int m_uLp = 0;//对reason进行判断
-                    if (!string.IsNullOrWhiteSpace(_reason) && _reason.Contains("对方")) m_uLp = 2;
+                    if (!string.IsNullOrWhiteSpace(_reason) && _reason.Contains("对方")) m_uLp = -2;
                     else if (!string.IsNullOrWhiteSpace(_reason) && _reason.Contains("Err黑名单")) m_uLp = 3;
                     Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP, (IntPtr)0, (IntPtr)m_uLp);
+                    break;
+                case M_WebSocket._bhzt_call_busy:
+                    Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_DO_ALTER, (IntPtr)0, Cmn.Sti(_reason));
                     break;
                 default:
                     break;

@@ -31,6 +31,7 @@
             this.ckbShowNumber = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.cbxSysMsgCall = new System.Windows.Forms.CheckBox();
             this.layout.SuspendLayout();
             this.gb.SuspendLayout();
             this.SuspendLayout();
@@ -57,13 +58,14 @@
             // 
             // gb
             // 
+            this.gb.Controls.Add(this.cbxSysMsgCall);
             this.gb.Controls.Add(this.ckbShowAddress);
             this.gb.Controls.Add(this.ckbShowRealName);
             this.gb.Controls.Add(this.ckbShowNumber);
             this.gb.Controls.Add(this.label1);
             this.gb.Location = new System.Drawing.Point(10, 10);
             this.gb.Name = "gb";
-            this.gb.Size = new System.Drawing.Size(400, 100);
+            this.gb.Size = new System.Drawing.Size(400, 122);
             this.gb.TabIndex = 2;
             this.gb.TabStop = false;
             this.gb.Text = "来电显示";
@@ -112,6 +114,19 @@
             this.label1.Size = new System.Drawing.Size(0, 12);
             this.label1.TabIndex = 1;
             // 
+            // cbxSysMsgCall
+            // 
+            this.cbxSysMsgCall.AutoSize = true;
+            this.cbxSysMsgCall.Checked = true;
+            this.cbxSysMsgCall.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxSysMsgCall.Location = new System.Drawing.Point(74, 90);
+            this.cbxSysMsgCall.Name = "cbxSysMsgCall";
+            this.cbxSysMsgCall.Size = new System.Drawing.Size(96, 16);
+            this.cbxSysMsgCall.TabIndex = 9;
+            this.cbxSysMsgCall.Text = "系统通知来电";
+            this.cbxSysMsgCall.UseVisualStyleBackColor = true;
+            this.cbxSysMsgCall.CheckedChanged += new System.EventHandler(this.cbxSysMsgCall_CheckedChanged);
+            // 
             // Args_CallerDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -137,5 +152,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox ckbShowAddress;
         private System.Windows.Forms.CheckBox ckbShowRealName;
+        private System.Windows.Forms.CheckBox cbxSysMsgCall;
     }
 }

@@ -176,6 +176,7 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "a.C_SpeakTime", Text = "通话时长", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "d.R_Description", Text = "通话结果", Width = 350, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.RecordFile", Text = "录音", Width = 575, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.Remark", Text = "备注", Width = 240, ImageIndex = 0 });
             this.list.EndUpdate();
             this.ucPager.pager.field = "a.C_StartTime";
             this.ucPager.pager.type = "desc";
@@ -205,7 +206,7 @@ namespace CenoCC {
 	CONCAT(b.Remark,'(',b.TypeName,')') as CallTypeName,
     case when ifnull(a.tnumber,'') = '' then a.LocalNum
          else a.tnumber end as LocalNum,
-    case when a.isshare = 1 then concat(ifnull(e.aname,''),' ',ifnull(a.fromagentname,''))
+    case when a.isshare > 0 then concat(ifnull(e.aname,''),' ',ifnull(a.fromagentname,''))
                             else c.AgentName end as AgentName,
     a.FreeSWITCHIPv4 as m_sFreeSWITCHIPv4,
     a.AgentID as m_uAgentID,
@@ -216,6 +217,7 @@ namespace CenoCC {
 	a.CallResultID, 
 	d.R_Description,
 	a.RecordFile,
+    a.Remark,
     a.ID,
     a.C_PhoneNum";
                     this.qop.FromSqlPart = @"from call_record as a
@@ -268,7 +270,7 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                     PopedomArgs popedomArgs = new PopedomArgs();
                     popedomArgs.type = DataPowerType._data_phonerecords_search;
                     popedomArgs.left.Add("c.ID");
-                    this.qop.appQuery($" AND ( a.isshare = 1 OR ( a.isshare = 0 {m_cPower.m_fPopedomSQL(popedomArgs)} ) ) ");
+                    this.qop.appQuery($" AND ( a.isshare > 0 OR ( a.isshare = 0 {m_cPower.m_fPopedomSQL(popedomArgs)} ) ) ");
                     ///姓名
                     if (args != null && args.ContainsKey("agentName"))
                     {
@@ -323,6 +325,7 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_SpeakTime", Text = dr["C_SpeakTime"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "R_Description", Text = dr["R_Description"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "RecordFile", Text = dr["RecordFile"].ToString() });
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "Remark", Text = dr["Remark"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ID", Text = dr["ID"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_PhoneNum", Text = dr["C_PhoneNum"].ToString() });
                         this.list.Items.Add(listViewItem);
@@ -667,6 +670,7 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         m_pDataTable.Columns["C_SpeakTime"].ColumnName = "通话时长";
                         m_pDataTable.Columns["R_Description"].ColumnName = "通话结果";
                         m_pDataTable.Columns["RecordFile"].ColumnName = "录音";
+                        m_pDataTable.Columns["Remark"].ColumnName = "备注";
                         m_pDataTable.Columns.Remove("CallResultID");
                         m_pDataTable.Columns.Remove("ID");
                         m_pDataTable.Columns.Remove("C_PhoneNum");

@@ -16,8 +16,6 @@ namespace Common
 {
     public class CommonParam
     {
-
-
         public static string GetNowDateTime
         {
             get
@@ -85,12 +83,12 @@ namespace Common
                         if (ipadd.Address.AddressFamily == AddressFamily.InterNetwork)
                         {
                             var _ip4 = ipadd.Address.ToString();
-                            var _has = _list.Where(x => x.key.ToString() == adapter.Id);
+                            var _has = _list.Where(x => x.key.ToString() == $"{adapter.Id}|{_ip4}");
                             if (_has != null && _has.Count() <= 0)
                             {
                                 _list.Add(new M_kv()
                                 {
-                                    key = adapter.Id,
+                                    key = $"{adapter.Id}|{_ip4}",
                                     value = $"{adapter.Name},{_ip4}",
                                     tag = _ip4
                                 });

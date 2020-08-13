@@ -608,5 +608,56 @@ namespace DataBaseUtil {
             }
         }
         #endregion
+        #region ***是否开启追加独立服务中的共享号码,申请式
+        public static bool? _m_bUseApply;
+        public static bool m_bUseApply
+        {
+            get
+            {
+                try
+                {
+                    if (_m_bUseApply == null)
+                    {
+                        _m_bUseApply = Call_ParamUtil.GetParamValueByName("UseApply") == "1";
+                    }
+                    return Convert.ToBoolean(_m_bUseApply);
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                try
+                {
+                    Call_ParamUtil.Update("UseApply", value ? "1" : "0");
+                    _m_bUseApply = value;
+                }
+                catch { }
+            }
+        }
+        #endregion
+        #region ***B Leg 超时时间
+        private static int? _m_uBLegTimeout;
+        public static int m_uBLegTimeout
+        {
+            get
+            {
+                try
+                {
+                    if (_m_uBLegTimeout == null)
+                    {
+                        _m_uBLegTimeout = int.Parse(GetParamValueByName("__timeout_seconds", "120"));
+                    }
+                    return _m_uBLegTimeout.Value;
+                }
+                catch
+                {
+                    return 120;
+                }
+            }
+        }
+        #endregion
     }
 }

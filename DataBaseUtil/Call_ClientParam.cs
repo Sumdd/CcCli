@@ -482,5 +482,59 @@ namespace DataBaseUtil {
             }
         }
         #endregion
+
+        #region ***是否开启追加独立服务中的共享号码,申请式
+        public static bool? _m_bUseApply;
+        public static bool m_bUseApply
+        {
+            get
+            {
+                try
+                {
+                    if (_m_bUseApply == null)
+                    {
+                        _m_bUseApply = Call_ClientParamUtil.GetParamValueByName("_m_bUseApply".Replace("_m_b", "").Replace("m_b", "")) == "1";
+                    }
+                    return Convert.ToBoolean(_m_bUseApply);
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("_m_bUseApply".Replace("_m_b", "").Replace("m_b", ""), value ? "1" : "0");
+                _m_bUseApply = value;
+            }
+        }
+        #endregion
+
+        #region ***系统通知来电
+        public static bool? _m_bIsSysMsgCall;
+        public static bool m_bIsSysMsgCall
+        {
+            get
+            {
+                try
+                {
+                    if (_m_bIsSysMsgCall == null)
+                    {
+                        _m_bIsSysMsgCall = Call_ClientParamUtil.GetParamValueByName("_m_bIsSysMsgCall".Replace("_m_b", "").Replace("m_b", "")) == "1";
+                    }
+                    return Convert.ToBoolean(_m_bIsSysMsgCall);
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("_m_bIsSysMsgCall".Replace("_m_b", "").Replace("m_b", ""), value ? "1" : "0");
+                _m_bIsSysMsgCall = value;
+            }
+        }
+        #endregion
     }
 }

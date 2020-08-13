@@ -48,6 +48,8 @@ namespace CenoCC
                 this.ckbShowRealName.Text += "(该功能已禁用)";
             }
 
+            this.cbxSysMsgCall.Checked = Call_ClientParamUtil.m_bIsSysMsgCall;
+
             m_bFirst = false;
         }
 
@@ -105,6 +107,13 @@ namespace CenoCC
             m_lStrings.Add(this.ckbShowRealName.Checked ? "1" : "0");
             m_lStrings.Add(this.ckbShowAddress.Checked ? "1" : "0");
             Call_ClientParamUtil.ShowStyleString = string.Join(",", m_lStrings.ToArray());
+        }
+
+        private void cbxSysMsgCall_CheckedChanged(object sender, EventArgs e)
+        {
+            if (m_bFirst)
+                return;
+            Call_ClientParamUtil.m_bIsSysMsgCall = this.cbxSysMsgCall.Checked;
         }
     }
 }

@@ -278,10 +278,10 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         switch (agentNameMark)
                         {
                             case "Like":
-                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.AgentName {agentNameMark} CONCAT('%','{args["agentName"]}','%') ) OR ( a.isshare = 1 AND a.fromagentname {agentNameMark} CONCAT('%','{args["agentName"]}','%') ) ) ");
+                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.AgentName {agentNameMark} CONCAT('%','{args["agentName"]}','%') ) OR ( a.isshare > 0 AND a.fromagentname {agentNameMark} CONCAT('%','{args["agentName"]}','%') ) ) ");
                                 break;
                             case "=":
-                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.AgentName {agentNameMark} CONCAT('','{args["agentName"]}','') ) OR ( a.isshare = 1 AND a.fromagentname {agentNameMark} CONCAT('','{args["agentName"]}','') ) ) ");
+                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.AgentName {agentNameMark} CONCAT('','{args["agentName"]}','') ) OR ( a.isshare > 0 AND a.fromagentname {agentNameMark} CONCAT('','{args["agentName"]}','') ) ) ");
                                 break;
                         }
                     }
@@ -292,10 +292,10 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         switch (loginNameMark)
                         {
                             case "Like":
-                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.LoginName {loginNameMark} CONCAT('%','{args["loginName"]}','%') ) OR ( a.isshare = 1 AND a.fromloginname {loginNameMark} CONCAT('%','{args["loginName"]}','%') ) ) ");
+                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.LoginName {loginNameMark} CONCAT('%','{args["loginName"]}','%') ) OR ( a.isshare > 0 AND a.fromloginname {loginNameMark} CONCAT('%','{args["loginName"]}','%') ) ) ");
                                 break;
                             case "=":
-                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.LoginName {loginNameMark} CONCAT('','{args["loginName"]}','') ) OR ( a.isshare = 1 AND a.fromloginname {loginNameMark} CONCAT('','{args["loginName"]}','') ) ) ");
+                                this.qop.appQuery($" AND ( ( a.isshare = 0 AND c.LoginName {loginNameMark} CONCAT('','{args["loginName"]}','') ) OR ( a.isshare > 0 AND a.fromloginname {loginNameMark} CONCAT('','{args["loginName"]}','') ) ) ");
                                 break;
                         }
                     }

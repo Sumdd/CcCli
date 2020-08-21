@@ -607,72 +607,80 @@ namespace CenoCC {
 
         private void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
-            this.BeginInvoke(new MethodInvoker(() => 
-            {
-                ListViewItem listViewItem = (ListViewItem)e.UserState;
-                if (listViewItem.SubItems["status"].Text == "1")
-                {
-                    listViewItem.SubItems["progress"].Text = $"100.00%";
-                }
-                else
-                {
-                    listViewItem.SubItems["progress"].Text = $"{e.ProgressPercentage}.00%";
-                }
-            }));
-        }
-
-        private void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            if (e == null)
-                return;
-
-            if (e.Error != null)
-            {
-                ListViewItem listViewItem = (ListViewItem)e.UserState;
-
-                this.BeginInvoke(new MethodInvoker(() =>
-                {
-                    listViewItem.ImageIndex = 3;
-                    listViewItem.SubItems["msgTips"].Text = $"下载失败({e.Error.Message},{e.Error.StackTrace})";
-                    listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
-                    //listViewItem.SubItems["progress"].Text = $"0.00%";
-                    listViewItem.SubItems["progress"].ForeColor = Color.Red;
-                    listViewItem.SubItems["status"].Text = "1";
-                }));
-
-                Log.Instance.Fail($"[CenoCC][DownLoad][client_DownloadFileCompleted][Error][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{listViewItem.SubItems["fileName"].Text},{e.Error.Message}]");
-
-                return;
-            }
-
-            if (e.Cancelled)
+            try
             {
                 this.BeginInvoke(new MethodInvoker(() =>
                 {
                     ListViewItem listViewItem = (ListViewItem)e.UserState;
-                    listViewItem.ImageIndex = 2;
-                    listViewItem.SubItems["msgTips"].Text = "取消下载";
-                    listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
-                    //listViewItem.SubItems["progress"].Text = $"0.00%";
-                    listViewItem.SubItems["progress"].ForeColor = Color.Red;
+                    if (listViewItem.SubItems["status"].Text == "1")
+                    {
+                        listViewItem.SubItems["progress"].Text = $"100.00%";
+                    }
+                    else
+                    {
+                        listViewItem.SubItems["progress"].Text = $"{e.ProgressPercentage}.00%";
+                    }
+                }));
+            }
+            catch { }
+        }
+
+        private void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            try
+            {
+                if (e == null)
+                    return;
+
+                if (e.Error != null)
+                {
+                    ListViewItem listViewItem = (ListViewItem)e.UserState;
+
+                    this.BeginInvoke(new MethodInvoker(() =>
+                    {
+                        listViewItem.ImageIndex = 3;
+                        listViewItem.SubItems["msgTips"].Text = $"下载失败({e.Error.Message},{e.Error.StackTrace})";
+                        listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
+                        //listViewItem.SubItems["progress"].Text = $"0.00%";
+                        listViewItem.SubItems["progress"].ForeColor = Color.Red;
+                        listViewItem.SubItems["status"].Text = "1";
+                    }));
+
+                    Log.Instance.Fail($"[CenoCC][DownLoad][client_DownloadFileCompleted][Error][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{listViewItem.SubItems["fileName"].Text},{e.Error.Message}]");
+
+                    return;
+                }
+
+                if (e.Cancelled)
+                {
+                    this.BeginInvoke(new MethodInvoker(() =>
+                    {
+                        ListViewItem listViewItem = (ListViewItem)e.UserState;
+                        listViewItem.ImageIndex = 2;
+                        listViewItem.SubItems["msgTips"].Text = "取消下载";
+                        listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
+                        //listViewItem.SubItems["progress"].Text = $"0.00%";
+                        listViewItem.SubItems["progress"].ForeColor = Color.Red;
+                        listViewItem.SubItems["status"].Text = "1";
+                    }));
+
+                    Log.Instance.Warn($"[CenoCC][DownLoad][client_DownloadFileCompleted][Cancelled][取消下载]");
+
+                    return;
+                }
+
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    ListViewItem listViewItem = (ListViewItem)e.UserState;
+                    listViewItem.ImageIndex = 1;
+                    listViewItem.SubItems["msgTips"].Text = "下载成功";
+                    listViewItem.SubItems["msgTips"].ForeColor = Color.Green;
+                    listViewItem.SubItems["progress"].Text = $"100.00%";
+                    listViewItem.SubItems["progress"].ForeColor = Color.Green;
                     listViewItem.SubItems["status"].Text = "1";
                 }));
-
-                Log.Instance.Warn($"[CenoCC][DownLoad][client_DownloadFileCompleted][Cancelled][取消下载]");
-
-                return;
             }
-
-            this.BeginInvoke(new MethodInvoker(() =>
-            {
-                ListViewItem listViewItem = (ListViewItem)e.UserState;
-                listViewItem.ImageIndex = 1;
-                listViewItem.SubItems["msgTips"].Text = "下载成功";
-                listViewItem.SubItems["msgTips"].ForeColor = Color.Green;
-                listViewItem.SubItems["progress"].Text = $"100.00%";
-                listViewItem.SubItems["progress"].ForeColor = Color.Green;
-                listViewItem.SubItems["status"].Text = "1";
-            }));
+            catch { }
         }
         #endregion
     }

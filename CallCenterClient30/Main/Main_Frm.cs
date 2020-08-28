@@ -428,6 +428,20 @@ namespace CenoCC {
                         return;
                     }
 
+                    //当都不存在时,判断是否有|,自动融入多服务器下载逻辑即可
+                    if (recordList.Contains("|"))
+                    {
+                        //循环加上>,放入多服务器下载逻辑中
+                        string[] m_lRecordStr = Cmn.SplitRemoveEmpty(recordList, ",");
+                        List<string> m_lRecord = new List<string>();
+                        foreach (string m_sRecordStr in m_lRecordStr)
+                        {
+                            m_lRecord.Add($">{m_sRecordStr}");
+                        }
+                        this.m_fRecordLoad(string.Join(",", m_lRecord));
+                        return;
+                    }
+
                     ///<![CDATA[
                     /// 单服务器下载(暂时)
                     /// ]]>
@@ -527,7 +541,7 @@ namespace CenoCC {
             }
         }
 
-        private string m_fGetByRecID(string m_sPath)
+        private string m_fGetByRecID(string m_sPath, bool m_bType = false)
         {
             try
             {
@@ -538,6 +552,12 @@ namespace CenoCC {
                         string yyyy = m_sPath.Substring(4, 4);
                         string MM = m_sPath.Substring(8, 2);
                         string dd = m_sPath.Substring(10, 2);
+
+                        ///仅返回后部分即可
+                        if (m_bType)
+                        {
+                            return $"/{yyyy}/{yyyy}{MM}/{yyyy}{MM}{dd}/{m_sPath}.mp3";
+                        }
 
                         ///<![CDATA[
                         /// 兼容最终转码扩展名称
@@ -571,6 +591,27 @@ namespace CenoCC {
                         try
                         {
                             var record_list_split = Cmn.SplitRemoveEmpty(recordList, ",");
+
+                            ///兼容IP
+                            if (record_list_split?.Length > 0 && record_list_split[0].Contains("|"))
+                            {
+                                var item_split = Cmn.SplitRemoveEmpty(record_list_split[0], "|");
+                                if (item_split?.Length == 2)
+                                {
+                                    ///真实路径,直接拼接,后续只可能有mp3的录音
+                                    string m_sSureHttpPath = $"http://{item_split[0]}:9469{m_fGetByRecID(item_split[1], true)}";
+                                    ///直接拼接路径即可
+                                    this.BeginInvoke(new MethodInvoker(() =>
+                                    {
+                                        MediaPlayerFrm m_pMediaPlayer = new MediaPlayerFrm(m_sSureHttpPath);
+                                        m_pMediaPlayer.BeginSearchFile();
+                                        m_pMediaPlayer.Show(this);
+                                    }));
+
+                                    return;
+                                }
+                            }
+
                             List<string> list = new List<string>();
                             foreach (var item in record_list_split)
                             {

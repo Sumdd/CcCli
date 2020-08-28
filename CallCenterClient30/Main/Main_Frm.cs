@@ -436,7 +436,7 @@ namespace CenoCC {
                         List<string> m_lRecord = new List<string>();
                         foreach (string m_sRecordStr in m_lRecordStr)
                         {
-                            m_lRecord.Add($">{m_sRecordStr}");
+                            m_lRecord.Add($"/>{m_sRecordStr}");
                         }
                         this.m_fRecordLoad(string.Join(",", m_lRecord));
                         return;

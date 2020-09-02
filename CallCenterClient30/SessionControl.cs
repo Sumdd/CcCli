@@ -18,21 +18,23 @@ namespace CenoCC {
         /// is called when sip register state change.
         /// </summary>
         /// <param name="RegState"></param>
-        public static void SipRegStateHandle(bool RegState) {
-            if(!RegState) {
-                if(CCFactory.IsInCall)
-                    CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING;
-                else
-                    CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_UNAVAILABLE;
+        public static void SipRegStateHandle(bool RegState)
+        {
+            ///如果注册失败
+            if (!RegState)
+            {
                 Log.Instance.Fail($"[CenoCC][SessionControl][SipRegStateHandle][SIP注册失败]");
+                if (!CCFactory.IsInCall)
+                {
+                    CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_UNAVAILABLE;
+                }
                 return;
             }
             CCFactory.ChInfo[MinChat.CurrentCh].IsSoftDial = true;
             Log.Instance.Success($"[CenoCC][SessionControl][SipRegStateHandle][SIP注册成功]");
-            if(CCFactory.IsInCall)
-                CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING;
-            else {
-                CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
+            ///修正此处BUG,如果不为不可用,那么这里不做处理
+            if (!CCFactory.IsInCall && CCFactory.ChInfo[MinChat.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_UNAVAILABLE)
+            {
                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_LOAD_STATUS_IDLE, (IntPtr)0, (IntPtr)0);
             }
         }

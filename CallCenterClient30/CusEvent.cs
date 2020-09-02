@@ -510,11 +510,11 @@ namespace CenoCC {
 
                     #region 空闲中
                     case (int)ChannelInfo.APP_USER_STATUS.US_LOAD_STATUS_IDLE: {
-                            if(CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE) {
-                                _MainChat.BeginInvoke(new MethodInvoker(() => {
-                                    _MainChat.CurrentStatus_TSMI.Text = "当前状态：空闲中";
-                                }));
-                            }
+                            CCFactory.ChInfo[MinChat.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE;
+                            _MainChat.BeginInvoke(new MethodInvoker(() =>
+                            {
+                                _MainChat.CurrentStatus_TSMI.Text = "当前状态：空闲中";
+                            }));
                         }
                         break;
                     #endregion

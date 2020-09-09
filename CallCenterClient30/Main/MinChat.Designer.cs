@@ -1008,6 +1008,9 @@ namespace CenoCC {
             MinChat.m_PhoneNumber = m_lStrings[2];
             m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact);
 
+            ///是否自己查询联系人姓名
+            int m_uName = Call_ClientParamUtil.m_bName ? 1 : 0;
+
             /**
              * 增加号码池概念
              * 增加俩个CMD的参数
@@ -1042,12 +1045,12 @@ namespace CenoCC {
                     ///分割
                     string[] m_lApiShare = _m_sUseNumber.Substring(Special.ADD_APISHARE_.Length).Split('&');
                     m_lStrings.Add(m_lApiShare[0]);
-                    m_sUsrData += $"|{m_lApiShare[0]}&{m_lApiShare[1]}";
+                    m_sUsrData += $"|{m_lApiShare[0]}&{m_lApiShare[1]}|{m_uName}";
                 }
                 else
                 {
                     ///追加自定义参数,全部补齐即可
-                    m_sUsrData += $"|&";
+                    m_sUsrData += $"|&|{m_uName}";
                 }
 
                 ///<![CDATA[
@@ -1074,7 +1077,7 @@ namespace CenoCC {
                 m_lStrings.Add(string.Empty);
 
                 ///追加自定义参数,全部补齐即可
-                m_sUsrData += $"|&";
+                m_sUsrData += $"|&|{m_uName}";
                 m_lStrings.Add(m_sUsrData);
 
                 InWebSocketMain.Send(Call_SocketCommandUtil.GetDialInfoStr(m_lStrings.ToArray()));
@@ -1101,7 +1104,7 @@ namespace CenoCC {
                     m_lStrings.Add(m_sTypeUUID);
 
                     ///追加自定义参数,全部补齐即可
-                    m_sUsrData += $"|{_m_sTypeUUID}&{_m_sTag}";
+                    m_sUsrData += $"|{_m_sTypeUUID}&{_m_sTag}|{m_uName}";
                     m_lStrings.Add(m_sUsrData);
 
                     InWebSocketMain.Send(Call_SocketCommandUtil.GetDialInfoStr(m_lStrings.ToArray()));

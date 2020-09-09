@@ -364,6 +364,24 @@
     <Compile Include="_Main_Extend_v1\user\userEdit.Designer.cs">
       <DependentUpon>userEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblist.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblist.Designer.cs">
+      <DependentUpon>wblist.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistOp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistOp.Designer.cs">
+      <DependentUpon>wblistOp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistSearch.Designer.cs">
+      <DependentUpon>wblistSearch.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Main_Extend_v1\_cs\h_xls.cs" />
     <Compile Include="_Main_Extend_v1\_cs\h_xml.cs" />
     <Compile Include="_Main_Extend_v1\_cs\m_cExcel.cs" />
@@ -710,6 +728,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\user\userSearch.resx">
       <DependentUpon>userSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\wblist\wblist.resx">
+      <DependentUpon>wblist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\wblist\wblistOp.resx">
+      <DependentUpon>wblistOp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\wblist\wblistSearch.resx">
+      <DependentUpon>wblistSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\_am\_item.resx">
       <DependentUpon>_item.cs</DependentUpon>

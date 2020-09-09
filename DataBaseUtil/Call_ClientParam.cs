@@ -175,6 +175,11 @@ namespace DataBaseUtil {
         #endregion
 
         #region 来电显示样式
+        /// <summary>
+        /// 默认不显示联系人姓名
+        /// </summary>
+        public static bool m_bName = false;
+
         private static string m_sShowStyleString;
 
         public static string ShowStyleString

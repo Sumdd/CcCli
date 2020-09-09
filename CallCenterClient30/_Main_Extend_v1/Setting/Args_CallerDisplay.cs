@@ -66,6 +66,25 @@ namespace CenoCC
             {
                 string m_sStrings = string.Join(",", m_lStrings.ToArray());
                 Call_ClientParamUtil.ShowStyleString = m_sStrings;
+
+                ///设定值,重新查询
+                Call_ParamUtil._m_sUseHomeSearch = null;
+
+                ///修改显示文字
+                if (Call_ParamUtil.m_bUseHomeSearch)
+                {
+                    this.ckbShowRealName.Text = this.ckbShowRealName.Text.Replace("(该功能已禁用)", "");
+                }
+                else
+                {
+                    if (!this.ckbShowRealName.Text.Contains("(该功能已禁用)"))
+                        this.ckbShowRealName.Text += "(该功能已禁用)";
+                }
+
+                ///载入缓存中
+                if (Call_ParamUtil.m_bUseHomeSearch && this.ckbShowRealName.Checked) Call_ClientParamUtil.m_bName = true;
+                else Call_ClientParamUtil.m_bName = false;
+
                 Cmn.MsgOK($"修改来电显示样式成功!");
                 Log.Instance.Success($"[CenoCC][Args_CallerDisplay][btnYes_Click][修改来电显示样式成功:{m_sStrings}]");
             }

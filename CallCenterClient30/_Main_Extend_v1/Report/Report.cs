@@ -20,6 +20,7 @@ namespace CenoCC {
         private DataSet m_ds;
         private bool m_downLoadEnd = true;
         private bool m_bDoing = false;
+        private bool m_bName = false;
         /// <summary>
         /// 统计表构造函数
         /// </summary>
@@ -28,6 +29,10 @@ namespace CenoCC {
             if(uc) {
                 this.FormBorderStyle = FormBorderStyle.None;
             }
+
+            ///直接赋值即可
+            this.m_bName = Call_ClientParamUtil.m_bName;
+
             this.m_bResetArgs = false;
             this.SearchEvent += new EventHandler(GetListBody);
             this.ucPager.PageSkipEvent += new EventHandler(GetListBody);
@@ -171,6 +176,12 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "c.AgentName", Text = "业务员", Width = 200, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.LocalNum", Text = "坐席电话", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.T_PhoneNum", Text = "电话", Width = 90, ImageIndex = 0 });
+
+            if (this.m_bName)
+            {
+                this.list.Columns.Add(new ColumnHeader() { Name = "realname", Text = "联系人姓名", Width = 125, ImageIndex = 0 });
+            }
+
             this.list.Columns.Add(new ColumnHeader() { Name = "a.PhoneAddress", Text = "归属地", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.C_StartTime", Text = "拨打时间", Width = 130, ImageIndex = 2, Tag = "desc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.C_SpeakTime", Text = "通话时长", Width = 90, ImageIndex = 0 });
@@ -195,6 +206,24 @@ namespace CenoCC {
                 return;
             }
 
+            string m_sFieldString = string.Empty;
+            if (this.m_bName)
+            {
+                m_sFieldString = $@"
+    (
+	    SELECT
+		    `exp_contact`.`realname` 
+	    FROM
+		    `exp_contact` 
+	    WHERE
+		    ( CASE WHEN IFNULL( `a`.`tnumber`, '' ) = '' THEN `a`.`T_PhoneNum` ELSE `a`.`T_PhoneNum` END ) = `exp_contact`.`number` 
+	    ORDER BY
+		    `exp_contact`.`updatetime` 
+		    LIMIT 1 
+	) AS `realname`, 
+";
+            }
+
             new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {
                 this.m_bDoing = true;
@@ -202,7 +231,7 @@ namespace CenoCC {
                 try
                 {
                     this.qop = new QueryPager();
-                    this.qop.FieldsSqlPart = @"SELECT 
+                    this.qop.FieldsSqlPart = $@"SELECT 
 	CONCAT(b.Remark,'(',b.TypeName,')') as CallTypeName,
     case when ifnull(a.tnumber,'') = '' then a.LocalNum
          else a.tnumber end as LocalNum,
@@ -211,6 +240,7 @@ namespace CenoCC {
     a.FreeSWITCHIPv4 as m_sFreeSWITCHIPv4,
     a.AgentID as m_uAgentID,
 	a.T_PhoneNum,
+    {m_sFieldString}
     a.PhoneAddress,
 	a.C_StartTime,
 	SEC_TO_TIME(a.C_SpeakTime) as C_SpeakTime,
@@ -320,6 +350,12 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "AgentName", Text = dr["AgentName"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "LocalNum", Text = dr["LocalNum"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "T_PhoneNum", Text = dr["T_PhoneNum"].ToString() });
+
+                        if (this.m_bName)
+                        {
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "realname", Text = dr["realname"].ToString() });
+                        }
+
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "PhoneAddress", Text = dr["PhoneAddress"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_StartTime", Text = dr["C_StartTime"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_SpeakTime", Text = dr["C_SpeakTime"].ToString() });
@@ -600,6 +636,10 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
             if(e.Column == 0)
                 return;
             ColumnHeader columnHeader = this.list.Columns[e.Column];
+
+            if (columnHeader.Name == "realname")
+                return;
+
             this.ucPager.pager.field = columnHeader.Name;
             this.list.BeginUpdate();
             if(columnHeader.Tag == null) {
@@ -665,6 +705,12 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         m_pDataTable.Columns["AgentName"].ColumnName = "业务员";
                         m_pDataTable.Columns["LocalNum"].ColumnName = "坐席电话";
                         m_pDataTable.Columns["T_PhoneNum"].ColumnName = "电话";
+
+                        if (this.m_bName)
+                        {
+                            m_pDataTable.Columns["realname"].ColumnName = "联系人姓名";
+                        }
+
                         m_pDataTable.Columns["PhoneAddress"].ColumnName = "归属地";
                         m_pDataTable.Columns["C_StartTime"].ColumnName = "拨打时间";
                         m_pDataTable.Columns["C_SpeakTime"].ColumnName = "通话时长";
@@ -674,6 +720,8 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         m_pDataTable.Columns.Remove("CallResultID");
                         m_pDataTable.Columns.Remove("ID");
                         m_pDataTable.Columns.Remove("C_PhoneNum");
+                        m_pDataTable.Columns.Remove("m_sFreeSWITCHIPv4");
+                        m_pDataTable.Columns.Remove("m_uAgentID");
                         m_cExcel.m_fExport(m_pDataSet, sfd.FileName);
                         this.m_bDoing = false;
                     }

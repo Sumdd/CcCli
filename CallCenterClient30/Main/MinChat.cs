@@ -62,6 +62,12 @@ namespace CenoCC {
             {
                 //加载一下下载配置
                 Call_ClientParamUtil.m_fRecSetting();
+                ///预加载是否显示联系人姓名
+                if (Call_ParamUtil.m_bUseHomeSearch)
+                {
+                    List<string> m_lShowStyleList = Call_ClientParamUtil.ShowStyleString?.Split(',')?.ToList();
+                    if (m_lShowStyleList?.Count > 1) Call_ClientParamUtil.m_bName = m_lShowStyleList[1] == "1";
+                }
             }
 
             ///操作权限

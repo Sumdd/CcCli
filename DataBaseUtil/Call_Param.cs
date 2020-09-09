@@ -191,7 +191,7 @@ namespace DataBaseUtil {
         }
         #endregion
         #region 是否使用催收查询联系人姓名
-        private static string _m_sUseHomeSearch;
+        public static string _m_sUseHomeSearch;
 
         public static bool m_bUseHomeSearch
         {

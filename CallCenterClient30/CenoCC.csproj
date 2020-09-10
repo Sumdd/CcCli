@@ -859,6 +859,7 @@
     <None Include="Resources\yx.jpg" />
     <None Include="Resources\微信图片_20191011171918.png" />
     <None Include="Resources\xsd.gif" />
+    <None Include="Resources\wb.png" />
     <Content Include="Update.sql" />
     <None Include="Resources\systemset.png" />
     <None Include="Resources\WebBrowser_Bg.png" />

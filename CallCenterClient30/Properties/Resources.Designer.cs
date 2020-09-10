@@ -683,6 +683,16 @@ namespace CenoCC.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap wb {
+            get {
+                object obj = ResourceManager.GetObject("wb", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap WebBrowser_Bg {
             get {
                 object obj = ResourceManager.GetObject("WebBrowser_Bg", resourceCulture);

@@ -58,6 +58,7 @@ namespace CenoCC {
             this.tsmiUser = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiGateway = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_route = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmi_wblist = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_Power = new System.Windows.Forms.ToolStripMenuItem();
             this.ShowDialPad_TSMI = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -113,6 +114,7 @@ namespace CenoCC {
             this.tsmiUser,
             this.tsmiGateway,
             this.tsmi_route,
+            this.tsmi_wblist,
             this.tsmi_Power,
             this.ShowDialPad_TSMI,
             this.toolStripSeparator2,
@@ -121,7 +123,7 @@ namespace CenoCC {
             this.Help_Tsmi,
             this.System_Tsmi});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 474);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 496);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // AgentInfo_TSMI
@@ -264,6 +266,15 @@ namespace CenoCC {
             this.tsmi_route.Tag = "route";
             this.tsmi_route.Text = "路由管理";
             this.tsmi_route.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
+            // 
+            // tsmi_wblist
+            // 
+            this.tsmi_wblist.Image = global::CenoCC.Properties.Resources.wb;
+            this.tsmi_wblist.Name = "tsmi_wblist";
+            this.tsmi_wblist.Size = new System.Drawing.Size(200, 22);
+            this.tsmi_wblist.Tag = "wblist";
+            this.tsmi_wblist.Text = "黑白名单管理";
+            this.tsmi_wblist.Click += new System.EventHandler(this.ToolStripMenuItem_Click);
             // 
             // tsmi_Power
             // 
@@ -708,6 +719,9 @@ namespace CenoCC {
                     break;
                 case "tsmi_route":
                     this.m_fOpenWebBrowser(new route(true));
+                    break;
+                case "tsmi_wblist":
+                    this.m_fOpenWebBrowser(new wblist(true));
                     break;
                 case "Register_Tsmi":
                     Log.Instance.Success($"[CenoCC][MinChat][ToolStripMenuItem_Click][SIP与WebSocket注册]");
@@ -1344,5 +1358,6 @@ namespace CenoCC {
         private ToolStripMenuItem tsmiGateway;
         private ToolStripMenuItem tsmi_route;
         public NotifyIcon notifyIcon;
+        private ToolStripMenuItem tsmi_wblist;
     }
 }

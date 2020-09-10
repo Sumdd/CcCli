@@ -87,14 +87,6 @@ namespace CenoCC
         private void defaultArgs(object sender, EventArgs e)
         {
             this.args = new Dictionary<string, object>();
-            var _time = DateTime.Now.ToString("yyyy-MM-dd");
-            this.args.Add("useStartDateTime", "true");
-            this.args.Add("startDateTimeMark", ">=");
-            this.args.Add("startDateTime", $"{_time} 00:00:00");
-            this.args.Add("useEndDateTime", "true");
-            this.args.Add("endDateTimeMark", "<=");
-            this.args.Add("endDateTime", $"{_time} 23:59:59");
-            this.args.Add("isshare", "0");
         }
         /// <summary>
         /// 加载列表表头
@@ -319,6 +311,7 @@ namespace CenoCC
                         m_lName.Add(item.SubItems["rname"].Text);
                     }
                 }
+                else return;
 
                 if (DialogResult.Yes != MessageBox.Show(this, $"确定要删除选中路由{(string.Join(",", m_lName))}吗?", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
@@ -373,7 +366,7 @@ WHERE
         {
             ///让服务器加载上即可,直接把路由加载到服务器缓存中,提高查询速度
             WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadRoute"));
-            MessageBox.Show(this, "发送用户信息重载命令完成");
+            MessageBox.Show(this, "发送路由重载命令完成");
         }
     }
 }

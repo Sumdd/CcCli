@@ -69,6 +69,9 @@ namespace CenoCC {
                 case "路由管理":
                     Tab_title.TitlePic = global::CenoCC.Properties.Resources.arrow_switch;
                     break;
+                case "黑白名单管理":
+                    Tab_title.TitlePic = global::CenoCC.Properties.Resources.wb;
+                    break;
             }
             Tab_title.Top = 21;
             Tab_title.Left = ControlCount * Tab_title.Width;

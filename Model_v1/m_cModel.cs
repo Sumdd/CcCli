@@ -106,6 +106,10 @@ namespace Model_v1
         /// 路由查询
         /// </summary>
         public const string _data_route_search = "data_route_search";
+        /// <summary>
+        /// 黑白名单查询
+        /// </summary>
+        public const string _data_wblist_search = "data_wblist_search";
     }
 
     public class DataPower

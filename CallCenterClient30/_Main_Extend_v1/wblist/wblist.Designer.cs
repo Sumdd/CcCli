@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(route));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(wblist));
             this.layout = new System.Windows.Forms.Panel();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
@@ -67,7 +67,7 @@
             this.btnReload.Name = "btnReload";
             this.btnReload.Size = new System.Drawing.Size(40, 23);
             this.btnReload.TabIndex = 14;
-            this.btnReload.Tag = "route_reload";
+            this.btnReload.Tag = "wblist_reload";
             this.btnReload.Text = "重载";
             this.btnReload.UseVisualStyleBackColor = true;
             this.btnReload.Click += new System.EventHandler(this.btnReload_Click);
@@ -78,7 +78,7 @@
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(40, 23);
             this.btnDelete.TabIndex = 13;
-            this.btnDelete.Tag = "route_delete";
+            this.btnDelete.Tag = "wblist_delete";
             this.btnDelete.Text = "删除";
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
@@ -89,7 +89,7 @@
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(40, 23);
             this.btnEdit.TabIndex = 12;
-            this.btnEdit.Tag = "route_edit";
+            this.btnEdit.Tag = "wblist_edit";
             this.btnEdit.Text = "编辑";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
@@ -100,7 +100,7 @@
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(40, 23);
             this.btnAdd.TabIndex = 11;
-            this.btnAdd.Tag = "route_add";
+            this.btnAdd.Tag = "wblist_add";
             this.btnAdd.Text = "增加";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
@@ -115,8 +115,8 @@
             // 
             // list
             // 
-            this.list.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.list.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.list.FullRowSelect = true;
             this.list.HideSelection = false;
@@ -168,15 +168,15 @@
             this.btnSearchOpen.UseVisualStyleBackColor = true;
             this.btnSearchOpen.Click += new System.EventHandler(this.btnSearchOpen_Click);
             // 
-            // route
+            // wblist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 476);
             this.Controls.Add(this.layout);
             this.MinimumSize = new System.Drawing.Size(998, 515);
-            this.Name = "route";
-            this.Text = "路由管理";
+            this.Name = "wblist";
+            this.Text = "黑白名单管理";
             this.layout.ResumeLayout(false);
             this.ResumeLayout(false);
 

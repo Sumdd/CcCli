@@ -330,7 +330,7 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         }
                     }
                     ///查询
-                    DataSet ds = this.qop.QdataSet();
+                    DataSet ds = this.qop.QdataSet(60 * 60);
                     //缓存当页数据,以便进行当前页录音下载
                     if (this.m_ds != null)
                     {

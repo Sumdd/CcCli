@@ -119,8 +119,15 @@ namespace DataBaseUtil {
         /// <param name="cmdText"></param>
         /// <param name="cmdParms"></param>
         /// <returns></returns>
-        public static DataSet ExecuteDataSet(string cmdText, MySqlParameter[] cmdParms) {
+        public static DataSet ExecuteDataSet(string cmdText, MySqlParameter[] cmdParms,int m_uTimeout = 0) {
             MySqlCommand cmd = new MySqlCommand();
+
+            ///设定超时时间,为了查询录音
+            if (m_uTimeout > 0)
+            {
+                cmd.CommandTimeout = m_uTimeout;
+            }
+
             MySqlDataAdapter adpt = new MySqlDataAdapter();
             DataSet ds = new DataSet();
             try {

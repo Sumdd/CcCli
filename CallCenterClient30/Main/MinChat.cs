@@ -54,6 +54,13 @@ namespace CenoCC {
         private static bool m_bShareCopying = false;
         private static bool m_bApiShareCopying = false;
 
+        /// <summary>
+        /// 右键时间,做记录
+        /// 点开时再做查询
+        /// </summary>
+        public static DateTime m_dtOpenRight = DateTime.Now;
+        public static bool m_bOpenRighting = false;
+
         public MinChat() {
             InitializeComponent();
             _MinChat = this;
@@ -583,7 +590,8 @@ namespace CenoCC {
 
             this.nextClipboardViewer = (IntPtr)Win32API.SetClipboardViewer((int)this.Handle);
 
-            SessionTimer.StartTimerServices();
+            ///减轻压力,重新写
+            ///SessionTimer.StartTimerServices();
         }
         #endregion
 
@@ -704,6 +712,7 @@ namespace CenoCC {
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e) {
             try {
+
                 this.AgentInfo_TSMI.Text = $"{AgentInfo.AgentName}({AgentInfo.RoleName})";
 
                 switch(CCFactory.ChInfo[CurrentCh].chStatus) {
@@ -826,47 +835,87 @@ namespace CenoCC {
                         break;
                 }
 
-                this.RecentNoanswerCalls_TSMI.DropDownItems.Clear();
-                if(CCFactory.RecentNoanswerRecords != null && CCFactory.RecentNoanswerRecords.Count > 0) {
-                    this.RecentNoanswerCalls_TSMI.ForeColor = Color.Red;
-                    this.RecentNoanswerCalls_TSMI.Text = "未接来电 (" + CCFactory.RecentNoanswerRecords.Count.ToString() + ")";
-                    int a_int = 0;
-                    foreach(M_kv _ in CCFactory.RecentNoanswerRecords) {
-                        ToolStripMenuItem tsmi = new ToolStripMenuItem();
-                        tsmi.Text = _.value;
-                        tsmi.ToolTipText = "点击拨打此号码";
-                        tsmi.Click += new EventHandler(delegate (object o, EventArgs ea) {
-                            if(CCFactory.IsInCall || CCFactory.ChInfo[CurrentCh].chStatus != ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
-                                return;
-                            new System.Threading.Thread(new System.Threading.ThreadStart(() => {
-                                try {
-                                    Log.Instance.Error($"[CenoCC][MinChat][contextMenuStrip1_Opening][RecentNoanswerRecords][Thread][Exception][未接来电:{_.value},已拨打]");
-                                    Call_Record.UpdateHandler(_.tag.ToString());
-                                } catch(Exception ex) {
-                                    Log.Instance.Error($"[CenoCC][MinChat][contextMenuStrip1_Opening][RecentNoanswerRecords][Thread][Exception][{ex.Message}]");
-                                }
-                            })).Start();
-                            ///号码隐藏逻辑
-                            MinChat.m_sSecretNumber = _.key?.ToString();
-                            this.Dial(_.tag.ToString());
-                        });
-                        if(CCFactory.IsInCall || CCFactory.ChInfo[CurrentCh].chStatus != ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE) {
-                            tsmi.Enabled = false;
-                            tsmi.ToolTipText = "通话中,请稍后...";
-                        }
-                        this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tsmi);
-                        a_int++;
-                        if(a_int < CCFactory.RecentNoanswerRecords.Count) {
-                            ToolStripSeparator tss = new ToolStripSeparator();
-                            this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tss);
-                        }
-                    }
-                } else {
-                    this.RecentNoanswerCalls_TSMI.ForeColor = Color.Black;
-                    this.RecentNoanswerCalls_TSMI.Text = "未接来电";
-                }
+                #region ***查询未接来电的方式,减小压力
+                if (!MinChat.m_bOpenRighting && ((TimeSpan)(DateTime.Now - MinChat.m_dtOpenRight)).TotalSeconds > 5)
+                {
+                    MinChat.m_bOpenRighting = true;
+                    ///未接来电显示
+                    bool m_bShow = false;
+                    if (m_cPower.Has(Model_v1.m_mOperate.noanswer_number_show)) m_bShow = true;
 
-                if(MinChat.isRightNeedLoad) {
+                    new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                    {
+                        try
+                        {
+                            CCFactory.RecentNoanswerRecords = Call_Record.GetRecentNoanswerData(int.Parse(AgentInfo.AgentID), m_bShow);
+                            ///首先清空
+                            this.RecentNoanswerCalls_TSMI.DropDownItems.Clear();
+                            if (CCFactory.RecentNoanswerRecords != null && CCFactory.RecentNoanswerRecords.Count > 0)
+                            {
+                                this.RecentNoanswerCalls_TSMI.ForeColor = Color.Red;
+                                this.RecentNoanswerCalls_TSMI.Text = "未接来电 (" + CCFactory.RecentNoanswerRecords.Count.ToString() + ")";
+                                int a_int = 0;
+                                foreach (M_kv _ in CCFactory.RecentNoanswerRecords)
+                                {
+                                    ToolStripMenuItem tsmi = new ToolStripMenuItem();
+                                    tsmi.Text = _.value;
+                                    tsmi.ToolTipText = "点击拨打此号码";
+                                    tsmi.Click += new EventHandler(delegate (object o, EventArgs ea)
+                                    {
+                                        if (CCFactory.IsInCall || CCFactory.ChInfo[CurrentCh].chStatus != ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
+                                            return;
+                                        new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                                        {
+                                            try
+                                            {
+                                                Log.Instance.Error($"[CenoCC][MinChat][contextMenuStrip1_Opening][RecentNoanswerRecords][Thread][Exception][未接来电:{_.value},已拨打]");
+                                                Call_Record.UpdateHandler(_.tag.ToString());
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Log.Instance.Error($"[CenoCC][MinChat][contextMenuStrip1_Opening][RecentNoanswerRecords][Thread][Exception][{ex.Message}]");
+                                            }
+                                        })).Start();
+                                        ///号码隐藏逻辑
+                                        MinChat.m_sSecretNumber = _.key?.ToString();
+                                        this.Dial(_.tag.ToString());
+                                    });
+                                    if (CCFactory.IsInCall || CCFactory.ChInfo[CurrentCh].chStatus != ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
+                                    {
+                                        tsmi.Enabled = false;
+                                        tsmi.ToolTipText = "通话中,请稍后...";
+                                    }
+                                    this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tsmi);
+                                    a_int++;
+                                    if (a_int < CCFactory.RecentNoanswerRecords.Count)
+                                    {
+                                        ToolStripSeparator tss = new ToolStripSeparator();
+                                        this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tss);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                this.RecentNoanswerCalls_TSMI.ForeColor = Color.Black;
+                                this.RecentNoanswerCalls_TSMI.Text = "未接来电";
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Instance.Error($"[CenoCC][MinChat][contextMenuStrip1_Opening][Thread][RecentNoanswerRecords][Exception][{ex.Message}]");
+                        }
+                        finally
+                        {
+                            MinChat.m_bOpenRighting = false;
+                            MinChat.m_dtOpenRight = DateTime.Now;
+                        }
+
+                    })).Start();
+                }
+                #endregion
+
+                if (MinChat.isRightNeedLoad) {
                     MinChat.isRightNeedLoad = false;
                     this.OpenBrowser_Tsmi.DropDownItems.Clear();
                     var q_str = Call_ClientParamUtil.GetParamValueByName("QuickWebsite");

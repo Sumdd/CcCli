@@ -292,7 +292,7 @@ namespace Query_v1 {
         /// 执行并得到数据结果集
         /// </summary>
         /// <returns></returns>
-        public DataSet QdataSet() {
+        public DataSet QdataSet(int m_uTimeout = 0) {
             List<MySqlParameter> paramList = new List<MySqlParameter>();
             foreach(QueryModel queryModel in querySample.QueryList) {
                 if(queryModel.Exist) {
@@ -309,7 +309,7 @@ namespace Query_v1 {
             var asMySQL = $"{CountSql};\r\n{QuerySql};\r\n{SumSql}"
                   .Replace("@limitStartValue", ((pager.page - 1) * pager.limit).ToString())
                   .Replace("@limit", pager.limit.ToString());
-            return MySQL_Method.ExecuteDataSet(asMySQL, paramList.ToArray());
+            return MySQL_Method.ExecuteDataSet(asMySQL, paramList.ToArray(), m_uTimeout);
         }
         #region 弃用
         /// <summary>

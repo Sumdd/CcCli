@@ -140,7 +140,19 @@ namespace CenoCC {
                                         __RecID = wb.Document.Window.Frames["mainFrame"].Document.GetElementById("RecID");
                                     else
                                         __RecID = wb.Document.GetElementById("RecID");
-                                    if(__RecID != null) {
+
+                                    ///6.0的开窗方式较多,这里增加一块内容,Bug
+                                    if (__RecID == null)
+                                    {
+                                        HtmlElement frame = wb.Document.GetElementById("iframe");
+                                        if (frame != null)
+                                        {
+                                            __RecID = wb.Document.Window.Frames["iframe"].Document.GetElementById("RecID");
+                                        }
+                                    }
+
+                                    if (__RecID != null)
+                                    {
                                         __RecID.InnerText = _RecID;
                                         Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][写入录音ID成功,{_RecID}]");
                                         return;

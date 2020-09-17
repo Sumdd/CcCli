@@ -848,12 +848,34 @@ namespace CenoCC {
                         try
                         {
                             CCFactory.RecentNoanswerRecords = Call_Record.GetRecentNoanswerData(int.Parse(AgentInfo.AgentID), m_bShow);
+
                             ///首先清空
-                            this.RecentNoanswerCalls_TSMI.DropDownItems.Clear();
+                            if (this.InvokeRequired)
+                            {
+                                this.Invoke(new MethodInvoker(() => { this.RecentNoanswerCalls_TSMI.DropDownItems.Clear(); }));
+                            }
+                            else
+                            {
+                                this.RecentNoanswerCalls_TSMI.DropDownItems.Clear();
+                            }
+
                             if (CCFactory.RecentNoanswerRecords != null && CCFactory.RecentNoanswerRecords.Count > 0)
                             {
-                                this.RecentNoanswerCalls_TSMI.ForeColor = Color.Red;
-                                this.RecentNoanswerCalls_TSMI.Text = "未接来电 (" + CCFactory.RecentNoanswerRecords.Count.ToString() + ")";
+                                ///设置未接显示
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    {
+                                        this.RecentNoanswerCalls_TSMI.ForeColor = Color.Red;
+                                        this.RecentNoanswerCalls_TSMI.Text = "未接来电 (" + CCFactory.RecentNoanswerRecords.Count.ToString() + ")";
+                                    }));
+                                }
+                                else
+                                {
+                                    this.RecentNoanswerCalls_TSMI.ForeColor = Color.Red;
+                                    this.RecentNoanswerCalls_TSMI.Text = "未接来电 (" + CCFactory.RecentNoanswerRecords.Count.ToString() + ")";
+                                }
+                               
                                 int a_int = 0;
                                 foreach (M_kv _ in CCFactory.RecentNoanswerRecords)
                                 {
@@ -885,21 +907,57 @@ namespace CenoCC {
                                         tsmi.Enabled = false;
                                         tsmi.ToolTipText = "通话中,请稍后...";
                                     }
-                                    this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tsmi);
+
+                                    ///添加未接目录
+                                    if (this.InvokeRequired)
+                                    {
+                                        this.Invoke(new MethodInvoker(() =>
+                                        {
+                                            this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tsmi);
+                                        }));
+                                    }
+                                    else
+                                    {
+                                        this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tsmi);
+                                    }
+
                                     a_int++;
                                     if (a_int < CCFactory.RecentNoanswerRecords.Count)
                                     {
-                                        ToolStripSeparator tss = new ToolStripSeparator();
-                                        this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tss);
+                                        ///添加分割线
+                                        if (this.InvokeRequired)
+                                        {
+                                            this.Invoke(new MethodInvoker(() =>
+                                            {
+                                                ToolStripSeparator tss = new ToolStripSeparator();
+                                                this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tss);
+                                            }));
+                                        }
+                                        else
+                                        {
+                                            ToolStripSeparator tss = new ToolStripSeparator();
+                                            this.RecentNoanswerCalls_TSMI.DropDownItems.Add(tss);
+                                        }
                                     }
                                 }
                             }
                             else
                             {
-                                this.RecentNoanswerCalls_TSMI.ForeColor = Color.Black;
-                                this.RecentNoanswerCalls_TSMI.Text = "未接来电";
+                                ///无未接的样式
+                                if (this.InvokeRequired)
+                                {
+                                    this.Invoke(new MethodInvoker(() =>
+                                    {
+                                        this.RecentNoanswerCalls_TSMI.ForeColor = Color.Black;
+                                        this.RecentNoanswerCalls_TSMI.Text = "未接来电";
+                                    }));
+                                }
+                                else
+                                {
+                                    this.RecentNoanswerCalls_TSMI.ForeColor = Color.Black;
+                                    this.RecentNoanswerCalls_TSMI.Text = "未接来电";
+                                }
                             }
-
                         }
                         catch (Exception ex)
                         {

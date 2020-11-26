@@ -152,9 +152,20 @@ namespace CenoCC
                                             }
                                             break;
                                     }
-                                    m_sPhoneAddressStr = Call_PhoneAddressUtil.m_fGetCityNameByCityCode(m_sPrefixStr, out m_sCityCodeStr);
-                                    m_sDealWithStr = Special.Telephone;
-                                    m_bIsNeedGetContact = true;
+
+                                    ///特殊处理400、800
+                                    if (m_sPhoneNumber.StartsWith("400") || m_sPhoneNumber.StartsWith("800"))
+                                    {
+                                        m_sRealPhoneNumberStr = $"{m_sPhoneNumber}";
+                                        m_sPhoneAddressStr = "特殊";
+                                        m_sDealWithStr = Special.Complete;
+                                    }
+                                    else
+                                    {
+                                        m_sPhoneAddressStr = Call_PhoneAddressUtil.m_fGetCityNameByCityCode(m_sPrefixStr, out m_sCityCodeStr);
+                                        m_sDealWithStr = Special.Telephone;
+                                        m_bIsNeedGetContact = true;
+                                    }
                                 }
 
                                 if (string.IsNullOrWhiteSpace(m_sPhoneAddressStr))

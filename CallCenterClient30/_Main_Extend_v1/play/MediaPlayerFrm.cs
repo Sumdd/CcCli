@@ -239,8 +239,16 @@ namespace CenoCC {
                     //显示错误对话框
                     MessageBox.Show("Open Error!");
                 }
+
+                ///是否全号显示
+                bool m_bSeeNumber = Model_v1.m_mOperate.m_bSeeNumber;
+
                 //获得打开文件的文件名
-                pathTBox.Text = openFileDialog.FileName;
+                if (m_bSeeNumber)
+                    this.pathTBox.Text = openFileDialog.FileName;
+                else
+                    this.pathTBox.Text = Cmn_v1.Cmn.m_fSecretRec(openFileDialog.FileName);
+
                 this.path = openFileDialog.FileName;
                 return;
             } catch(Exception ex) {
@@ -299,6 +307,10 @@ namespace CenoCC {
             this.PlayBtn.Enabled = false;
             this.StopBtn.Enabled = false;
             this.PlayProgressBar.Enabled = false;
+
+            ///是否全号显示
+            bool m_bSeeNumber = Model_v1.m_mOperate.m_bSeeNumber;
+
             BackgroundWorker _ = new BackgroundWorker();
             _.DoWork += (o, e) => {
                 try {
@@ -310,7 +322,13 @@ namespace CenoCC {
                     this.path = e.Result.ToString();
                     this.OpenFileBtn.Enabled = false;
                     this.pathTBox.Enabled = false;
-                    this.pathTBox.Text = System.IO.Path.GetFileName(this.path);
+
+                    ///录音路径脱敏
+                    if (m_bSeeNumber)
+                        this.pathTBox.Text = System.IO.Path.GetFileName(this.path);
+                    else
+                        this.pathTBox.Text = Cmn_v1.Cmn.m_fSecretRec(System.IO.Path.GetFileName(this.path));
+
                     this.OpenFileBtn.Text = "浏览";
                     this.BackwardBtn.Enabled = false;
                     this.PlayBtn.Enabled = true;

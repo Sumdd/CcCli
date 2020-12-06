@@ -45,6 +45,10 @@ namespace CenoCC {
                 bool m_bHasPrefix = m_ds.Tables[0].Columns.Contains("m_sPrefix");
                 bool m_bHasFreeSWITCHIPv4 = m_ds.Tables[0].Columns.Contains("m_sFreeSWITCHIPv4");
                 bool m_bHasAgentID = m_ds.Tables[0].Columns.Contains("m_uAgentID");
+
+                ///是否全号显示
+                bool m_bSeeNumber = Model_v1.m_mOperate.m_bSeeNumber;
+
                 foreach (DataRow dr in this.m_ds.Tables[0].Rows) {
                     ListViewItem listViewItem = new ListViewItem();
                     listViewItem.UseItemStyleForSubItems = false;
@@ -52,7 +56,17 @@ namespace CenoCC {
                     listViewItem.ImageIndex = string.IsNullOrWhiteSpace(_recordFile) ? 2 : 0;
                     listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "index", Text = $"{index++}" });
                     listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "msgTips", Text = $"等待下载" });
-                    listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "fileName", Text = $"{_recordFile}" });
+
+                    ///是否全号显示
+                    string m_sRecordFile = _recordFile;
+                    if (!m_bSeeNumber)
+                    {
+                        m_sRecordFile = Cmn.m_fSecretRec(m_sRecordFile);
+                    }
+
+                    ///处理后的录音路径
+                    listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "S_fileName", Text = $"{m_sRecordFile}" });
+
                     listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "progress", Text = "0.00%" });
                     listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ID", Text = $"{dr["ID"]}" });
                     listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "status", Text = $"{listViewItem.ImageIndex}" });
@@ -71,6 +85,9 @@ namespace CenoCC {
                         var m_uAgentID = m_bHasAgentID ? $"{dr["m_uAgentID"]}" : "-1";
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "m_sFreeSWITCHIPv4", Text = $"{m_sFreeSWITCHIPv4}" });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "m_uAgentID", Text = $"{m_uAgentID}" });
+
+                        ///真实录音路径
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "fileName", Text = $"{_recordFile}" });
                     }
 
                     this.list.Items.Add(listViewItem);

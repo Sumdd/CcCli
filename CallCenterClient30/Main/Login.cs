@@ -201,15 +201,18 @@ namespace CenoCC
 
                             ParamInfo.RememberUserName = AgentInfo.LoginName;
 
-                            //成功后保存IP
+                            ///成功后保存IP
                             m_cProfile.m_fSetServerIP(Common.Encrypt.EncryptString(this.txtDpwd.Text));
 
-                            //保存网卡IP
+                            ///保存网卡IP
                             CommonParam.IP4 = this.m_pIPv4;
                             m_cProfile.localip = CommonParam.IP4?.tag?.ToString();
 
                             ///加载操作权限
                             m_cPower.m_fGetOperatePower();
+
+                            ///直接加载是否全好显示
+                            Model_v1.m_mOperate.m_bSeeNumber = m_cPower.Has(Model_v1.m_mOperate.noanswer_number_show);
 
                             ///加载数据权限
                             m_cPower.m_fGetDataPower();

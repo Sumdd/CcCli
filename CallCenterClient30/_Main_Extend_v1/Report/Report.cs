@@ -291,16 +291,82 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                     //处理电话类型
                     if (args != null && args.ContainsKey("callArgs"))
                         this.qop.appQuery($" AND a.CallType IN ({args["callArgs"]}) ");
-                    //业务员
-                    if (args != null && args.ContainsKey("agent"))
-                        this.qop.appQuery($" AND a.isshare = 0 and c.ID = {args["agent"]} ");
                     //号码类别
                     this.qop.setQuery("a.isshare", "isshare");
-                    ///权限
+
+                    #region ***权限优化
+                    ///业务员,本机域通话记录均可查
+                    bool m_bUa = false;
+                    string m_sUa = string.Empty;
+                    if (args != null && args.ContainsKey("agent"))
+                    {
+                        m_bUa = true;
+                        m_sUa = args["agent"].ToString();
+                    }
+                    ///IPv4
+                    string m_sFreeSWITCHIPv4 = DataBaseUtil.m_cEsyMySQL.m_sFreeSWITCHIPv4;
+                    ///操作权限中判断,是否可查询共享号码通话记录(权限)
+                    bool m_bShare = m_cPower.Has(m_mOperate.phonerecords_search_share);
+                    ///操作权限中判断,是否可查询共享号码通话记录(全部)
+                    bool m_bShareAll = m_cPower.Has(m_mOperate.phonerecords_search_share_all);
+                    ///权限分支
                     PopedomArgs popedomArgs = new PopedomArgs();
                     popedomArgs.type = DataPowerType._data_phonerecords_search;
                     popedomArgs.left.Add("c.ID");
-                    this.qop.appQuery($" AND ( a.isshare > 0 OR ( a.isshare = 0 {m_cPower.m_fPopedomSQL(popedomArgs)} ) ) ");
+                    string m_sUaSQL = m_cPower.m_fPopedomSQL(popedomArgs);
+                    string m_sShareSQL = m_sUaSQL.Replace("c.ID", "a.fromagentid");
+                    if (m_bShare)
+                    {
+                        if (m_bShareAll)
+                        {
+                            if (m_bUa)
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 AND a.FreeSWITCHIPv4 = '{m_sFreeSWITCHIPv4}' AND a.fromagentid = {m_sUa} ) OR ( a.isshare = 0 AND c.ID = {m_sUa} ) ) ");
+                            }
+                            else
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 ) OR ( a.isshare = 0 {m_sUaSQL} ) ) ");
+                            }
+                        }
+                        else
+                        {
+                            if (m_bUa)
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 AND a.FreeSWITCHIPv4 = '{m_sFreeSWITCHIPv4}' AND a.fromagentid = {m_sUa} ) OR ( a.isshare = 0 AND c.ID = {m_sUa} ) ) ");
+                            }
+                            else
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 AND a.FreeSWITCHIPv4 = '{m_sFreeSWITCHIPv4}' {m_sShareSQL} ) OR ( a.isshare = 0 {m_sUaSQL} ) ) ");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (m_bShareAll)
+                        {
+                            if (m_bUa)
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 AND a.FreeSWITCHIPv4 = '{m_sFreeSWITCHIPv4}' AND a.fromagentid = {m_sUa} ) OR ( a.isshare = 0 AND c.ID = {m_sUa} ) ) ");
+                            }
+                            else
+                            {
+                                this.qop.appQuery($" AND ( ( a.isshare > 0 ) OR ( a.isshare = 0 {m_sUaSQL} ) ) ");
+                            }
+                        }
+                        else
+                        {
+                            if (m_bUa)
+                            {
+                                this.qop.appQuery($" AND a.isshare = 0 AND c.ID = {m_sUa} ");
+                            }
+                            else
+                            {
+                                this.qop.appQuery($" AND a.isshare = 0 {m_sUaSQL} ");
+                            }
+                        }
+                    }
+                    #endregion
+
                     ///姓名
                     if (args != null && args.ContainsKey("agentName"))
                     {
@@ -343,13 +409,28 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                     int pageIndexStart = this.ucPager.PageIndexStart;
                     this.list.BeginUpdate();
                     this.list.Items.Clear();
+
+                    ///是否全号显示
+                    bool m_bSeeNumber = m_mOperate.m_bSeeNumber;
+
                     foreach (DataRow dr in ds.Tables[1].Rows)
                     {
                         ListViewItem listViewItem = new ListViewItem($"{pageIndexStart++}");
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "CallTypeName", Text = dr["CallTypeName"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "AgentName", Text = dr["AgentName"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "LocalNum", Text = dr["LocalNum"].ToString() });
-                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "T_PhoneNum", Text = dr["T_PhoneNum"].ToString() });
+
+                        ///是否全号显示
+                        string m_sPhoneNum = dr["T_PhoneNum"].ToString();
+                        string m_sRecordFile = dr["RecordFile"].ToString();
+                        if (!m_bSeeNumber)
+                        {
+                            m_sPhoneNum = Cmn.m_fSecret(m_sPhoneNum);
+                            m_sRecordFile = Cmn.m_fSecretRec(m_sRecordFile);
+                        }
+
+                        ///处理后的对方号码
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "S_T_PhoneNum", Text = m_sPhoneNum });
 
                         if (this.m_bName)
                         {
@@ -360,10 +441,15 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_StartTime", Text = dr["C_StartTime"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_SpeakTime", Text = dr["C_SpeakTime"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "R_Description", Text = dr["R_Description"].ToString() });
-                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "RecordFile", Text = dr["RecordFile"].ToString() });
+
+                        ///处理后的录音路径
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "S_RecordFile", Text = m_sRecordFile });
+
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "Remark", Text = dr["Remark"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ID", Text = dr["ID"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "C_PhoneNum", Text = dr["C_PhoneNum"].ToString() });
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "T_PhoneNum", Text = dr["T_PhoneNum"].ToString() });
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "RecordFile", Text = dr["RecordFile"].ToString() });
                         this.list.Items.Add(listViewItem);
                     }
                     this.list.EndUpdate();
@@ -497,6 +583,11 @@ left join dial_area e on e.aip = a.FreeSWITCHIPv4
                     this.tsmiRecordListenTest.Enabled = false;
                     this.tsmiRecordListenTest.ToolTipText = "录音试听";
                 }
+
+                ///是否全号显示
+                bool m_bSeeNumber = m_mOperate.m_bSeeNumber;
+                if (m_bSeeNumber) this.callNumber.Visible = true;
+                else this.callNumber.Visible = false;
 
                 ///操作权限
                 if (!m_cPower.Has(m_mOperate.phonerecords_listen))

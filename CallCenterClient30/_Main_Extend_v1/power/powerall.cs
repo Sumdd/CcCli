@@ -793,6 +793,8 @@ namespace CenoCC
             this.m_fFill(m_pMethodInvoker);
             ///重新加载操作权限
             m_cPower.m_fGetOperatePower();
+            ///重新设定全号显示缓存
+            Model_v1.m_mOperate.m_bSeeNumber = m_cPower.Has(Model_v1.m_mOperate.noanswer_number_show);
             ///菜单显隐
             MinChat.m_fLoadOperatePower();
         }

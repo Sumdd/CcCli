@@ -32,12 +32,18 @@ namespace Model_v1
         /// </summary>
         public const string noanswer_number_show = "noanswer_number_show";
         /// <summary>
+        /// 是否全号显示
+        /// </summary>
+        public static bool m_bSeeNumber = false;
+
+        /// <summary>
         /// 浏览器
         /// </summary>
         public const string browser = "browser";
         #region ***通话记录
         public const string phonerecords = "phonerecords";
         public const string phonerecords_search_share = "phonerecords_search_share";
+        public const string phonerecords_search_share_all = "phonerecords_search_share_all";
         public const string phonerecords_listen = "phonerecords_listen";
         public const string phonerecords_download = "phonerecords_download";
         public const string phonerecords_download_page = "phonerecords_download_page";

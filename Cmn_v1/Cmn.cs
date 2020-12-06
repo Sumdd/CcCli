@@ -198,5 +198,46 @@ namespace Cmn_v1 {
             catch { }
             return m_sString;
         }
+        /// <summary>
+        /// 电话号码脱敏
+        /// </summary>
+        /// <param name="m_sNumber"></param>
+        /// <returns></returns>
+        public static string m_fSecret(string m_sNumber)
+        {
+            if (!string.IsNullOrWhiteSpace(m_sNumber))
+            {
+                int m_uInt = m_sNumber.Length;
+                if (m_uInt > 7)
+                {
+                    return m_sNumber.Substring(0, 3) + "****" + m_sNumber.Substring(m_uInt - 4);
+                }
+                else
+                {
+                    return "*******";
+                }
+            }
+            else
+            {
+                return "*******";
+            }
+        }
+        /// <summary>
+        /// 录音路径脱敏
+        /// </summary>
+        /// <param name="m_sNumber"></param>
+        /// <returns></returns>
+        public static string m_fSecretRec(string m_sString)
+        {
+            if (string.IsNullOrWhiteSpace(m_sString)) return null;
+
+            List<string> m_lString1 = m_sString.Split('_').ToList();
+            int m_uLast = m_lString1.Count - 1;
+            List<string> m_lString2 = m_lString1[m_uLast].Split('.').ToList();
+            string m_sNumber = m_lString2[0];
+            m_lString2[0] = Cmn.m_fSecret(m_sNumber);
+            m_lString1.RemoveAt(m_uLast);
+            return $"{string.Join("_", m_lString1)}_{m_lString2[0]}.{m_lString2[1]}";
+        }
     }
 }

@@ -214,5 +214,41 @@ FROM
             }
             return null;
         }
+
+
+        private static string _m_sFreeSWITCHIPv4;
+        public static string m_sFreeSWITCHIPv4
+        {
+            get
+            {
+                try
+                {
+                    if (!string.IsNullOrWhiteSpace(_m_sFreeSWITCHIPv4)) return _m_sFreeSWITCHIPv4;
+
+                    ///首次加载
+                    string m_sSQL = $@"
+SELECT
+	`dial_area`.`aip` 
+FROM
+	`dial_area` 
+WHERE
+	`dial_area`.`amain` = 2 
+	LIMIT 1;
+";
+                    DataTable m_pDataTable = MySQL_Method.BindTable(m_sSQL);
+                    ///赋值
+                    if (m_pDataTable != null && m_pDataTable.Rows.Count > 0) _m_sFreeSWITCHIPv4 = m_pDataTable.Rows[0]["aip"].ToString();
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"[DataBaseUtil][m_cEsyMySQL][m_sFreeSWITCHIPv4][Exception][{ex.Message}]");
+                }
+
+                ///未得到赋值
+                if (string.IsNullOrWhiteSpace(_m_sFreeSWITCHIPv4)) _m_sFreeSWITCHIPv4 = m_cProfile.server;
+
+                return _m_sFreeSWITCHIPv4;
+            }
+        }
     }
 }

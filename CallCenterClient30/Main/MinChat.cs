@@ -273,7 +273,7 @@ namespace CenoCC {
                                                         {
                                                             try
                                                             {
-                                                                List<share_number> m_lShareNumber = Core_v1.Redis2.m_fGetShareNumberList();
+                                                                List<share_number> m_lShareNumber = Core_v1.Redis2.m_fGetShareNumberList(AgentInfo.LoginName);
                                                                 if (m_lShareNumber != null && m_lShareNumber.Count > 0)
                                                                 {
                                                                     lock (MinChat.m_oLoadNumberLock)

@@ -67,6 +67,13 @@ namespace WebSocket_v1 {
                 InWebSocketMain.m_WebSocket.Open();
             } catch(Exception ex) {
                 Log.Instance.Error($"[WebSocket_v1][InWebSocketMain][Start][Exception][{ex.Message}]");
+
+                ///增加一个错误自动重启,当在此环节出现时,也需要开启定时器
+                if (InWebSocketMain.m_IsCanLogin)
+                {
+                    InWebSocketMain.AutoStartWebSocketDo();
+                }
+
             }
         }
         /// <summary>

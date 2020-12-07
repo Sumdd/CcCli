@@ -330,6 +330,13 @@ namespace Core_v1
         }
         #endregion
 
+        #region ***仅获取共享号码接口
+        public static string m_fGetShare1(string m_sLoginName)
+        {
+            return $"{m_cProfile.m_sApi}/m_fGetShare1?m_sLoginName={m_sLoginName}";
+        }
+        #endregion
+
         #region ***独立共享接口
         public static string m_fUseShareApi(string m_sUUID, int m_sTimeout = 5)
         {

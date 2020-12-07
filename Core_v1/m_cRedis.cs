@@ -1,5 +1,4 @@
-﻿using ServiceStack.Redis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,90 +36,33 @@ namespace Core_v1
         /// </summary>
         public const string m_sDialAreaName = "SHARE-DIAL-AREA";
 
-        #region ***Redis多例模式
-        public static RedisClient Instance
-        {
-            get
-            {
-                try
-                {
-                    return new RedisClient(host, port, password, db);
-                }
-                catch (Exception ex)
-                {
-                    Log.Instance.Fail($"[Core_v1][Redis2][Instance][get][{ex.Message}]");
-                }
-                return null;
-            }
-        }
-        #endregion
-
         //读数据(无锁)
-        public static List<share_number> m_fGetShareNumberList()
+        public static List<share_number> m_fGetShareNumberList(string m_sLoginName)
         {
             try
             {
                 if (Redis2.use)
                 {
-                    ///有无配置本机域
-                    if (Redis2.m_EsyDialArea == null)
-                    {
-                        Log.Instance.Warn($"[Core_v1][Redis2][m_fGetShareNumberList][not find my area in mysql]");
-                        return null;
-                    }
+                    ///将其写到接口获取,方便调整    
+                    string m_sResultString = H_Web.Get(m_cProfile.m_fGetShare1(m_sLoginName));
 
-                    ///是否已加入域
-                    List<dial_area> m_lDialArea = JsonConvert.DeserializeObject<List<dial_area>>(Redis2.Instance.Get<string>(Redis2.m_sDialAreaName));
-                    var m_uCount = m_lDialArea.Where(x => x.aip == Redis2.m_EsyDialArea?.aip && (x.astate == 2 || x.astate == 4))?.Count();
-                    if (m_uCount <= 0)
+                    ///解析
+                    if (!string.IsNullOrWhiteSpace(m_sResultString))
                     {
-                        Log.Instance.Warn($"[Core_v1][Redis2][m_fGetShareNumberList][no find my area in redis]");
-                        return null;
-                    }
-
-                    string[] m_lDataKeys = Redis2.Instance.GetAllKeys().Where(x => x.StartsWith(m_sJSONPrefix))?.ToArray();
-                    string[] m_lLockKeys = Redis2.Instance.GetAllKeys().Where(x => x.StartsWith(m_sLockPrefix))?.ToArray();
-                    if (m_lLockKeys == null) m_lLockKeys = new string[0];
-                    if (m_lDataKeys != null && m_lDataKeys.Count() > 0)
-                    {
-                        List<share_number> m_lShareNumber = (from r in Redis2.Instance.GetAll<string>(m_lDataKeys.ToList())
-                                                             .Select(x => { return JsonConvert.DeserializeObject<share_number>(x.Value); })
-                                                             where
-                                                             //电话状态为空闲
-                                                             r.state == SHARE_NUM_STATUS.IDLE
-                                                             //限制配置设置
-                                                             &&
-                                                             (
-                                                                //总次数
-                                                                (r.limitcount == 0 || r.limitcount > r.usecount)
-                                                                &&
-                                                                //总时长
-                                                                (r.limitduration == 0 || r.limitduration > r.useduration)
-                                                                &&
-                                                                (
-                                                                    //当日次数
-                                                                    ((r.limitthecount == 0 || r.limitthecount > r.usethecount) && Cmn_v1.Cmn.m_fEqualsDate(r.usethetime)) || Cmn_v1.Cmn.m_fLessDate(r.usethetime)
-                                                                    &&
-                                                                    //当日时长
-                                                                    ((r.limittheduration == 0 || r.limittheduration > r.usetheduration) && Cmn_v1.Cmn.m_fEqualsDate(r.usethetime)) || Cmn_v1.Cmn.m_fLessDate(r.usethetime)
-                                                                )
-                                                             )
-                                                             //没有锁
-                                                             &&
-                                                             !m_lLockKeys.Contains($"{Redis2.m_sLockPrefix}:{r.uuid}")
-                                                             //类型
-                                                             &&
-                                                             r.isshare == 1
-                                                             //排序
-                                                             orderby r.ordernum ascending, r.areaname ascending, r.number ascending
-                                                             //暂时去掉同号码限呼逻辑
-                                                             select r)?.ToList();
-
-                        return m_lShareNumber;
+                        m_mResponseJSON _m_mResponseJSON = JsonConvert.DeserializeObject<m_mResponseJSON>(m_sResultString);
+                        if (_m_mResponseJSON.status == 0)
+                        {
+                            ///返回结果
+                            return JsonConvert.DeserializeObject<List<share_number>>(_m_mResponseJSON.result.ToString());
+                        }
+                        else
+                        {
+                            Log.Instance.Warn($"[Core_v1][Redis2][m_fGetShareNumberList][{_m_mResponseJSON.msg}:{_m_mResponseJSON.result}]");
+                        }
                     }
                     else
                     {
-                        Log.Instance.Warn($"[Core_v1][Redis2][m_fGetShareNumberList][no share number]");
+                        Log.Instance.Warn($"[Core_v1][Redis2][m_fGetShareNumberList][无返回]");
                     }
                 }
                 else

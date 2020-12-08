@@ -98,6 +98,7 @@ namespace CenoCC
             this.list.Columns.Add(new ColumnHeader() { Name = "wbname", Text = "名称", Width = 165, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "wbnumber", Text = "号码表达式", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "wbtype", Text = "类型", Width = 100, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "wblimittype", Text = "限制类型", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "ordernum", Text = "唯一索引", Width = 90, ImageIndex = 1, Tag = "asc" });
             this.list.EndUpdate();
             this.ucPager.pager.field = "ordernum";
@@ -129,6 +130,17 @@ namespace CenoCC
 	`call_wblist`.`wbname`,
 	`call_wblist`.`wbnumber`,
 	( CASE WHEN `call_wblist`.`wbtype` = 1 THEN '白名单' ELSE '黑名单' END ) AS `wbtype`,
+	(
+	CASE
+			
+			WHEN `call_wblist`.`wblimittype` = 1 THEN
+			'呼入' 
+			WHEN `call_wblist`.`wblimittype` = 2 THEN
+			'呼出' 
+			WHEN `call_wblist`.`wblimittype` = 3 THEN
+			'呼入呼出' ELSE '未知类型' 
+		END 
+		) AS `wblimittype`,
 	`call_wblist`.`ordernum` ";
                     this.qop.FromSqlPart = @"FROM
 	`call_wblist`";
@@ -142,6 +154,7 @@ namespace CenoCC
                     this.qop.setQuery("wbname", "wbname");
                     this.qop.setQuery("wbnumber", "wbnumber");
                     this.qop.setQuery("wbtype", "wbtype");
+                    this.qop.setQuery("wblimittype", "wblimittype");
                     this.qop.setQuery("ordernum", "ordernum");
                     ///查询
                     DataSet ds = this.qop.QdataSet();
@@ -163,6 +176,7 @@ namespace CenoCC
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "wbname", Text = dr["wbname"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "wbnumber", Text = dr["wbnumber"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "wbtype", Text = dr["wbtype"].ToString() });
+                        listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "wblimittype", Text = dr["wblimittype"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ordernum", Text = dr["ordernum"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ID", Text = dr["ID"].ToString() });
                         this.list.Items.Add(listViewItem);

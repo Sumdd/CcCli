@@ -38,6 +38,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.cbxWbtype = new System.Windows.Forms.ComboBox();
+            this.cbxWblimittype = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtWbname
@@ -99,7 +101,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(197, 140);
+            this.btnSave.Location = new System.Drawing.Point(197, 160);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -116,11 +118,31 @@
             this.cbxWbtype.Size = new System.Drawing.Size(120, 20);
             this.cbxWbtype.TabIndex = 8;
             // 
+            // cbxWblimittype
+            // 
+            this.cbxWblimittype.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxWblimittype.FormattingEnabled = true;
+            this.cbxWblimittype.Location = new System.Drawing.Point(152, 119);
+            this.cbxWblimittype.Name = "cbxWblimittype";
+            this.cbxWblimittype.Size = new System.Drawing.Size(120, 20);
+            this.cbxWblimittype.TabIndex = 14;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(12, 122);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "限制类型";
+            // 
             // wblistOp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 177);
+            this.ClientSize = new System.Drawing.Size(284, 195);
+            this.Controls.Add(this.cbxWblimittype);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.cbxWbtype);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label3);
@@ -151,5 +173,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.ComboBox cbxWbtype;
+        private System.Windows.Forms.ComboBox cbxWblimittype;
+        private System.Windows.Forms.Label label4;
     }
 }

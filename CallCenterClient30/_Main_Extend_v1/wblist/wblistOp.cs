@@ -52,10 +52,46 @@ namespace CenoCC
                 this.cbxWbtype.ValueMember = "ID";
                 this.cbxWbtype.DisplayMember = "Name";
                 this.cbxWbtype.EndUpdate();
-                this.cbxWbtype.SelectedValue = 2;
+
+                ///添加时默认值
+                if (m_uID == -1)
+                {
+                    this.cbxWbtype.SelectedValue = 2;
+                }
 
                 this.cbxWbtype.Enabled = false;
             }
+
+            ///限制类型
+            {
+                this.cbxWblimittype.BeginUpdate();
+                DataTable m_pDataTable = new DataTable();
+                m_pDataTable.Columns.Add("ID", typeof(int));
+                m_pDataTable.Columns.Add("Name", typeof(string));
+                DataRow m_pDataRow4 = m_pDataTable.NewRow();
+                m_pDataRow4["ID"] = 3;
+                m_pDataRow4["Name"] = "呼入呼出";
+                m_pDataTable.Rows.Add(m_pDataRow4);
+                DataRow m_pDataRow1 = m_pDataTable.NewRow();
+                m_pDataRow1["ID"] = 1;
+                m_pDataRow1["Name"] = "呼入";
+                m_pDataTable.Rows.Add(m_pDataRow1);
+                DataRow m_pDataRow2 = m_pDataTable.NewRow();
+                m_pDataRow2["ID"] = 2;
+                m_pDataRow2["Name"] = "呼出";
+                m_pDataTable.Rows.Add(m_pDataRow2);
+                this.cbxWblimittype.DataSource = m_pDataTable;
+                this.cbxWblimittype.ValueMember = "ID";
+                this.cbxWblimittype.DisplayMember = "Name";
+                this.cbxWblimittype.EndUpdate();
+
+                ///添加时默认值
+                if (m_uID == -1)
+                {
+                    this.cbxWblimittype.SelectedValue = 4;
+                }
+            }
+
             ///只把组织架构加载上可勾选即可
             this.HandleCreated += (a, b) =>
             {
@@ -82,6 +118,7 @@ WHERE
                             this.txtWbnumber.Text = m_pDataRow["wbnumber"].ToString();
                             this.txtOrdernum.Text = m_pDataRow["ordernum"].ToString();
                             this.cbxWbtype.SelectedValue = m_pDataRow["wbtype"].ToString();
+                            this.cbxWblimittype.SelectedValue = m_pDataRow["wblimittype"].ToString();
                         }
 
                     })).Start();
@@ -143,9 +180,9 @@ SELECT
 			( IFNULL( ( SELECT MAX( `wbid` ) FROM `call_wblist` ), 0 ) + 1 ) ELSE {m_uID} 
 	END 
 	) INTO @m_uMaxID;
-INSERT INTO `call_wblist` ( `wbid`, `wbname`, `wbnumber`, `wbtype`, `addtime`, `adduser`, `ordernum` )
+INSERT INTO `call_wblist` ( `wbid`, `wbname`, `wbnumber`, `wbtype`, `addtime`, `adduser`, `ordernum`, `wblimittype` )
 VALUES
-	( @m_uMaxID, '{this.txtWbname.Text}', '{this.txtWbnumber.Text}', {this.cbxWbtype.SelectedValue}, '{m_sNow}', {Common.AgentInfo.AgentID}, {this.txtOrdernum.Text} );
+	( @m_uMaxID, '{this.txtWbname.Text}', '{this.txtWbnumber.Text}', {this.cbxWbtype.SelectedValue}, '{m_sNow}', {Common.AgentInfo.AgentID}, {this.txtOrdernum.Text}, {this.cbxWblimittype.SelectedValue} );
 {(string.Join("\r\n", m_lSQL))}
 ";
                         int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true);

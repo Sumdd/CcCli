@@ -30,6 +30,10 @@
         {
             this.layout = new System.Windows.Forms.Panel();
             this.searchpanel = new System.Windows.Forms.Panel();
+            this.ordernumKey = new CenoCC._queryLeft();
+            this.ordernumValue = new System.Windows.Forms.TextBox();
+            this.rnumberKey = new CenoCC._queryLeft();
+            this.rnumberValue = new System.Windows.Forms.TextBox();
             this.rtypeValue = new System.Windows.Forms.ComboBox();
             this.rtextKey = new CenoCC._queryLeft();
             this.rnameKey = new CenoCC._queryLeft();
@@ -41,10 +45,6 @@
             this.btnCloseAfterSearch = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
-            this.rnumberKey = new CenoCC._queryLeft();
-            this.rnumberValue = new System.Windows.Forms.TextBox();
-            this.ordernumKey = new CenoCC._queryLeft();
-            this.ordernumValue = new System.Windows.Forms.TextBox();
             this.layout.SuspendLayout();
             this.searchpanel.SuspendLayout();
             this.SuspendLayout();
@@ -83,6 +83,36 @@
             this.searchpanel.Name = "searchpanel";
             this.searchpanel.Size = new System.Drawing.Size(410, 360);
             this.searchpanel.TabIndex = 14;
+            // 
+            // ordernumKey
+            // 
+            this.ordernumKey.BackColor = System.Drawing.Color.Transparent;
+            this.ordernumKey.Location = new System.Drawing.Point(10, 142);
+            this.ordernumKey.Name = "ordernumKey";
+            this.ordernumKey.Size = new System.Drawing.Size(176, 20);
+            this.ordernumKey.TabIndex = 10;
+            // 
+            // ordernumValue
+            // 
+            this.ordernumValue.Location = new System.Drawing.Point(192, 141);
+            this.ordernumValue.Name = "ordernumValue";
+            this.ordernumValue.Size = new System.Drawing.Size(180, 21);
+            this.ordernumValue.TabIndex = 11;
+            // 
+            // rnumberKey
+            // 
+            this.rnumberKey.BackColor = System.Drawing.Color.Transparent;
+            this.rnumberKey.Location = new System.Drawing.Point(10, 115);
+            this.rnumberKey.Name = "rnumberKey";
+            this.rnumberKey.Size = new System.Drawing.Size(176, 20);
+            this.rnumberKey.TabIndex = 8;
+            // 
+            // rnumberValue
+            // 
+            this.rnumberValue.Location = new System.Drawing.Point(192, 114);
+            this.rnumberValue.Name = "rnumberValue";
+            this.rnumberValue.Size = new System.Drawing.Size(180, 21);
+            this.rnumberValue.TabIndex = 9;
             // 
             // rtypeValue
             // 
@@ -182,36 +212,6 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
-            // rnumberKey
-            // 
-            this.rnumberKey.BackColor = System.Drawing.Color.Transparent;
-            this.rnumberKey.Location = new System.Drawing.Point(10, 115);
-            this.rnumberKey.Name = "rnumberKey";
-            this.rnumberKey.Size = new System.Drawing.Size(176, 20);
-            this.rnumberKey.TabIndex = 8;
-            // 
-            // rnumberValue
-            // 
-            this.rnumberValue.Location = new System.Drawing.Point(192, 114);
-            this.rnumberValue.Name = "rnumberValue";
-            this.rnumberValue.Size = new System.Drawing.Size(180, 21);
-            this.rnumberValue.TabIndex = 9;
-            // 
-            // ordernumKey
-            // 
-            this.ordernumKey.BackColor = System.Drawing.Color.Transparent;
-            this.ordernumKey.Location = new System.Drawing.Point(10, 142);
-            this.ordernumKey.Name = "ordernumKey";
-            this.ordernumKey.Size = new System.Drawing.Size(176, 20);
-            this.ordernumKey.TabIndex = 10;
-            // 
-            // ordernumValue
-            // 
-            this.ordernumValue.Location = new System.Drawing.Point(192, 141);
-            this.ordernumValue.Name = "ordernumValue";
-            this.ordernumValue.Size = new System.Drawing.Size(180, 21);
-            this.ordernumValue.TabIndex = 11;
-            // 
             // routeSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -219,7 +219,7 @@
             this.ClientSize = new System.Drawing.Size(450, 561);
             this.Controls.Add(this.layout);
             this.Name = "routeSearch";
-            this.Text = "通话记录查询条件";
+            this.Text = "路由管理查询条件";
             this.layout.ResumeLayout(false);
             this.searchpanel.ResumeLayout(false);
             this.searchpanel.PerformLayout();

@@ -49,11 +49,10 @@ namespace CenoCC
         /// </summary>
         private void LoadQueryKey()
         {
-            this.rnameKey.thisDefult("路由名称", this.rnameKey.Name, "Like", true, ">", ">=", "<", "<=");
-            this.ctypeKey.thisDefult("路由方式", this.ctypeKey.Name, "=", false);
-            this.rtypeKey.thisDefult("作用范围", this.rtypeKey.Name, "=", false);
-            this.rtextKey.thisDefult("作用范围枚举", this.rtextKey.Name, "Like", true, ">", ">=", "<", "<=");
-            this.rnumberKey.thisDefult("号码表达式", this.rnumberKey.Name, "Like", true, ">", ">=", "<", "<=");
+            this.wbnameKey.thisDefult("名称", this.wbnameKey.Name, "Like", true, ">", ">=", "<", "<=");
+            this.wbtypeKey.thisDefult("类型", this.wbtypeKey.Name, "=", false);
+            this.wblimittypeKey.thisDefult("限制类型", this.wblimittypeKey.Name, "=", false);
+            this.wbnumberKey.thisDefult("号码表达式", this.wbnumberKey.Name, "Like", true, ">", ">=", "<", "<=");
             this.ordernumKey.thisDefult("唯一索引", this.ordernumKey.Name, "Like", true, ">", ">=", "<", "<=");
         }
         /// <summary>
@@ -61,67 +60,60 @@ namespace CenoCC
         /// </summary>
         private void LoadQueryValue()
         {
-            this.rnameValue.Text = string.Empty;
-            ///路由方式
+            this.wbnameValue.Text = string.Empty;
+            ///黑白名单类型
             {
-                this.ctypeValue.BeginUpdate();
+                this.wbtypeValue.BeginUpdate();
                 DataTable m_pDataTable = new DataTable();
                 m_pDataTable.Columns.Add("ID", typeof(int));
                 m_pDataTable.Columns.Add("Name", typeof(string));
-                DataRow m_pDataRow0 = m_pDataTable.NewRow();
-                m_pDataRow0["ID"] = -1;
-                m_pDataRow0["Name"] = "全部";
-                m_pDataTable.Rows.Add(m_pDataRow0);
                 DataRow m_pDataRow1 = m_pDataTable.NewRow();
                 m_pDataRow1["ID"] = 1;
-                m_pDataRow1["Name"] = "正序取闲";
+                m_pDataRow1["Name"] = "白名单";
                 m_pDataTable.Rows.Add(m_pDataRow1);
                 DataRow m_pDataRow2 = m_pDataTable.NewRow();
                 m_pDataRow2["ID"] = 2;
-                m_pDataRow2["Name"] = "倒序取闲";
+                m_pDataRow2["Name"] = "黑名单";
                 m_pDataTable.Rows.Add(m_pDataRow2);
-                DataRow m_pDataRow3 = m_pDataTable.NewRow();
-                m_pDataRow3["ID"] = 3;
-                m_pDataRow3["Name"] = "随机取闲";
-                m_pDataTable.Rows.Add(m_pDataRow3);
-                this.ctypeValue.DataSource = m_pDataTable;
-                this.ctypeValue.ValueMember = "ID";
-                this.ctypeValue.DisplayMember = "Name";
-                this.ctypeValue.EndUpdate();
+                this.wbtypeValue.DataSource = m_pDataTable;
+                this.wbtypeValue.ValueMember = "ID";
+                this.wbtypeValue.DisplayMember = "Name";
+                this.wbtypeValue.EndUpdate();
 
-                //路由方式
-                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("ctype"))
-                    this.ctypeValue.SelectedValue = this.senderEntity.args["ctype"];
+                ///黑白名单类型
+                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("wbtype"))
+                    this.wbtypeValue.SelectedValue = this.senderEntity.args["wbtype"];
+                else
+                    this.wbtypeValue.SelectedValue = 2;
             }
-            ///作用范围
+            ///黑白名单限制类型
             {
-                this.rtypeValue.BeginUpdate();
+                this.wblimittypeValue.BeginUpdate();
                 DataTable m_pDataTable = new DataTable();
                 m_pDataTable.Columns.Add("ID", typeof(int));
                 m_pDataTable.Columns.Add("Name", typeof(string));
-                DataRow m_pDataRow0 = m_pDataTable.NewRow();
-                m_pDataRow0["ID"] = -1;
-                m_pDataRow0["Name"] = "全部";
-                m_pDataTable.Rows.Add(m_pDataRow0);
+                DataRow m_pDataRow4 = m_pDataTable.NewRow();
+                m_pDataRow4["ID"] = 3;
+                m_pDataRow4["Name"] = "呼入呼出";
+                m_pDataTable.Rows.Add(m_pDataRow4);
                 DataRow m_pDataRow1 = m_pDataTable.NewRow();
-                m_pDataRow1["ID"] = 0;
-                m_pDataRow1["Name"] = "无限制";
+                m_pDataRow1["ID"] = 1;
+                m_pDataRow1["Name"] = "呼入";
                 m_pDataTable.Rows.Add(m_pDataRow1);
                 DataRow m_pDataRow2 = m_pDataTable.NewRow();
-                m_pDataRow2["ID"] = 1;
-                m_pDataRow2["Name"] = "使用作用范围枚举";
+                m_pDataRow2["ID"] = 2;
+                m_pDataRow2["Name"] = "呼出";
                 m_pDataTable.Rows.Add(m_pDataRow2);
-                this.rtypeValue.DataSource = m_pDataTable;
-                this.rtypeValue.ValueMember = "ID";
-                this.rtypeValue.DisplayMember = "Name";
-                this.rtypeValue.EndUpdate();
+                this.wblimittypeValue.DataSource = m_pDataTable;
+                this.wblimittypeValue.ValueMember = "ID";
+                this.wblimittypeValue.DisplayMember = "Name";
+                this.wblimittypeValue.EndUpdate();
 
-                //路由方式
-                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("rtype"))
-                    this.ctypeValue.SelectedValue = this.senderEntity.args["rtype"];
+                ///黑白名单限制类型
+                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("wblimittype"))
+                    this.wbtypeValue.SelectedValue = this.senderEntity.args["wblimittype"];
             }
-            this.rtextValue.Text = string.Empty;
-            this.rnumberValue.Text = string.Empty;
+            this.wbnumberValue.Text = string.Empty;
             this.ordernumValue.Text = string.Empty;
         }
         /// <summary>
@@ -133,22 +125,16 @@ namespace CenoCC
             {
                 var args = this.senderEntity.args;
                 //路由名称
-                this.argsKey = "rname";
+                this.argsKey = "wbname";
                 if (args.ContainsKey(argsKey))
                 {
-                    this.rnameValue.Text = args[argsKey].ToString();
-                }
-                //作用范围枚举
-                this.argsKey = "rtext";
-                if (args.ContainsKey(argsKey))
-                {
-                    this.rtextValue.Text = args[argsKey].ToString();
+                    this.wbnameValue.Text = args[argsKey].ToString();
                 }
                 //号码表达式
-                this.argsKey = "rnumber";
+                this.argsKey = "wbnumber";
                 if (args.ContainsKey(argsKey))
                 {
-                    this.rnumberValue.Text = args[argsKey].ToString();
+                    this.wbnumberValue.Text = args[argsKey].ToString();
                 }
                 //唯一索引
                 this.argsKey = "ordernum";
@@ -176,34 +162,28 @@ namespace CenoCC
             this.senderEntity.args = new Dictionary<string, object>();
             this.SetArgsMark();
             //路由名称
-            var rname = this.rnameValue.Text;
-            if (!string.IsNullOrWhiteSpace(rname))
+            var wbname = this.wbnameValue.Text;
+            if (!string.IsNullOrWhiteSpace(wbname))
             {
-                this.senderEntity.args.Add("rname", rname);
+                this.senderEntity.args.Add("wbname", wbname);
             }
-            //路由类型
-            var ctype = Convert.ToInt32(this.ctypeValue.SelectedValue);
-            if (ctype != -1)
+            //类型
+            var wbtype = Convert.ToInt32(this.wbtypeValue.SelectedValue);
+            if (wbtype != -1)
             {
-                this.senderEntity.args.Add("ctype", ctype);
+                this.senderEntity.args.Add("wbtype", wbtype);
             }
-            //作用范围
-            var rtype = Convert.ToInt32(this.rtypeValue.SelectedValue);
-            if (rtype != -1)
+            //限制类型
+            var wblimittype = Convert.ToInt32(this.wblimittypeValue.SelectedValue);
+            if (wblimittype != -1)
             {
-                this.senderEntity.args.Add("rtype", rtype);
-            }
-            //作用范围枚举
-            var rtext = this.rtextValue.Text;
-            if (!string.IsNullOrWhiteSpace(rtext))
-            {
-                this.senderEntity.args.Add("rtext", rtext);
+                this.senderEntity.args.Add("wblimittype", wblimittype);
             }
             //号码表达式
-            var rnumber = this.rnumberValue.Text;
-            if (!string.IsNullOrWhiteSpace(rnumber))
+            var wbnumber = this.wbnumberValue.Text;
+            if (!string.IsNullOrWhiteSpace(wbnumber))
             {
-                this.senderEntity.args.Add("rnumber", rnumber);
+                this.senderEntity.args.Add("wbnumber", wbnumber);
             }
             //唯一索引
             var ordernum = this.ordernumValue.Text;

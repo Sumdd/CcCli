@@ -268,6 +268,24 @@
     <Compile Include="_Main_Extend_v1\gateway\gatewaySearch.designer.cs">
       <DependentUpon>gatewaySearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inrule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inrule.Designer.cs">
+      <DependentUpon>inrule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleOp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleOp.Designer.cs">
+      <DependentUpon>inruleOp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleSearch.Designer.cs">
+      <DependentUpon>inruleSearch.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Main_Extend_v1\play\MediaPlayerFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -622,6 +640,15 @@
     <EmbeddedResource Include="_Main_Extend_v1\gateway\gatewaySearch.resx">
       <DependentUpon>gatewaySearch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\inrule\inrule.resx">
+      <DependentUpon>inrule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\inrule\inruleOp.resx">
+      <DependentUpon>inruleOp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\inrule\inruleSearch.resx">
+      <DependentUpon>inruleSearch.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\play\MediaPlayerFrm.resx">
       <DependentUpon>MediaPlayerFrm.cs</DependentUpon>
     </EmbeddedResource>
@@ -841,6 +868,7 @@
     <None Include="Resources\cog.png" />
     <None Include="Resources\computer_go.png" />
     <None Include="Resources\folder.png" />
+    <None Include="Resources\inrule.png" />
     <Content Include="Resources\list.jpg" />
     <None Include="Resources\telsetting.bmp" />
     <None Include="Resources\sound_off.png" />

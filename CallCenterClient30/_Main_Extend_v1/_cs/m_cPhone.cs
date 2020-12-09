@@ -38,6 +38,8 @@ namespace CenoCC
             m_sCardType = string.Empty;
             ///邮编
             m_sZipCode = string.Empty;
+            ///修改规则,如果尾缀有*1000等格式则判断为内呼,并兼容内呼规则
+            Regex m_rRegex = new Regex("(.*)[*][0-9][0-9][0-9][0-9]$");
 
             try
             {
@@ -62,7 +64,6 @@ namespace CenoCC
                      */
 
                     case '*':
-                        Regex m_rRegex = new Regex("^[*][0-9][0-9][0-9][0-9]$");
                         if (m_rRegex.IsMatch(m_sPhoneNumber))
                         {
                             m_sFirstChar = Special.Star;
@@ -82,8 +83,17 @@ namespace CenoCC
                     default:
                         m_sFirstChar = Special.Zero;
 
-                        if (m_sPhoneNumber.Contains(Special.Star) ||
-                            m_sPhoneNumber.Contains(Special.Hash))
+                        if (m_rRegex.IsMatch(m_sPhoneNumber))
+                        {
+                            ///判断为内呼,并兼容内呼规则
+                            m_sFirstChar = Special.Star;
+                            ///真实号码不做处理即可
+                            m_sRealPhoneNumberStr = m_sPhoneNumber;
+                            m_sPhoneAddressStr = "内呼";
+                            m_sDealWithStr = Special.Complete;
+                        }
+                        else if (m_sPhoneNumber.Contains(Special.Star) ||
+                             m_sPhoneNumber.Contains(Special.Hash))
                         {
                             /*
                              * 业务前面的零需要去掉

@@ -228,6 +228,7 @@
             this.userListValue.Name = "userListValue";
             this.userListValue.Size = new System.Drawing.Size(121, 20);
             this.userListValue.TabIndex = 11;
+            this.userListValue.SelectedIndexChanged += new System.EventHandler(this.userListValue_SelectedIndexChanged);
             // 
             // ucPager
             // 

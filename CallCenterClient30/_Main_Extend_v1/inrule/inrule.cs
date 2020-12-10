@@ -100,6 +100,7 @@ namespace CenoCC
             this.list.Columns.Add(new ColumnHeader() { Name = "inruleport", Text = "内呼规则端口", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "inruleua", Text = "内呼规则ua", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "inrulesuffix", Text = "内呼规则前缀", Width = 135, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "inrulemain", Text = "是否为本机规则", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "ordernum", Text = "唯一索引", Width = 90, ImageIndex = 1, Tag = "asc" });
             this.list.EndUpdate();
             this.ucPager.pager.field = "ordernum";
@@ -133,6 +134,7 @@ namespace CenoCC
 	`call_inrule`.`inruleport`,
 	`call_inrule`.`inruleua`,
 	`call_inrule`.`inrulesuffix`,
+	`call_inrule`.`inrulemain`,
 	`call_inrule`.`ordernum` ";
                     this.qop.FromSqlPart = @"FROM
 	`call_inrule`";
@@ -140,7 +142,7 @@ namespace CenoCC
                     this.qop.setQuerySample(args);
                     ///查询条件
                     PopedomArgs popedomArgs = new PopedomArgs();
-                    popedomArgs.type = DataPowerType._data_wblist_search;
+                    popedomArgs.type = DataPowerType._data_inrule_search;
                     popedomArgs.left.Add("adduser");
                     this.qop.appQuery($"{m_cPower.m_fPopedomSQL(popedomArgs)}");
                     this.qop.setQuery("inrulename", "inrulename");
@@ -148,6 +150,7 @@ namespace CenoCC
                     this.qop.setQuery("inruleport", "inruleport");
                     this.qop.setQuery("inruleua", "inruleua");
                     this.qop.setQuery("inrulesuffix", "inrulesuffix");
+                    this.qop.setQuery("inrulemain", "inrulemain");
                     this.qop.setQuery("ordernum", "ordernum");
                     ///查询
                     DataSet ds = this.qop.QdataSet();
@@ -166,11 +169,29 @@ namespace CenoCC
                     foreach (DataRow dr in ds.Tables[1].Rows)
                     {
                         ListViewItem listViewItem = new ListViewItem($"{pageIndexStart++}");
+                        listViewItem.UseItemStyleForSubItems = false;
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inrulename", Text = dr["inrulename"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inruleip", Text = dr["inruleip"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inruleport", Text = dr["inruleport"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inruleua", Text = dr["inruleua"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inrulesuffix", Text = dr["inrulesuffix"].ToString() });
+
+                        ///是否为本机规则
+                        int m_uMain = Convert.ToInt32(dr["inrulemain"]);
+                        var m_pSubItem = new ListViewItem.ListViewSubItem();
+                        m_pSubItem.Name = "inrulemain";
+                        if (m_uMain == 1)
+                        {
+                            m_pSubItem.Text = "是";
+                            m_pSubItem.ForeColor = Color.Green;
+                        }
+                        else
+                        {
+                            m_pSubItem.Text = "否";
+                            m_pSubItem.ForeColor = Color.Red;
+                        }
+                        listViewItem.SubItems.Add(m_pSubItem);
+
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ordernum", Text = dr["ordernum"].ToString() });
                         listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ID", Text = dr["ID"].ToString() });
                         this.list.Items.Add(listViewItem);

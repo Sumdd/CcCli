@@ -34,6 +34,32 @@ namespace CenoCC
                 this.btnSave.Text = "编辑";
             }
 
+            ///是否为本机规则
+            {
+                this.cbxInrulemain.BeginUpdate();
+                DataTable m_pDataTable = new DataTable();
+                m_pDataTable.Columns.Add("ID", typeof(int));
+                m_pDataTable.Columns.Add("Name", typeof(string));
+                DataRow m_pDataRow1 = m_pDataTable.NewRow();
+                m_pDataRow1["ID"] = 0;
+                m_pDataRow1["Name"] = "否";
+                m_pDataTable.Rows.Add(m_pDataRow1);
+                DataRow m_pDataRow2 = m_pDataTable.NewRow();
+                m_pDataRow2["ID"] = 1;
+                m_pDataRow2["Name"] = "是";
+                m_pDataTable.Rows.Add(m_pDataRow2);
+                this.cbxInrulemain.DataSource = m_pDataTable;
+                this.cbxInrulemain.ValueMember = "ID";
+                this.cbxInrulemain.DisplayMember = "Name";
+                this.cbxInrulemain.EndUpdate();
+
+                ///添加时默认值
+                if (m_uID == -1)
+                {
+                    this.cbxInrulemain.SelectedValue = 0;
+                }
+            }
+
             if (m_uID == -1)
             {
                 ///默认端口
@@ -69,6 +95,7 @@ WHERE
                             this.txtInruleport.Text = m_pDataRow["inruleport"].ToString();
                             this.txtInruleua.Text = m_pDataRow["inruleua"].ToString();
                             this.txtInruleSuffix.Text = m_pDataRow["inrulesuffix"].ToString();
+                            this.cbxInrulemain.SelectedValue = m_pDataRow["inrulemain"].ToString();
                             this.txtOrdernum.Text = m_pDataRow["ordernum"].ToString();
                         }
 
@@ -136,9 +163,9 @@ SELECT
 			( IFNULL( ( SELECT MAX( `inruleid` ) FROM `call_inrule` ), 0 ) + 1 ) ELSE {m_uID} 
 	END 
 	) INTO @m_uMaxID;
-INSERT INTO `call_inrule` ( `inruleid`, `inrulename`, `inruleip`, `inrulesuffix`, `addtime`, `adduser`, `ordernum`, `inruleport`, `inruleua` )
+INSERT INTO `call_inrule` ( `inruleid`, `inrulename`, `inruleip`, `inrulesuffix`, `addtime`, `adduser`, `ordernum`, `inruleport`, `inruleua`, `inrulemain` )
 VALUES
-	( @m_uMaxID, '{this.txtInruleName.Text}', '{this.txtInruleIP.Text}', '{this.txtInruleSuffix.Text}', '{m_sNow}', {Common.AgentInfo.AgentID}, {this.txtOrdernum.Text}, {this.txtInruleport.Text}, '{this.txtInruleua.Text}' );
+	( @m_uMaxID, '{this.txtInruleName.Text}', '{this.txtInruleIP.Text}', '{this.txtInruleSuffix.Text}', '{m_sNow}', {Common.AgentInfo.AgentID}, {this.txtOrdernum.Text}, {this.txtInruleport.Text}, '{this.txtInruleua.Text}', {this.cbxInrulemain.SelectedValue} );
 {(string.Join("\r\n", m_lSQL))}
 ";
                         int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true);

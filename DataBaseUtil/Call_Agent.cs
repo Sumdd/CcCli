@@ -94,7 +94,7 @@ namespace DataBaseUtil {
             return dt;
         }
 
-        public static DataTable m_fGetAgentList(string m_sPopedomSQL)
+        public static DataTable m_fGetAgentList(string m_sPopedomSQL, int m_uUa = -1)
         {
             string asSQL = $@"
 SELECT
@@ -102,8 +102,21 @@ SELECT
 	concat( a.loginname, '(', a.AgentName, ')' ) AS lr 
 FROM
 	call_agent AS a 
+    {(m_uUa == -11 || m_uUa == -12 ? $@"
+	LEFT JOIN (
+	SELECT
+		`dial_limit`.`useuser`,
+		ifnull( sum( CASE WHEN isuse = 1 THEN 1 ELSE 0 END ), 0 ) AS usecount,
+		sum( 1 ) AS allcount 
+	FROM
+		`dial_limit` 
+	GROUP BY
+		`dial_limit`.`useuser` 
+	) AS `b` ON `b`.`useuser` = `a`.`ID`" : "")}
 WHERE
-	1 =1
+	1 = 1
+    {(m_uUa == -11 ? " AND ifnull(`allcount`,0) <= 0 " : "")}
+    {(m_uUa == -12 ? " AND ifnull(`usecount`,0) <= 0 " : "")}
     {m_sPopedomSQL};
 ";
             DataTable dt = MySQL_Method.BindTable(asSQL);

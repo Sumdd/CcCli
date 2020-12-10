@@ -14,6 +14,9 @@ using Model_v1;
 
 namespace CenoCC {
     public partial class diallimit : _index {
+
+        private bool m_bUaListLoading = false;
+
         /// <![CDATA[
         /// 权限问题：这里还是要以全部为准,嵌套写法有点麻烦
         /// ]]>
@@ -40,9 +43,9 @@ namespace CenoCC {
             this.defaultArgs(this, null);
             this.HandleCreated += new EventHandler((o, e) => {
                 this.GetListBody(this, null);
-                this.Fill();
+                this.m_fFlushGateway(null, null);
+                this.m_fFlushUa();
             });
-
             ///操作权限
             this.m_fLoadOperatePower(this.Controls);
         }
@@ -73,16 +76,23 @@ namespace CenoCC {
         }
         #endregion
 
-        private void Fill() {
-            new System.Threading.Thread(new System.Threading.ThreadStart(() => {
-                try {
+        private void m_fFlushUa(int m_uUa = -1)
+        {
+            if (this.m_bUaListLoading) return;
+
+            this.m_bUaListLoading = true;
+
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                try
+                {
 
                     PopedomArgs popedomArgs = new PopedomArgs();
                     popedomArgs.type = DataPowerType._data_diallimit_limit_allot;
                     popedomArgs.left.Add("a.ID");
                     string m_sPopedomSQL = m_cPower.m_fPopedomSQL(popedomArgs);
 
-                    var dt = Call_AgentUtil.m_fGetAgentList(m_sPopedomSQL);
+                    var dt = Call_AgentUtil.m_fGetAgentList(m_sPopedomSQL, m_uUa);
                     var dr = dt.NewRow();
                     dr["EmpID"] = -1;
                     dr["lr"] = "取消分配";
@@ -97,9 +107,40 @@ namespace CenoCC {
                     drp["lr"] = "批量分配";
                     dt.Rows.InsertAt(drp, 1);
 
+                    ///方便分配线路
+                    {
+                        ///<![CDATA[
+                        /// 切换为无启用线路
+                        /// ]]>
+
+                        var druse = dt.NewRow();
+                        druse["EmpID"] = -12;
+                        druse["lr"] = "切换无启用线路坐席";
+                        dt.Rows.InsertAt(druse, 2);
+
+                        ///<![CDATA[
+                        /// 切换为分配线路大于0
+                        /// ]]>
+
+                        var drset = dt.NewRow();
+                        drset["EmpID"] = -11;
+                        drset["lr"] = "切换无分配线路坐席";
+                        dt.Rows.InsertAt(drset, 3);
+
+                        ///<![CDATA[
+                        /// 切换为默认模式
+                        /// ]]>
+
+                        var drdef = dt.NewRow();
+                        drdef["EmpID"] = -10;
+                        drdef["lr"] = "切换全部坐席";
+                        dt.Rows.InsertAt(drdef, 4);
+                    }
+
+
                     if (!this.IsDisposed)
                     {
-                        this.BeginInvoke(new MethodInvoker(() =>
+                        this.Invoke(new MethodInvoker(() =>
                         {
                             this.userListValue.BeginUpdate();
                             this.userListValue.DataSource = dt;
@@ -108,11 +149,15 @@ namespace CenoCC {
                             this.userListValue.EndUpdate();
                         }));
                     }
-                } catch(Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Log.Instance.Error($"diallimit fill agent:{ex.Message}");
                 }
-
-                this.m_fFlushGateway(null, null);
+                finally
+                {
+                    this.m_bUaListLoading = false;
+                }
 
             })).Start();
         }
@@ -963,6 +1008,18 @@ on c.uniqueid = a.gwuid";
             _._entity = this;
             _.SearchEvent = new EventHandler(this.GetListBody);
             _.Show(this);
+        }
+
+        private void userListValue_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.m_bUaListLoading) return;
+
+            int m_uUa = Convert.ToInt32(this.userListValue.SelectedValue);
+            ///特定值操作
+            if (m_uUa == -10 || m_uUa == -11 || m_uUa == -12)
+            {
+                this.m_fFlushUa(m_uUa);
+            }
         }
     }
 }

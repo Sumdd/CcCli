@@ -116,6 +116,10 @@ namespace Model_v1
         /// 黑白名单查询
         /// </summary>
         public const string _data_wblist_search = "data_wblist_search";
+        /// <summary>
+        /// 黑白名单查询
+        /// </summary>
+        public const string _data_inrule_search = "data_inrule_search";
     }
 
     public class DataPower

@@ -42,6 +42,9 @@
             this.txtInruleport = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtInruleua = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbxInrulemain = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtInruleName
@@ -81,16 +84,16 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 150);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(113, 12);
+            this.label2.Size = new System.Drawing.Size(89, 12);
             this.label2.TabIndex = 11;
-            this.label2.Text = "唯一索引(不可重复)";
+            this.label2.Text = "是否为本机规则";
             // 
             // txtOrdernum
             // 
-            this.txtOrdernum.Location = new System.Drawing.Point(152, 147);
+            this.txtOrdernum.Location = new System.Drawing.Point(152, 173);
             this.txtOrdernum.Name = "txtOrdernum";
             this.txtOrdernum.Size = new System.Drawing.Size(120, 21);
-            this.txtOrdernum.TabIndex = 12;
+            this.txtOrdernum.TabIndex = 14;
             // 
             // label3
             // 
@@ -103,10 +106,10 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(197, 194);
+            this.btnSave.Location = new System.Drawing.Point(197, 307);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 13;
+            this.btnSave.TabIndex = 15;
             this.btnSave.Text = "添加";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -150,11 +153,41 @@
             this.txtInruleua.Size = new System.Drawing.Size(120, 21);
             this.txtInruleua.TabIndex = 8;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 176);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(113, 12);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "唯一索引(不可重复)";
+            // 
+            // cbxInrulemain
+            // 
+            this.cbxInrulemain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxInrulemain.FormattingEnabled = true;
+            this.cbxInrulemain.Location = new System.Drawing.Point(152, 147);
+            this.cbxInrulemain.Name = "cbxInrulemain";
+            this.cbxInrulemain.Size = new System.Drawing.Size(120, 20);
+            this.cbxInrulemain.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.ForeColor = System.Drawing.Color.Red;
+            this.label8.Location = new System.Drawing.Point(12, 211);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(260, 93);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "本机规则必须且只能存在一个,请如实填写,为内呼之后的回呼做准备";
+            // 
             // inruleOp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 229);
+            this.ClientSize = new System.Drawing.Size(284, 342);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.cbxInrulemain);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.txtInruleua);
             this.Controls.Add(this.label4);
@@ -193,5 +226,8 @@
         private System.Windows.Forms.TextBox txtInruleport;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtInruleua;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ComboBox cbxInrulemain;
+        private System.Windows.Forms.Label label8;
     }
 }

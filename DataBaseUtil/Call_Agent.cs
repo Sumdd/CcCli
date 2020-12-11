@@ -106,8 +106,8 @@ FROM
 	LEFT JOIN (
 	SELECT
 		`dial_limit`.`useuser`,
-		ifnull( sum( CASE WHEN isuse = 1 THEN 1 ELSE 0 END ), 0 ) AS usecount,
-		sum( 1 ) AS allcount 
+		ifnull( sum( CASE WHEN isuse = 1 and isshare = 0 THEN 1 ELSE 0 END ), 0 ) AS usecount,
+		ifnull( sum( CASE WHEN isshare = 0 THEN 1 ELSE 0 END ), 0 ) AS allcount 
 	FROM
 		`dial_limit` 
 	GROUP BY

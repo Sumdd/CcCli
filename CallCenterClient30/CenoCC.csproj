@@ -196,6 +196,12 @@
     <Compile Include="_Main_Extend_v1\convert\convert.designer.cs">
       <DependentUpon>convert.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\inlimit_2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\diallimit\inlimit_2.Designer.cs">
+      <DependentUpon>inlimit_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Main_Extend_v1\diallimit\multiAssign.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -603,6 +609,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\convert\convert.resx">
       <DependentUpon>convert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\diallimit\inlimit_2.resx">
+      <DependentUpon>inlimit_2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\diallimit\multiAssign.resx">
       <DependentUpon>multiAssign.cs</DependentUpon>

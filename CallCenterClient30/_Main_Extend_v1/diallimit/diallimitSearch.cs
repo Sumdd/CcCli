@@ -298,6 +298,11 @@ namespace CenoCC
                 m_pDataRow0["ID"] = -1;
                 m_pDataRow0["Name"] = "全部";
                 m_pDataTable.Rows.Add(m_pDataRow0);
+                ///增加一个类别,支持呼叫后转
+                DataRow m_pDataRow_2 = m_pDataTable.NewRow();
+                m_pDataRow_2["ID"] = -2;
+                m_pDataRow_2["Name"] = "呼叫后转号码";
+                m_pDataTable.Rows.Add(m_pDataRow_2);
                 DataRow m_pDataRow1 = m_pDataTable.NewRow();
                 m_pDataRow1["ID"] = 0;
                 m_pDataRow1["Name"] = "专线号码";

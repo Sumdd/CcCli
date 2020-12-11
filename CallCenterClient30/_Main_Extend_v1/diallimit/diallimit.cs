@@ -137,7 +137,6 @@ namespace CenoCC {
                         dt.Rows.InsertAt(drdef, 4);
                     }
 
-
                     if (!this.IsDisposed)
                     {
                         this.Invoke(new MethodInvoker(() =>
@@ -188,7 +187,7 @@ namespace CenoCC {
         private void LoadListHeader() {
             this.list.BeginUpdate();
             this.list.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "b.loginname", Text = "登录名", Width = 80, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "b.loginname", Text = "登录名", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.number", Text = "号码", Width = 100, ImageIndex = 1, Tag = "asc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.tnumber", Text = "真实号码", Width = 100, ImageIndex = 0 });
@@ -250,11 +249,13 @@ namespace CenoCC {
 	a.isdel,
 	a.isuse,
     case a.isshare when 0 then b.loginname
+                   when -2 then concat(b.loginname,'(',b.agentname,')')
                    when 1 then '共享号码'
                    when 2 then '申请式'
                    else        '未知'
     end as loginname,
     case a.isshare when 0 then b.agentname
+                   when -2 then '呼叫内转号码'
                    when 1 then '共享号码'
                    when 2 then '申请式'
                    else        '未知'
@@ -272,7 +273,8 @@ namespace CenoCC {
          else concat(c.remark,' ',c.gw_name) end as gw,
     -- c.gw_name as gw,
     a.isusedial,
-    a.isusecall";
+    a.isusecall,
+    a.isshare";
                     this.qop.FromSqlPart = @"from dial_limit as a
 left join call_agent as b
 on a.useuser = b.id
@@ -462,6 +464,7 @@ on c.uniqueid = a.gwuid";
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "limittheduration", Text = Convert.ToInt32(dr["limittheduration"]) == 0 ? "不限制" : dr["limittheduration"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "usetheduration", Text = dr["usetheduration"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "id", Text = dr["id"].ToString() });
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "isshare", Text = dr["isshare"].ToString() });
                             this.list.Items.Add(listViewItem);
                         }
                         this.list.EndUpdate();
@@ -1019,6 +1022,54 @@ on c.uniqueid = a.gwuid";
             if (m_uUa == -10 || m_uUa == -11 || m_uUa == -12)
             {
                 this.m_fFlushUa(m_uUa);
+            }
+        }
+
+        private void list_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (this.list.SelectedItems.Count == 1)
+                {
+                    int m_uShare = Convert.ToInt32(this.list.SelectedItems[0].SubItems["isshare"].Text);
+                    if (m_uShare == -2)
+                    {
+                        ///呼叫内转号码配置
+                        this.tsmiShare_2.Visible = true;
+                        this.tsmiShare2.Visible = false;
+                        this.contextListMenu.Show(list, e.Location);
+                    }
+                    else if (m_uShare == 2)
+                    {
+                        ///申请式号码配置
+                        this.tsmiShare_2.Visible = false;
+                        this.tsmiShare2.Visible = false;
+                        this.contextListMenu.Show(list, e.Location);
+                    }
+                }
+            }
+        }
+
+        private void tsmiShare_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                switch (((ToolStripMenuItem)sender).Name)
+                {
+                    case "tsmiShare_2":
+                        ///呼叫内转号码配置
+                        int m_uID = Convert.ToInt32(this.list.SelectedItems[0].SubItems["id"].Text);
+                        inlimit_2 _inlimit_2 = new inlimit_2(m_uID);
+                        _inlimit_2.Show(this);
+                        break;
+                    case "tsmiShare2":
+                        ///申请式号码配置
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][diallimit][tsmiShare_Click][Exception][{ex.Message}]");
             }
         }
     }

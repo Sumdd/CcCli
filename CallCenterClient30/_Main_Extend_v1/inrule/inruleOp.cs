@@ -188,7 +188,7 @@ VALUES
             catch (Exception ex)
             {
                 Log.Instance.Error($"[CenoCC][inruleOp][btnSave_Click][Exception][{ex.Message}]");
-                Cmn_v1.Cmn.MsgWranThat(this, $"黑白名单{(m_uID == -1 ? "添加" : "编辑")}错误:{ex.Message}");
+                Cmn_v1.Cmn.MsgWranThat(this, $"内呼规则{(m_uID == -1 ? "添加" : "编辑")}错误:{ex.Message}");
                 this.m_bDoing = false;
             }
         }

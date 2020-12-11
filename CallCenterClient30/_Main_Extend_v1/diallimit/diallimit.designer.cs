@@ -46,6 +46,8 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnSearchOpen = new System.Windows.Forms.Button();
             this.contextListMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiShare_2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShare2 = new System.Windows.Forms.ToolStripMenuItem();
             this.callNumber = new System.Windows.Forms.ToolStripTextBox();
             this.callNow = new System.Windows.Forms.ToolStripMenuItem();
             this.recordUpload = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +55,7 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.layout.SuspendLayout();
+            this.contextListMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // layout
@@ -255,6 +258,7 @@
             this.list.View = System.Windows.Forms.View.Details;
             this.list.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.list_ColumnClick);
             this.list.SelectedIndexChanged += new System.EventHandler(this.list_SelectedIndexChanged);
+            this.list.MouseClick += new System.Windows.Forms.MouseEventHandler(this.list_MouseClick);
             // 
             // imageList
             // 
@@ -296,8 +300,25 @@
             // 
             // contextListMenu
             // 
+            this.contextListMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShare_2,
+            this.tsmiShare2});
             this.contextListMenu.Name = "contextListMenu";
-            this.contextListMenu.Size = new System.Drawing.Size(61, 4);
+            this.contextListMenu.Size = new System.Drawing.Size(173, 70);
+            // 
+            // tsmiShare_2
+            // 
+            this.tsmiShare_2.Name = "tsmiShare_2";
+            this.tsmiShare_2.Size = new System.Drawing.Size(172, 22);
+            this.tsmiShare_2.Text = "呼叫内转号码配置";
+            this.tsmiShare_2.Click += new System.EventHandler(this.tsmiShare_Click);
+            // 
+            // tsmiShare2
+            // 
+            this.tsmiShare2.Name = "tsmiShare2";
+            this.tsmiShare2.Size = new System.Drawing.Size(172, 22);
+            this.tsmiShare2.Text = "申请式号码配置";
+            this.tsmiShare2.Click += new System.EventHandler(this.tsmiShare_Click);
             // 
             // callNumber
             // 
@@ -328,6 +349,7 @@
             this.Name = "diallimit";
             this.Text = "拨号限制";
             this.layout.ResumeLayout(false);
+            this.contextListMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -361,5 +383,7 @@
         private System.Windows.Forms.Button btnIMS;
         private System.Windows.Forms.Button btnUpdateNumber;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShare_2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShare2;
     }
 }

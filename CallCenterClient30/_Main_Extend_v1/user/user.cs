@@ -160,9 +160,9 @@ LEFT JOIN (
 SELECT
 	concat(
 		'【启:',
-		( ifnull( sum( CASE WHEN isuse = 1 THEN 1 ELSE 0 END ), 0 ) ),
+		( ifnull( sum( CASE WHEN isuse = 1 and isshare = 0 THEN 1 ELSE 0 END ), 0 ) ),
 		'】【禁:',
-		( ifnull( sum( CASE WHEN isuse = 0 THEN 1 ELSE 0 END ), 0 ) ),
+		( ifnull( sum( CASE WHEN isuse = 0 and isshare = 0 THEN 1 ELSE 0 END ), 0 ) ),
 		'】【共:',
 		ifnull( sum( 1 ), 0 ),
 		'】' 

@@ -123,11 +123,12 @@
             // label8
             // 
             this.label8.ForeColor = System.Drawing.Color.Red;
-            this.label8.Location = new System.Drawing.Point(12, 359);
+            this.label8.Location = new System.Drawing.Point(12, 333);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(260, 53);
+            this.label8.Size = new System.Drawing.Size(260, 79);
             this.label8.TabIndex = 16;
-            this.label8.Text = "1.呼叫内转结束时间如果小于开始时间则计算到次日，如果大于开始时间则计算到当日。\r\n2.呼叫内转模式如果都勾选会先接坐席，坐席无人接听后尝试设定次数的呼叫内转。";
+            this.label8.Text = "1.呼叫内转结束时间如果小于开始时间则计算到次日，如果大于开始时间则计算到当日。\r\n2.呼叫内转模式如果都勾选会先接坐席，坐席无人接听后尝试设定次数的呼叫内转。\r" +
+    "\n3.启用禁用修正为随线路设置的启用禁用状态";
             // 
             // inlimit_2starttime
             // 
@@ -222,11 +223,12 @@
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label7.Location = new System.Drawing.Point(12, 313);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(101, 12);
+            this.label7.Size = new System.Drawing.Size(53, 12);
             this.label7.TabIndex = 24;
-            this.label7.Text = "呼叫内转是否启用";
+            this.label7.Text = "启用禁用";
             // 
             // inlimit_2
             // 

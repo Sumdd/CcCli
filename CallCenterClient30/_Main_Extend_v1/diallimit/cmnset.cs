@@ -34,10 +34,10 @@ namespace CenoCC {
                 DataTable m_pDataTable = new DataTable();
                 m_pDataTable.Columns.Add("ID", typeof(int));
                 m_pDataTable.Columns.Add("Name", typeof(string));
-                ///增加一个类别,支持呼叫后转
+                ///增加一个类别,支持呼叫内转
                 DataRow m_pDataRow_2 = m_pDataTable.NewRow();
                 m_pDataRow_2["ID"] = -2;
-                m_pDataRow_2["Name"] = "呼叫后转号码";
+                m_pDataRow_2["Name"] = "呼叫内转号码";
                 m_pDataTable.Rows.Add(m_pDataRow_2);
                 DataRow m_pDataRow1 = m_pDataTable.NewRow();
                 m_pDataRow1["ID"] = 0;
@@ -477,6 +477,30 @@ namespace CenoCC {
                     this._common_ = false;
                 }
             })).Start();
+        }
+
+        private void btnInlimit_2Reload_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Cmn.MsgQ("确定要重载呼叫内转配置吗?"))
+                {
+                    //激活
+                    bool m_bSended = InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadInlimit_2"));
+                    if (m_bSended)
+                    {
+                        Log.Instance.Success($"[CenoCC][cmnset][btnInlimit_2Reload_Click][Exception][执行重载呼叫内转配置]");
+                    }
+                    else
+                    {
+                        Cmn.MsgWranThat(this, "发送重载呼叫内转配置命令失败,请检查WebSocket是否连接等后重试");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][cmnset][btnInlimit_2Reload_Click][Exception][{ex.Message}]");
+            }
         }
     }
 }

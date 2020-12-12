@@ -287,6 +287,7 @@ on c.uniqueid = a.gwuid";
                     this.qop.setQuerySample(args);
                     this.qop.setQuery("a.useuser", "agent");
                     this.qop.setQuery("a.number", "number");
+                    this.qop.setQuery("a.tnumber", "tnumber");
                     this.qop.setQuery("c.id", "gateway");
                     this.qop.setQuery("a.areacode", "areacode");
                     this.qop.setQuery("a.areaname", "areaname");

@@ -54,6 +54,8 @@
             this.btnPrefixDealFlagSelect = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.cbxPrefixDealFlag = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.btnInlimit_2Reload = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnOK
@@ -344,11 +346,33 @@
             this.cbxPrefixDealFlag.Size = new System.Drawing.Size(120, 20);
             this.cbxPrefixDealFlag.TabIndex = 19;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(12, 502);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(77, 12);
+            this.label10.TabIndex = 42;
+            this.label10.Text = "呼叫内转配置";
+            // 
+            // btnInlimit_2Reload
+            // 
+            this.btnInlimit_2Reload.Location = new System.Drawing.Point(197, 497);
+            this.btnInlimit_2Reload.Name = "btnInlimit_2Reload";
+            this.btnInlimit_2Reload.Size = new System.Drawing.Size(75, 23);
+            this.btnInlimit_2Reload.TabIndex = 43;
+            this.btnInlimit_2Reload.Tag = "diallimit_common_inlimit_2_reload";
+            this.btnInlimit_2Reload.Text = "重载";
+            this.btnInlimit_2Reload.UseVisualStyleBackColor = true;
+            this.btnInlimit_2Reload.Click += new System.EventHandler(this.btnInlimit_2Reload_Click);
+            // 
             // cmnset
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 496);
+            this.ClientSize = new System.Drawing.Size(284, 541);
+            this.Controls.Add(this.btnInlimit_2Reload);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.btnPrefixDealFlagAll);
             this.Controls.Add(this.btnPrefixDealFlagSelect);
             this.Controls.Add(this.label9);
@@ -419,5 +443,7 @@
         private System.Windows.Forms.Button btnPrefixDealFlagSelect;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cbxPrefixDealFlag;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnInlimit_2Reload;
     }
 }

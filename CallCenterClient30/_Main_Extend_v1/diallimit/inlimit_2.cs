@@ -23,6 +23,9 @@ namespace CenoCC
 
             m_uID = _m_uID;
 
+            ///跟随线路启用禁用状态即可
+            this.inlimit_2use.Enabled = false;
+
             if (m_uID == -1)
             {
                 this.Text = "呼叫内转配置添加";
@@ -226,13 +229,6 @@ VALUES
 ";
                         Log.Instance.Debug(m_sSQL);
                         int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true);
-
-                        ///重新加载呼叫内转缓存
-                        {
-                            ///让服务器加载上即可,直接把黑白名单加载到服务器缓存中,提高查询速度
-                            WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadInlimit_2"));
-                        }
-
                         MessageBox.Show(this, $"呼叫内转配置{(m_uID == -1 ? "添加" : "编辑")}成功");
                         this.Close();
                         if (this.SearchEvent != null)

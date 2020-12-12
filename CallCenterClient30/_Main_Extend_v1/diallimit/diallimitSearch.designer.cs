@@ -34,8 +34,7 @@
             this.areanameValue = new System.Windows.Forms.TextBox();
             this.areacodeValue = new System.Windows.Forms.TextBox();
             this.gatewayValue = new System.Windows.Forms.ComboBox();
-            this.usethedurationEndValue = new System.Windows.Forms.DateTimePicker();
-            this.usethedurationEndKey = new CenoCC._queryLeft();
+            this.tnumberKey = new CenoCC._queryLeft();
             this.isshareKey = new CenoCC._queryLeft();
             this.isusecallKey = new CenoCC._queryLeft();
             this.isusedialKey = new CenoCC._queryLeft();
@@ -52,6 +51,7 @@
             this.btnCloseAfterSearch = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
+            this.tnumberValue = new System.Windows.Forms.TextBox();
             this.layout.SuspendLayout();
             this.searchpanel.SuspendLayout();
             this.SuspendLayout();
@@ -74,6 +74,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.searchpanel.AutoScroll = true;
+            this.searchpanel.Controls.Add(this.tnumberValue);
             this.searchpanel.Controls.Add(this.isshareValue);
             this.searchpanel.Controls.Add(this.isusecallValue);
             this.searchpanel.Controls.Add(this.isusedialValue);
@@ -83,8 +84,7 @@
             this.searchpanel.Controls.Add(this.areanameValue);
             this.searchpanel.Controls.Add(this.areacodeValue);
             this.searchpanel.Controls.Add(this.gatewayValue);
-            this.searchpanel.Controls.Add(this.usethedurationEndValue);
-            this.searchpanel.Controls.Add(this.usethedurationEndKey);
+            this.searchpanel.Controls.Add(this.tnumberKey);
             this.searchpanel.Controls.Add(this.isshareKey);
             this.searchpanel.Controls.Add(this.isusecallKey);
             this.searchpanel.Controls.Add(this.isusedialKey);
@@ -178,25 +178,13 @@
             this.gatewayValue.Size = new System.Drawing.Size(180, 20);
             this.gatewayValue.TabIndex = 24;
             // 
-            // usethedurationEndValue
+            // tnumberKey
             // 
-            this.usethedurationEndValue.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.usethedurationEndValue.Location = new System.Drawing.Point(192, 295);
-            this.usethedurationEndValue.Name = "usethedurationEndValue";
-            this.usethedurationEndValue.ShowCheckBox = true;
-            this.usethedurationEndValue.ShowUpDown = true;
-            this.usethedurationEndValue.Size = new System.Drawing.Size(180, 21);
-            this.usethedurationEndValue.TabIndex = 23;
-            this.usethedurationEndValue.Visible = false;
-            // 
-            // usethedurationEndKey
-            // 
-            this.usethedurationEndKey.BackColor = System.Drawing.Color.Transparent;
-            this.usethedurationEndKey.Location = new System.Drawing.Point(10, 296);
-            this.usethedurationEndKey.Name = "usethedurationEndKey";
-            this.usethedurationEndKey.Size = new System.Drawing.Size(176, 20);
-            this.usethedurationEndKey.TabIndex = 22;
-            this.usethedurationEndKey.Visible = false;
+            this.tnumberKey.BackColor = System.Drawing.Color.Transparent;
+            this.tnumberKey.Location = new System.Drawing.Point(10, 296);
+            this.tnumberKey.Name = "tnumberKey";
+            this.tnumberKey.Size = new System.Drawing.Size(176, 20);
+            this.tnumberKey.TabIndex = 22;
             // 
             // isshareKey
             // 
@@ -335,6 +323,13 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // tnumberValue
+            // 
+            this.tnumberValue.Location = new System.Drawing.Point(192, 295);
+            this.tnumberValue.Name = "tnumberValue";
+            this.tnumberValue.Size = new System.Drawing.Size(180, 21);
+            this.tnumberValue.TabIndex = 33;
+            // 
             // diallimitSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -367,8 +362,7 @@
         private _queryLeft dialprefixKey;
         private _queryLeft isuseKey;
         private _queryLeft dtmfKey;
-        private System.Windows.Forms.DateTimePicker usethedurationEndValue;
-        private _queryLeft usethedurationEndKey;
+        private _queryLeft tnumberKey;
         private _queryLeft isshareKey;
         private _queryLeft isusecallKey;
         private _queryLeft isusedialKey;
@@ -381,5 +375,6 @@
         private System.Windows.Forms.ComboBox isusecallValue;
         private System.Windows.Forms.ComboBox isusedialValue;
         private System.Windows.Forms.ComboBox isshareValue;
+        private System.Windows.Forms.TextBox tnumberValue;
     }
 }

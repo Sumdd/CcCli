@@ -60,7 +60,7 @@ namespace CenoCC
             this.isusedialKey.thisDefult("禁止呼出", this.isusedialKey.Name, "=", false);
             this.isusecallKey.thisDefult("禁止呼入", this.isusecallKey.Name, "=", false);
             this.isshareKey.thisDefult("号码类别", this.isshareKey.Name, "=", false);
-            this.usethedurationEndKey.thisDefult("当日使用时长止", this.usethedurationEndKey.Name, "<=", false);
+            this.tnumberKey.thisDefult("真实号码", this.tnumberKey.Name, "Like", true, ">", ">=", "<", "<=");
         }
         /// <summary>
         /// 加载查询参数默认值
@@ -298,10 +298,10 @@ namespace CenoCC
                 m_pDataRow0["ID"] = -1;
                 m_pDataRow0["Name"] = "全部";
                 m_pDataTable.Rows.Add(m_pDataRow0);
-                ///增加一个类别,支持呼叫后转
+                ///增加一个类别,支持呼叫内转
                 DataRow m_pDataRow_2 = m_pDataTable.NewRow();
                 m_pDataRow_2["ID"] = -2;
-                m_pDataRow_2["Name"] = "呼叫后转号码";
+                m_pDataRow_2["Name"] = "呼叫内转号码";
                 m_pDataTable.Rows.Add(m_pDataRow_2);
                 DataRow m_pDataRow1 = m_pDataTable.NewRow();
                 m_pDataRow1["ID"] = 0;
@@ -331,8 +331,7 @@ namespace CenoCC
             }
             #endregion
 
-            this.usethedurationEndValue.Checked = true;
-            this.usethedurationEndValue.Text = "00:00:00";
+            this.tnumberValue.Text = string.Empty;
         }
         /// <summary>
         /// 从缓存中提取查询参数
@@ -365,6 +364,12 @@ namespace CenoCC
                 if (args.ContainsKey(argsKey))
                 {
                     this.dialprefixValue.Text = args[argsKey].ToString();
+                }
+                ///真实号码
+                this.argsKey = "tnumber";
+                if (args.ContainsKey(argsKey))
+                {
+                    this.tnumberValue.Text = args[argsKey].ToString();
                 }
             }
             ///权限项:查询共享号码通话记录
@@ -460,6 +465,12 @@ namespace CenoCC
             if (isshare != -1)
             {
                 this.senderEntity.args.Add("isshare", isshare);
+            }
+            ///真实号码
+            var tnumber = this.tnumberValue.Text;
+            if (!string.IsNullOrWhiteSpace(tnumber))
+            {
+                this.senderEntity.args.Add("tnumber", tnumber);
             }
         }
 

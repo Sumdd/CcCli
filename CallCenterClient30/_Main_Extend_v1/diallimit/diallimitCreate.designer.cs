@@ -102,6 +102,7 @@
             this.cbxShare.Name = "cbxShare";
             this.cbxShare.Size = new System.Drawing.Size(120, 20);
             this.cbxShare.TabIndex = 8;
+            this.cbxShare.SelectedIndexChanged += new System.EventHandler(this.cbxShare_SelectedIndexChanged);
             // 
             // label5
             // 

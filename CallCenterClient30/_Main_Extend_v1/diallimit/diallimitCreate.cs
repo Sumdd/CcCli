@@ -14,6 +14,9 @@ using Model_v1;
 
 namespace CenoCC {
     public partial class diallimitCreate : Form {
+
+        private bool m_bLoad = true;
+
         private bool _create_ = false;
         public EventHandler SearchEvent;
         public diallimitCreate()  {
@@ -97,6 +100,8 @@ namespace CenoCC {
                     })).Start();
                 }
                 #endregion
+
+                this.m_bLoad = false;
             };
 
             ///操作权限
@@ -179,6 +184,7 @@ namespace CenoCC {
                         }
 
                         this._create_ = true;
+                        int m_uShare = Convert.ToInt32(this.cbxShare.SelectedValue);
                         /// <![CDATA[
                         /// 添加号码,所有不存在与数据库中的数据均要添加
                         /// 这里可以给一个判断
@@ -189,7 +195,14 @@ namespace CenoCC {
                                 _dt_.Columns.Add("number", typeof(string));
                                 for(double i = _s_; i <= _e_; i++) {
                                     DataRow _dr_ = _dt_.NewRow();
-                                    _dr_["number"] = $"{m_sPrefix}{i}";
+                                    if (m_uShare == -2)
+                                    {
+                                        _dr_["number"] = $"";
+                                    }
+                                    else
+                                    {
+                                        _dr_["number"] = $"{m_sPrefix}{i}";
+                                    }
                                     _dt_.Rows.Add(_dr_);
                                 }
                                 int j = d_multi.iu(_dt_, AgentInfo.AgentID, "-1", Convert.ToInt32(this.cbxShare.SelectedValue), this.cbxGateway.SelectedValue.ToString(), m_bSame);
@@ -230,6 +243,24 @@ namespace CenoCC {
                 return m_sResult;
             }
             return "";
+        }
+
+        private void cbxShare_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.m_bLoad) return;
+
+            if (this.cbxShare.SelectedValue?.ToString() == "-2")
+            {
+                //this.startNumberValue.Enabled = false;
+                //this.endNumberValue.Enabled = false;
+                this.btnOk.Enabled = false;
+            }
+            else
+            {
+                //this.startNumberValue.Enabled = true;
+                //this.endNumberValue.Enabled = true;
+                this.btnOk.Enabled = true;
+            }
         }
     }
 }

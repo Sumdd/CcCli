@@ -15,6 +15,8 @@ using Model_v1;
 namespace CenoCC {
     public partial class diallimit : _index {
 
+        string m_sWeekdays = "一二三四五六日";
+
         private bool m_bUaListLoading = false;
 
         /// <![CDATA[
@@ -188,7 +190,7 @@ namespace CenoCC {
             this.list.BeginUpdate();
             this.list.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
             this.list.Columns.Add(new ColumnHeader() { Name = "b.loginname", Text = "登录名", Width = 160, ImageIndex = 0 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 160, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 205, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.number", Text = "号码", Width = 100, ImageIndex = 1, Tag = "asc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.tnumber", Text = "真实号码", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.gw_name", Text = "网关", Width = 245, ImageIndex = 0 });
@@ -261,6 +263,9 @@ namespace CenoCC {
                    else        '未知'
     end as realname,
     `dial_inlimit_2`.`inlimit_2number`, 
+    `dial_inlimit_2`.`inlimit_2whatday`, 
+    `dial_inlimit_2`.`inlimit_2starttime`, 
+    `dial_inlimit_2`.`inlimit_2endtime`, 
 	-- b.loginname,
 	-- b.agentname as realname,
     a.dialprefix,
@@ -328,25 +333,42 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                             {
                                 string inlimit_2number = dr["inlimit_2number"].ToString();
                                 ListViewItem.ListViewSubItem _inlimit_2number = new ListViewItem.ListViewSubItem();
+                                ListViewItem.ListViewSubItem _number = new ListViewItem.ListViewSubItem();
                                 _inlimit_2number.Name = "realname";
+                                _number.Name = "number";
                                 if (string.IsNullOrWhiteSpace(inlimit_2number))
                                 {
                                     _inlimit_2number.ForeColor = Color.Red;
-                                    _inlimit_2number.Text = $"{dr["realname"]}:未配置";
+                                    _inlimit_2number.Text = $"{dr["realname"]}";
+                                    _number.ForeColor = Color.Red;
+                                    _number.Text = $"未配置";
                                 }
                                 else
                                 {
+                                    int m_uWeekday = Convert.ToInt32(dr["inlimit_2whatday"]);
+                                    string m_sWhatdays = "";
+                                    for (int i = 0; i < 7; i++)
+                                    {
+                                        if ((m_uWeekday & (int)Math.Pow(2, i)) > 0)
+                                        {
+                                            m_sWhatdays += m_sWeekdays[i];
+                                        }
+                                    }
+
                                     _inlimit_2number.ForeColor = Color.Green;
-                                    _inlimit_2number.Text = $"{dr["realname"]}:{inlimit_2number}";
+                                    _inlimit_2number.Text = $"{m_sWhatdays}:{dr["inlimit_2starttime"]}-{dr["inlimit_2endtime"]}";
+                                    _number.ForeColor = Color.Green;
+                                    _number.Text = $"{inlimit_2number}";
                                 }
                                 listViewItem.SubItems.Add(_inlimit_2number);
+                                listViewItem.SubItems.Add(_number);
                             }
                             else
                             {
                                 listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "realname", Text = dr["realname"].ToString() });
+                                listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = dr["number"].ToString() });
                             }
-
-                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = dr["number"].ToString() });
+                            
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tnumber", Text = dr["tnumber"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "gw", Text = dr["gw"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "areacode", Text = dr["areacode"].ToString() });

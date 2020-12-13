@@ -36,6 +36,11 @@ namespace CenoCC {
                     DataTable m_pDataTable = new DataTable();
                     m_pDataTable.Columns.Add("ID", typeof(int));
                     m_pDataTable.Columns.Add("Name", typeof(string));
+                    ///增加一个类别,支持呼叫内转
+                    DataRow m_pDataRow_2 = m_pDataTable.NewRow();
+                    m_pDataRow_2["ID"] = -2;
+                    m_pDataRow_2["Name"] = "呼叫内转号码";
+                    m_pDataTable.Rows.Add(m_pDataRow_2);
                     DataRow m_pDataRow1 = m_pDataTable.NewRow();
                     m_pDataRow1["ID"] = 0;
                     m_pDataRow1["Name"] = "专线号码";
@@ -53,6 +58,9 @@ namespace CenoCC {
                     this.cbxShare.ValueMember = "ID";
                     this.cbxShare.DisplayMember = "Name";
                     this.cbxShare.EndUpdate();
+
+                    ///设定选中项
+                    this.cbxShare.SelectedValue = 0;
                 }
                 #endregion
 
@@ -90,7 +98,36 @@ namespace CenoCC {
                 }
                 #endregion
             };
+
+            ///操作权限
+            this.m_fLoadOperatePower(this.Controls);
         }
+
+        #region ***操作权限
+        private void m_fLoadOperatePower(Control.ControlCollection m_lControls)
+        {
+            foreach (var item in m_lControls)
+            {
+                if (item.GetType() == typeof(Button))
+                {
+                    Button m_pButton = (Button)item;
+                    if (m_pButton.Tag == null)
+                        continue;
+                    if (string.IsNullOrWhiteSpace(m_pButton.Tag.ToString()))
+                        continue;
+                    if (m_cPower.Has(m_pButton.Tag.ToString()))
+                        m_pButton.Enabled = true;
+                    else
+                        m_pButton.Enabled = false;
+                }
+                else if (item.GetType() == typeof(Panel))
+                {
+                    Panel m_pPanel = (Panel)item;
+                    this.m_fLoadOperatePower(m_pPanel.Controls);
+                }
+            }
+        }
+        #endregion
 
         private void btnOk_Click(object sender, EventArgs e) {
             if(this._create_)
@@ -133,6 +170,14 @@ namespace CenoCC {
                     double _s_ = Convert.ToDouble(this.startNumberValue.Text);
                     double _e_ = Convert.ToDouble(endNumberValue);
                     if(_e_ >= _s_) {
+
+                        ///如果为重复确定
+                        bool m_bSame = ((Button)sender).Name == "btnOkSame";
+                        if (m_bSame)
+                        {
+                            if (!Cmn_v1.Cmn.MsgQ("该操作会越过判重直接添加号码，请再次确认号码是否必须重复添加？")) return;
+                        }
+
                         this._create_ = true;
                         /// <![CDATA[
                         /// 添加号码,所有不存在与数据库中的数据均要添加
@@ -147,12 +192,12 @@ namespace CenoCC {
                                     _dr_["number"] = $"{m_sPrefix}{i}";
                                     _dt_.Rows.Add(_dr_);
                                 }
-                                int j = d_multi.iu(_dt_, AgentInfo.AgentID, "-1", Convert.ToInt32(this.cbxShare.SelectedValue), this.cbxGateway.SelectedValue.ToString());
+                                int j = d_multi.iu(_dt_, AgentInfo.AgentID, "-1", Convert.ToInt32(this.cbxShare.SelectedValue), this.cbxGateway.SelectedValue.ToString(), m_bSame);
                                 if(j > 0) { 
                                     if(this.SearchEvent != null)
                                         this.SearchEvent(this, null);
                                 }
-                                string msg = $"号码{this.startNumberValue.Text}-{endNumberValue}添加完成,成功{j}条";
+                                string msg = $"号码{this.startNumberValue.Text}-{endNumberValue}添加完成,去重后成功添加{j}条";
                                 Log.Instance.Success($"diallimitCreate btnOk_Click:{msg}");
                                 MessageBox.Show($"{msg}");
                             } catch(Exception ex) {

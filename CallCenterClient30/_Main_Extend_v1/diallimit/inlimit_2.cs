@@ -23,8 +23,10 @@ namespace CenoCC
 
             m_uID = _m_uID;
 
-            ///跟随线路启用禁用状态即可
+            ///跟随线路启用禁用状态即可、模式禁用、尝试次数禁用
             this.inlimit_2use.Enabled = false;
+            this.inlimit_2way.Enabled = false;
+            this.inlimit_2trycount.Enabled = false;
 
             if (m_uID == -1)
             {
@@ -40,7 +42,8 @@ namespace CenoCC
                 ///默认仅勾选内转
                 for (int i = 0; i < this.inlimit_2way.Items.Count; i++)
                 {
-                    this.inlimit_2way.SetItemChecked(i, true);
+                    if ((2 & (int)(Math.Pow(2, i))) > 0)
+                        this.inlimit_2way.SetItemChecked(i, true);
                 }
 
                 this.inlimit_2starttime.Text = "19:00:00";
@@ -125,7 +128,8 @@ WHERE
                                 ///默认仅勾选内转
                                 for (int i = 0; i < this.inlimit_2way.Items.Count; i++)
                                 {
-                                    this.inlimit_2way.SetItemChecked(i, true);
+                                    if ((2 & (int)(Math.Pow(2, i))) > 0)
+                                        this.inlimit_2way.SetItemChecked(i, true);
                                 }
 
                                 this.inlimit_2starttime.Text = "19:00:00";

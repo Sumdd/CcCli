@@ -182,7 +182,7 @@ namespace CenoCC {
                 this.list.Columns.Add(new ColumnHeader() { Name = "realname", Text = "联系人姓名", Width = 125, ImageIndex = 0 });
             }
 
-            this.list.Columns.Add(new ColumnHeader() { Name = "a.PhoneAddress", Text = "归属地", Width = 90, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.PhoneAddress", Text = "归属地", Width = 200, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.C_StartTime", Text = "拨打时间", Width = 130, ImageIndex = 2, Tag = "desc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.C_SpeakTime", Text = "通话时长", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "d.R_Description", Text = "通话结果", Width = 350, ImageIndex = 0 });

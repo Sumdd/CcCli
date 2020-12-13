@@ -10,7 +10,7 @@ using WebSocket_v1;
 
 namespace CenoCC {
     public class d_multi {
-        public static int iu(DataTable _not, string adduser, string useuser, int isshare = 0, string gwuid = "") {
+        public static int iu(DataTable _not, string adduser, string useuser, int isshare = 0, string gwuid = "", bool m_bSame = false) {
             var as_list = new List<string>();
             if(useuser == "-1") {
                 /*
@@ -49,7 +49,7 @@ namespace CenoCC {
                     }
                     var as_insert_sql = $@"insert into dial_limit (id,number,adduser,addtime,limitcount,limitduration,limitthecount,limittheduration,limitthedial,areacode,areaname,gwuid,dialprefix,diallocalprefix,isshare)
                                            select * from ({string.Join("\r\nunion\r\n", as_list.ToArray())}) as a 
-                                           where cast(a.number as char(20)) not in (select number from dial_limit as b where b.isdel = 0);";
+                                           {(!m_bSame ? $@" where cast(a.number as char(20)) not in (select number from dial_limit as b where b.isdel = 0) " : "")};";
                     return MySQL_Method.ExecuteNonQuery(as_insert_sql);
                 }
                 else { return 0; }

@@ -188,7 +188,7 @@ namespace CenoCC {
             this.list.BeginUpdate();
             this.list.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
             this.list.Columns.Add(new ColumnHeader() { Name = "b.loginname", Text = "登录名", Width = 160, ImageIndex = 0 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 90, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.number", Text = "号码", Width = 100, ImageIndex = 1, Tag = "asc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.tnumber", Text = "真实号码", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.gw_name", Text = "网关", Width = 245, ImageIndex = 0 });
@@ -255,11 +255,12 @@ namespace CenoCC {
                    else        '未知'
     end as loginname,
     case a.isshare when 0 then b.agentname
-                   when -2 then '呼叫内转号码'
+                   when -2 then '呼叫转移'
                    when 1 then '共享号码'
                    when 2 then '申请式'
                    else        '未知'
     end as realname,
+    `dial_inlimit_2`.`inlimit_2number`, 
 	-- b.loginname,
 	-- b.agentname as realname,
     a.dialprefix,
@@ -281,7 +282,9 @@ on a.useuser = b.id
 left join call_clientparam as d
 on b.clientparamid = d.id
 left join call_gateway as c
-on c.uniqueid = a.gwuid";
+on c.uniqueid = a.gwuid
+LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
+";
                     this.qop.pager = this.ucPager.pager;
                     //this.qop.PrimaryKey = "rownum";
                     this.qop.setQuerySample(args);
@@ -318,7 +321,30 @@ on c.uniqueid = a.gwuid";
                             ListViewItem listViewItem = new ListViewItem($"{pageIndexStart++}");
                             listViewItem.UseItemStyleForSubItems = false;
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "loginname", Text = dr["loginname"].ToString() });
-                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "realname", Text = dr["realname"].ToString() });
+
+                            ///格式化
+                            int isshare = Convert.ToInt32(dr["isshare"]);
+                            if (isshare == -2)
+                            {
+                                string inlimit_2number = dr["inlimit_2number"].ToString();
+                                ListViewItem.ListViewSubItem _inlimit_2number = new ListViewItem.ListViewSubItem();
+                                if (string.IsNullOrWhiteSpace(inlimit_2number))
+                                {
+                                    _inlimit_2number.ForeColor = Color.Red;
+                                    _inlimit_2number.Text = $"{dr["realname"]}:未配置";
+                                }
+                                else
+                                {
+                                    _inlimit_2number.ForeColor = Color.Green;
+                                    _inlimit_2number.Text = $"{dr["realname"]}:{inlimit_2number}";
+                                }
+                                listViewItem.SubItems.Add(_inlimit_2number);
+                            }
+                            else
+                            {
+                                listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "realname", Text = dr["realname"].ToString() });
+                            }
+
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "number", Text = dr["number"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "tnumber", Text = dr["tnumber"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "gw", Text = dr["gw"].ToString() });
@@ -1061,6 +1087,7 @@ on c.uniqueid = a.gwuid";
                         ///呼叫内转号码配置
                         int m_uID = Convert.ToInt32(this.list.SelectedItems[0].SubItems["id"].Text);
                         inlimit_2 _inlimit_2 = new inlimit_2(m_uID);
+                        _inlimit_2.SearchEvent += this.GetListBody;
                         _inlimit_2.Show(this);
                         break;
                     case "tsmiShare2":

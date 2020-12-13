@@ -1,5 +1,7 @@
-﻿namespace CenoCC {
-    partial class diallimitCreate {
+﻿namespace CenoCC
+{
+    partial class diallimitCreate
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -9,8 +11,10 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if(disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -22,7 +26,8 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(diallimitCreate));
             this.startNumberValue = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -34,6 +39,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.cbxGateway = new System.Windows.Forms.ComboBox();
+            this.btnOkSame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // startNumberValue
@@ -73,13 +79,14 @@
             this.label3.ForeColor = System.Drawing.Color.Red;
             this.label3.Location = new System.Drawing.Point(12, 181);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(260, 42);
+            this.label3.Size = new System.Drawing.Size(260, 79);
             this.label3.TabIndex = 4;
-            this.label3.Text = "注意：号码必须为数字，如果添加为一段号码，那么起止号码都要填写，开始号码不小于结束号码；如果仅添加一个号码，只填写起始号码即可";
+            this.label3.Text = "注意：号码必须为数字，如果添加为一段号码，那么起止号码都要填写，开始号码不小于结束号码；如果仅添加一个号码，只填写起始号码即可\r\n重复确定：如果号码系统已经存在，" +
+    "但又真实需要，需点重复确定可越过重复判断将号码加入到系统";
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(197, 226);
+            this.btnOk.Location = new System.Drawing.Point(197, 263);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 5;
@@ -123,11 +130,23 @@
             this.cbxGateway.Size = new System.Drawing.Size(258, 20);
             this.cbxGateway.TabIndex = 10;
             // 
+            // btnOkSame
+            // 
+            this.btnOkSame.Location = new System.Drawing.Point(116, 263);
+            this.btnOkSame.Name = "btnOkSame";
+            this.btnOkSame.Size = new System.Drawing.Size(75, 23);
+            this.btnOkSame.TabIndex = 12;
+            this.btnOkSame.Tag = "diallimit_number_add_number_same";
+            this.btnOkSame.Text = "重复确定";
+            this.btnOkSame.UseVisualStyleBackColor = true;
+            this.btnOkSame.Click += new System.EventHandler(this.btnOk_Click);
+            // 
             // diallimitCreate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(284, 298);
+            this.Controls.Add(this.btnOkSame);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.cbxGateway);
             this.Controls.Add(this.label5);
@@ -159,5 +178,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbxGateway;
+        private System.Windows.Forms.Button btnOkSame;
     }
 }

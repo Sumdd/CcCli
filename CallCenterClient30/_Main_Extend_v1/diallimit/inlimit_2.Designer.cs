@@ -37,7 +37,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.inlimit_2number = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.inlimit_2starttime = new System.Windows.Forms.DateTimePicker();
             this.inlimit_2endtime = new System.Windows.Forms.DateTimePicker();
             this.inlimit_2trycount = new System.Windows.Forms.ComboBox();
@@ -47,6 +46,7 @@
             this.inlimit_2id = new System.Windows.Forms.Label();
             this.inlimit_2use = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // inlimit_2idstatus
@@ -70,6 +70,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.Location = new System.Drawing.Point(12, 266);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 12);
@@ -90,7 +91,7 @@
             this.btnSave.Location = new System.Drawing.Point(197, 415);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 15;
+            this.btnSave.TabIndex = 18;
             this.btnSave.Text = "添加";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -120,16 +121,6 @@
             this.inlimit_2number.Size = new System.Drawing.Size(120, 21);
             this.inlimit_2number.TabIndex = 8;
             // 
-            // label8
-            // 
-            this.label8.ForeColor = System.Drawing.Color.Red;
-            this.label8.Location = new System.Drawing.Point(12, 333);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(260, 79);
-            this.label8.TabIndex = 16;
-            this.label8.Text = "1.呼叫内转结束时间如果小于开始时间则计算到次日，如果大于开始时间则计算到当日。\r\n2.呼叫内转模式如果都勾选会先接坐席，坐席无人接听后尝试设定次数的呼叫内转。\r" +
-    "\n3.启用禁用修正为随线路设置的启用禁用状态";
-            // 
             // inlimit_2starttime
             // 
             this.inlimit_2starttime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
@@ -137,7 +128,7 @@
             this.inlimit_2starttime.Name = "inlimit_2starttime";
             this.inlimit_2starttime.ShowUpDown = true;
             this.inlimit_2starttime.Size = new System.Drawing.Size(120, 21);
-            this.inlimit_2starttime.TabIndex = 17;
+            this.inlimit_2starttime.TabIndex = 4;
             this.inlimit_2starttime.Value = new System.DateTime(1990, 1, 1, 0, 0, 0, 0);
             // 
             // inlimit_2endtime
@@ -147,7 +138,7 @@
             this.inlimit_2endtime.Name = "inlimit_2endtime";
             this.inlimit_2endtime.ShowUpDown = true;
             this.inlimit_2endtime.Size = new System.Drawing.Size(120, 21);
-            this.inlimit_2endtime.TabIndex = 18;
+            this.inlimit_2endtime.TabIndex = 6;
             this.inlimit_2endtime.Value = new System.DateTime(1990, 1, 1, 0, 0, 0, 0);
             // 
             // inlimit_2trycount
@@ -161,15 +152,16 @@
             this.inlimit_2trycount.Location = new System.Drawing.Point(152, 284);
             this.inlimit_2trycount.Name = "inlimit_2trycount";
             this.inlimit_2trycount.Size = new System.Drawing.Size(120, 20);
-            this.inlimit_2trycount.TabIndex = 20;
+            this.inlimit_2trycount.TabIndex = 14;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(12, 287);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(101, 12);
-            this.label6.TabIndex = 19;
+            this.label6.TabIndex = 13;
             this.label6.Text = "呼叫内转尝试次数";
             // 
             // inlimit_2whatday
@@ -186,7 +178,7 @@
             this.inlimit_2whatday.Location = new System.Drawing.Point(152, 120);
             this.inlimit_2whatday.Name = "inlimit_2whatday";
             this.inlimit_2whatday.Size = new System.Drawing.Size(120, 116);
-            this.inlimit_2whatday.TabIndex = 21;
+            this.inlimit_2whatday.TabIndex = 10;
             // 
             // inlimit_2way
             // 
@@ -197,7 +189,7 @@
             this.inlimit_2way.Location = new System.Drawing.Point(152, 242);
             this.inlimit_2way.Name = "inlimit_2way";
             this.inlimit_2way.Size = new System.Drawing.Size(120, 36);
-            this.inlimit_2way.TabIndex = 22;
+            this.inlimit_2way.TabIndex = 12;
             // 
             // inlimit_2id
             // 
@@ -205,7 +197,7 @@
             this.inlimit_2id.Location = new System.Drawing.Point(150, 15);
             this.inlimit_2id.Name = "inlimit_2id";
             this.inlimit_2id.Size = new System.Drawing.Size(17, 12);
-            this.inlimit_2id.TabIndex = 23;
+            this.inlimit_2id.TabIndex = 2;
             this.inlimit_2id.Text = "-1";
             // 
             // inlimit_2use
@@ -218,7 +210,7 @@
             this.inlimit_2use.Location = new System.Drawing.Point(152, 310);
             this.inlimit_2use.Name = "inlimit_2use";
             this.inlimit_2use.Size = new System.Drawing.Size(120, 20);
-            this.inlimit_2use.TabIndex = 25;
+            this.inlimit_2use.TabIndex = 16;
             // 
             // label7
             // 
@@ -227,8 +219,17 @@
             this.label7.Location = new System.Drawing.Point(12, 313);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(53, 12);
-            this.label7.TabIndex = 24;
+            this.label7.TabIndex = 15;
             this.label7.Text = "启用禁用";
+            // 
+            // label8
+            // 
+            this.label8.ForeColor = System.Drawing.Color.Red;
+            this.label8.Location = new System.Drawing.Point(12, 333);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(260, 79);
+            this.label8.TabIndex = 17;
+            this.label8.Text = "1.呼叫内转结束时间如果小于开始时间则计算到次日，如果大于开始时间则计算到当日。\r\n2.固定为内转模式、尝试1次、启用，如需启用禁用则修改线路的启用禁用状态";
             // 
             // inlimit_2
             // 
@@ -272,7 +273,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox inlimit_2number;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.DateTimePicker inlimit_2starttime;
         private System.Windows.Forms.DateTimePicker inlimit_2endtime;
         private System.Windows.Forms.ComboBox inlimit_2trycount;
@@ -282,5 +282,6 @@
         private System.Windows.Forms.Label inlimit_2id;
         private System.Windows.Forms.ComboBox inlimit_2use;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }

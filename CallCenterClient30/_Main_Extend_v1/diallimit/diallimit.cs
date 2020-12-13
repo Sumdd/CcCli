@@ -328,6 +328,7 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                             {
                                 string inlimit_2number = dr["inlimit_2number"].ToString();
                                 ListViewItem.ListViewSubItem _inlimit_2number = new ListViewItem.ListViewSubItem();
+                                _inlimit_2number.Name = "realname";
                                 if (string.IsNullOrWhiteSpace(inlimit_2number))
                                 {
                                     _inlimit_2number.ForeColor = Color.Red;
@@ -838,6 +839,7 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                 }
             } catch(Exception ex) {
                 Log.Instance.Error($"diallimit btnQuick_Click all error:{ex.Message}");
+                Log.Instance.Debug(ex);
                 this._quick_ = false;
             }
         }

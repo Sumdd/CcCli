@@ -231,7 +231,6 @@ VALUES
 	`dial_inlimit_2`.`inlimit_2trycount` = '{this.inlimit_2trycount.SelectedItem}', 
 	`dial_inlimit_2`.`inlimit_2use` = '{m_uUse}';
 ";
-                        Log.Instance.Debug(m_sSQL);
                         int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true);
                         MessageBox.Show(this, $"呼叫内转配置{(m_uID == -1 ? "添加" : "编辑")}成功");
                         this.Close();

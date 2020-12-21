@@ -335,4 +335,12 @@ namespace Model_v1
             get; set;
         }
     }
+
+    public class m_mBook
+    {
+        public string inrulebookname { get; set; }
+        public string inrulebookfkey { get; set; }
+        public string inrulebooktkey { get; set; }
+        public float inrulebookordernum { get; set; }
+    }
 }

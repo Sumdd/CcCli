@@ -102,7 +102,7 @@ namespace CenoCC {
             return MySQL_Method.ExecuteNonQuery(as_del_sql);
         }
 
-        public static int gatewayadd(string gwName, string gwType, string gwOName, out string m_sErrMsg, string m_sUUID = "", string m_sRemark = "", string m_sXML = "")
+        public static int gatewayadd(string gwName, string gwType, string gwOName, out string m_sErrMsg, string m_sUUID = "", string m_sRemark = "", string m_sXML = "", int isinlimit_2 = 0, string inlimit_2caller = "")
         {
             m_sErrMsg = string.Empty;
             int i = 0;
@@ -137,7 +137,9 @@ namespace CenoCC {
 UPDATE `call_gateway` 
 SET `call_gateway`.`gw_name` = '{gwName}',
 `call_gateway`.`gwtype` = '{(!string.IsNullOrWhiteSpace(gwOName) ? gwOName : gwType)}', 
-`call_gateway`.`remark` = '{m_sRemark}'  
+`call_gateway`.`remark` = '{m_sRemark}', 
+`call_gateway`.`isinlimit_2` = {isinlimit_2},
+`call_gateway`.`inlimit_2caller` = '{inlimit_2caller}' 
 WHERE
 	`UniqueID` = '{m_sUUID}';
 ";
@@ -163,7 +165,7 @@ WHERE
                             }
                         }
 
-                        var as_sql = $"INSERT INTO `call_gateway` VALUES (DEFAULT(id), uuid(), '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{m_sRemark}', '{(!string.IsNullOrWhiteSpace(gwOName) ? gwOName : gwType)}', '{Common.AgentInfo.AgentID}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}');";
+                        var as_sql = $"INSERT INTO `call_gateway` VALUES (DEFAULT(id), uuid(), '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{m_sRemark}', '{(!string.IsNullOrWhiteSpace(gwOName) ? gwOName : gwType)}', '{Common.AgentInfo.AgentID}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', {isinlimit_2}, '{inlimit_2caller}');";
                         i = MySQL_Method.ExecuteNonQuery(as_sql);
                         m_sErrMsg = "添加成功";
                     }

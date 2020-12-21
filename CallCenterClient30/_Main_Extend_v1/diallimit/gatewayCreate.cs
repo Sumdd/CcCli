@@ -63,6 +63,10 @@ namespace CenoCC
                             {
                                 this.txtGwOName.Text = m_pDataRow["gwType"].ToString();
                             }
+
+                            ///呼叫转移
+                            this.cbxisinlimit_2.Checked = Convert.ToInt32(m_pDataRow["isinlimit_2"]) == 1;
+                            this.txtinlimit_2number.Text = m_pDataRow["inlimit_2caller"].ToString();
                         }
 
                         if (gwType == Model_v1.m_mGatewayType._m_sGateway)
@@ -231,7 +235,7 @@ namespace CenoCC
                         return;
                     }
                     string m_sErrMsg = string.Empty;
-                    if (d_multi.gatewayadd(this.txtGwName.Text, this.cboGwType.Text, this.txtGwOName.Text, out m_sErrMsg, _m_sUUID, this.txtName.Text, m_sXML) > 0)
+                    if (d_multi.gatewayadd(this.txtGwName.Text, this.cboGwType.Text, this.txtGwOName.Text, out m_sErrMsg, _m_sUUID, this.txtName.Text, m_sXML, (this.cbxisinlimit_2.Checked ? 1 : 0), this.txtinlimit_2number.Text) > 0)
                     {
                         var msg = $"网关{this.txtGwName.Text}成功";
                         MessageBox.Show(this, msg);

@@ -45,6 +45,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.cbxInrulemain = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtInrulebook = new System.Windows.Forms.TextBox();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtInruleName
@@ -106,7 +109,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(197, 307);
+            this.btnSave.Location = new System.Drawing.Point(197, 378);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 15;
@@ -176,15 +179,38 @@
             this.label8.ForeColor = System.Drawing.Color.Red;
             this.label8.Location = new System.Drawing.Point(12, 211);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(260, 93);
+            this.label8.Size = new System.Drawing.Size(260, 164);
             this.label8.TabIndex = 16;
-            this.label8.Text = "本机规则必须且只能存在一个,请如实填写,为内呼之后的回呼做准备";
+            this.label8.Text = "1.本机规则必须且只能存在一个,请如实填写,为内呼之后的回呼做准备\r\n2.内呼按键规则：内呼规则前缀*分机号，如0532*1001\r\n3.*分机号默认为本呼叫中心" +
+    "内呼\r\n4.可以添加快捷电话簿，*快捷电话簿，系统自动转为对应内呼规则\r\n5.快捷电话簿：\r\n索引 名称 快捷电话 分机号，如\r\n1 A 0532111111 " +
+    "1001\r\n2 B 0532222222 1002\r\n\r\n";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtInrulebook);
+            this.groupBox1.Location = new System.Drawing.Point(278, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(262, 389);
+            this.groupBox1.TabIndex = 17;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "快捷电话簿";
+            // 
+            // txtInrulebook
+            // 
+            this.txtInrulebook.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtInrulebook.Location = new System.Drawing.Point(3, 17);
+            this.txtInrulebook.Multiline = true;
+            this.txtInrulebook.Name = "txtInrulebook";
+            this.txtInrulebook.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtInrulebook.Size = new System.Drawing.Size(256, 369);
+            this.txtInrulebook.TabIndex = 0;
             // 
             // inruleOp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 342);
+            this.ClientSize = new System.Drawing.Size(552, 413);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.cbxInrulemain);
             this.Controls.Add(this.label6);
@@ -206,6 +232,8 @@
             this.Name = "inruleOp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "内呼规则添加";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,5 +257,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cbxInrulemain;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox txtInrulebook;
     }
 }

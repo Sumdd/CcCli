@@ -65,7 +65,7 @@ namespace CenoCC {
             m_kv7.value = "拨号设置";
             m_kv8.key = 7;
             m_kv8.tag = "Args_CallerDisplay";
-            m_kv8.value = "来电显示";
+            m_kv8.value = "来电";
             this.leftMenu.Items.AddRange(new object[] {
             m_kv1,
             m_kv2,

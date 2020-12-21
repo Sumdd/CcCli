@@ -273,7 +273,7 @@ namespace CenoCC
             ///添加
             inruleOp m = new inruleOp(-1);
             m.SearchEvent = this.GetListBody;
-            m.ShowDialog(this);
+            m.Show(this);
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -282,7 +282,7 @@ namespace CenoCC
             {
                 inruleOp m = new inruleOp(Convert.ToInt32(this.list.SelectedItems[0].SubItems["ID"].Text));
                 m.SearchEvent = this.GetListBody;
-                m.ShowDialog(this);
+                m.Show(this);
             }
         }
 

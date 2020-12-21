@@ -132,6 +132,15 @@ namespace CenoCC
         {
             if (this.m_bDoLogin)
                 return;
+
+            ///缓存
+            string account = this.txtAccount.Text;
+            string pwd = this.txtPwd.Text;
+            string server = this.cbxServer.Text;
+            string database = this.txtDatabase.Text;
+            string duid = this.txtDuid.Text;
+            string dpwd = this.txtDpwd.Text;
+
             new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {
                 try
@@ -144,12 +153,12 @@ namespace CenoCC
                         //正则验证
                         {
                             Regex m_pRegex = new Regex(@"^(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)$");
-                            if (m_pRegex.IsMatch(this.cbxServer.Text))
+                            if (m_pRegex.IsMatch(server))
                             {
-                                m_cProfile.server = this.cbxServer.Text;
-                                m_cProfile.database = this.txtDatabase.Text;
-                                m_cProfile.uid = this.txtDuid.Text;
-                                m_cProfile.pwd = this.txtDpwd.Text;
+                                m_cProfile.server = server;
+                                m_cProfile.database = database;
+                                m_cProfile.uid = duid;
+                                m_cProfile.pwd = dpwd;
                             }
                             else
                             {
@@ -160,14 +169,14 @@ namespace CenoCC
 
                         //用户名密码必填
                         {
-                            if (string.IsNullOrWhiteSpace(this.txtAccount.Text) || string.IsNullOrWhiteSpace(this.txtPwd.Text))
+                            if (string.IsNullOrWhiteSpace(account) || string.IsNullOrWhiteSpace(pwd))
                             {
                                 this.m_fReLogin("请填写用户名和密码");
                                 return;
                             }
                         }
 
-                        DataTable m_pDataTable = Call_AgentUtil.CheckLogin(this.txtAccount.Text, this.txtPwd.Text);
+                        DataTable m_pDataTable = Call_AgentUtil.CheckLogin(account, pwd);
                         if (m_pDataTable.Rows.Count <= 0)
                         {
                             this.m_fReLogin("用户名或密码错误");
@@ -202,7 +211,7 @@ namespace CenoCC
                             ParamInfo.RememberUserName = AgentInfo.LoginName;
 
                             ///成功后保存IP
-                            m_cProfile.m_fSetServerIP(Common.Encrypt.EncryptString(this.txtDpwd.Text));
+                            m_cProfile.m_fSetServerIP(Common.Encrypt.EncryptString(dpwd));
 
                             ///保存网卡IP
                             CommonParam.IP4 = this.m_pIPv4;
@@ -230,7 +239,7 @@ namespace CenoCC
                     };
                     #endregion
 
-                    Invoke(m_pAction);
+                    m_pAction();
                 }
                 catch (Exception ex)
                 {

@@ -48,6 +48,8 @@
             this.label7 = new System.Windows.Forms.Label();
             this.txtSeconds = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.cbxisinlimit_2 = new System.Windows.Forms.CheckBox();
+            this.txtinlimit_2number = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -92,10 +94,10 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(397, 384);
+            this.btnOk.Location = new System.Drawing.Point(397, 419);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 19;
+            this.btnOk.TabIndex = 21;
             this.btnOk.Tag = "diallimit_gateway_ok";
             this.btnOk.Text = "确定";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -135,21 +137,21 @@
             // 
             // txtXML
             // 
-            this.txtXML.Location = new System.Drawing.Point(14, 118);
+            this.txtXML.Location = new System.Drawing.Point(14, 145);
             this.txtXML.Multiline = true;
             this.txtXML.Name = "txtXML";
             this.txtXML.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtXML.Size = new System.Drawing.Size(458, 150);
-            this.txtXML.TabIndex = 9;
+            this.txtXML.TabIndex = 11;
             this.txtXML.DoubleClick += new System.EventHandler(this.txtXML_DoubleClick);
             // 
             // btnXML
             // 
             this.btnXML.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnXML.Location = new System.Drawing.Point(316, 384);
+            this.btnXML.Location = new System.Drawing.Point(316, 419);
             this.btnXML.Name = "btnXML";
             this.btnXML.Size = new System.Drawing.Size(75, 23);
-            this.btnXML.TabIndex = 18;
+            this.btnXML.TabIndex = 20;
             this.btnXML.Tag = "diallimit_gateway_XMLedit";
             this.btnXML.Text = "XML修改";
             this.btnXML.UseVisualStyleBackColor = true;
@@ -157,74 +159,93 @@
             // 
             // txtPassword
             // 
-            this.txtPassword.Location = new System.Drawing.Point(152, 274);
+            this.txtPassword.Location = new System.Drawing.Point(152, 301);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(320, 21);
-            this.txtPassword.TabIndex = 11;
+            this.txtPassword.TabIndex = 13;
             // 
             // txtIP
             // 
-            this.txtIP.Location = new System.Drawing.Point(152, 301);
+            this.txtIP.Location = new System.Drawing.Point(152, 328);
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(320, 21);
-            this.txtIP.TabIndex = 13;
+            this.txtIP.TabIndex = 15;
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(152, 328);
+            this.txtPort.Location = new System.Drawing.Point(152, 355);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(320, 21);
-            this.txtPort.TabIndex = 15;
+            this.txtPort.TabIndex = 17;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 277);
+            this.label5.Location = new System.Drawing.Point(12, 304);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(101, 12);
-            this.label5.TabIndex = 10;
+            this.label5.TabIndex = 12;
             this.label5.Text = "密码($password$)";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 304);
+            this.label6.Location = new System.Drawing.Point(12, 331);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
-            this.label6.TabIndex = 12;
+            this.label6.TabIndex = 14;
             this.label6.Text = "IP($ip$)";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(12, 331);
+            this.label7.Location = new System.Drawing.Point(12, 358);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(77, 12);
-            this.label7.TabIndex = 14;
+            this.label7.TabIndex = 16;
             this.label7.Text = "端口($port$)";
             // 
             // txtSeconds
             // 
-            this.txtSeconds.Location = new System.Drawing.Point(152, 355);
+            this.txtSeconds.Location = new System.Drawing.Point(152, 382);
             this.txtSeconds.Name = "txtSeconds";
             this.txtSeconds.Size = new System.Drawing.Size(320, 21);
-            this.txtSeconds.TabIndex = 17;
+            this.txtSeconds.TabIndex = 19;
             this.txtSeconds.Text = "75";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 358);
+            this.label8.Location = new System.Drawing.Point(12, 385);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(119, 12);
-            this.label8.TabIndex = 16;
+            this.label8.TabIndex = 18;
             this.label8.Text = "过期时间($seconds$)";
+            // 
+            // cbxisinlimit_2
+            // 
+            this.cbxisinlimit_2.AutoSize = true;
+            this.cbxisinlimit_2.Location = new System.Drawing.Point(14, 120);
+            this.cbxisinlimit_2.Name = "cbxisinlimit_2";
+            this.cbxisinlimit_2.Size = new System.Drawing.Size(96, 16);
+            this.cbxisinlimit_2.TabIndex = 9;
+            this.cbxisinlimit_2.Text = "支持呼叫转移";
+            this.cbxisinlimit_2.UseVisualStyleBackColor = true;
+            // 
+            // txtinlimit_2number
+            // 
+            this.txtinlimit_2number.Location = new System.Drawing.Point(152, 118);
+            this.txtinlimit_2number.Name = "txtinlimit_2number";
+            this.txtinlimit_2number.Size = new System.Drawing.Size(320, 21);
+            this.txtinlimit_2number.TabIndex = 10;
             // 
             // gatewayCreate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 416);
+            this.ClientSize = new System.Drawing.Size(484, 451);
+            this.Controls.Add(this.txtinlimit_2number);
+            this.Controls.Add(this.cbxisinlimit_2);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.txtSeconds);
             this.Controls.Add(this.label7);
@@ -275,5 +296,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtSeconds;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox cbxisinlimit_2;
+        private System.Windows.Forms.TextBox txtinlimit_2number;
     }
 }

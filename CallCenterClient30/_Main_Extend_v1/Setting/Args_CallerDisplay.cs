@@ -50,6 +50,10 @@ namespace CenoCC
 
             this.cbxSysMsgCall.Checked = Call_ClientParamUtil.m_bIsSysMsgCall;
 
+            ///呼叫转移
+            this.cbxIsinlimit_2.Checked = Call_ClientParamUtil.m_bisinlimit_2;
+            this.txtInlimit_2number.Text = Call_ClientParamUtil.m_sinlimit_2number;
+
             m_bFirst = false;
         }
 
@@ -85,8 +89,15 @@ namespace CenoCC
                 if (Call_ParamUtil.m_bUseHomeSearch && this.ckbShowRealName.Checked) Call_ClientParamUtil.m_bName = true;
                 else Call_ClientParamUtil.m_bName = false;
 
-                Cmn.MsgOK($"修改来电显示样式成功!");
-                Log.Instance.Success($"[CenoCC][Args_CallerDisplay][btnYes_Click][修改来电显示样式成功:{m_sStrings}]");
+                ///来电的系统提示
+                Call_ClientParamUtil.m_bIsSysMsgCall = this.cbxSysMsgCall.Checked;
+
+                ///呼叫转移
+                Call_ClientParamUtil.m_bisinlimit_2 = this.cbxIsinlimit_2.Checked;
+                Call_ClientParamUtil.m_sinlimit_2number = this.txtInlimit_2number.Text;
+
+                Cmn.MsgOK($"修改成功!");
+                Log.Instance.Success($"[CenoCC][Args_CallerDisplay][btnYes_Click][修改成功:{m_sStrings}]");
             }
             else
             {

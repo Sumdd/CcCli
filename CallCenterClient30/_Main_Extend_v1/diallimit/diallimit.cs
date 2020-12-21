@@ -190,7 +190,7 @@ namespace CenoCC {
             this.list.BeginUpdate();
             this.list.Columns.Add(new ColumnHeader() { Text = "序号", Width = 50 });
             this.list.Columns.Add(new ColumnHeader() { Name = "b.loginname", Text = "登录名", Width = 160, ImageIndex = 0 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 205, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "b.agentname", Text = "真实姓名", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.number", Text = "号码", Width = 100, ImageIndex = 1, Tag = "asc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.tnumber", Text = "真实号码", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.gw_name", Text = "网关", Width = 245, ImageIndex = 0 });
@@ -332,6 +332,7 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                             if (isshare == -2)
                             {
                                 string inlimit_2number = dr["inlimit_2number"].ToString();
+                                string number = dr["number"].ToString();
                                 ListViewItem.ListViewSubItem _inlimit_2number = new ListViewItem.ListViewSubItem();
                                 ListViewItem.ListViewSubItem _number = new ListViewItem.ListViewSubItem();
                                 _inlimit_2number.Name = "realname";
@@ -339,9 +340,7 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                                 if (string.IsNullOrWhiteSpace(inlimit_2number))
                                 {
                                     _inlimit_2number.ForeColor = Color.Red;
-                                    _inlimit_2number.Text = $"{dr["realname"]}";
-                                    _number.ForeColor = Color.Red;
-                                    _number.Text = $"未配置";
+                                    _inlimit_2number.Text = $"{dr["realname"]} 未配置转移号码";
                                 }
                                 else
                                 {
@@ -356,10 +355,10 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                                     }
 
                                     _inlimit_2number.ForeColor = Color.Green;
-                                    _inlimit_2number.Text = $"{m_sWhatdays}:{dr["inlimit_2starttime"]}-{dr["inlimit_2endtime"]}";
-                                    _number.ForeColor = Color.Green;
-                                    _number.Text = $"{inlimit_2number}";
+                                    _inlimit_2number.Text = $"{m_sWhatdays}:{dr["inlimit_2starttime"]}-{dr["inlimit_2endtime"]} 转移:{inlimit_2number}";
                                 }
+                                ///还原号码
+                                _number.Text = number;
                                 listViewItem.SubItems.Add(_inlimit_2number);
                                 listViewItem.SubItems.Add(_number);
                             }

@@ -1,5 +1,7 @@
-﻿namespace CenoCC {
-    partial class Args_CallerDisplay {
+﻿namespace CenoCC
+{
+    partial class Args_CallerDisplay
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -9,8 +11,10 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if(disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -22,16 +26,20 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.layout = new System.Windows.Forms.Panel();
             this.btnYes = new System.Windows.Forms.Button();
             this.gb = new System.Windows.Forms.GroupBox();
+            this.txtInlimit_2number = new System.Windows.Forms.TextBox();
+            this.cbxIsinlimit_2 = new System.Windows.Forms.CheckBox();
+            this.cbxSysMsgCall = new System.Windows.Forms.CheckBox();
             this.ckbShowAddress = new System.Windows.Forms.CheckBox();
             this.ckbShowRealName = new System.Windows.Forms.CheckBox();
             this.ckbShowNumber = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.cbxSysMsgCall = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.layout.SuspendLayout();
             this.gb.SuspendLayout();
             this.SuspendLayout();
@@ -44,20 +52,23 @@
             this.layout.Location = new System.Drawing.Point(0, 0);
             this.layout.Name = "layout";
             this.layout.Size = new System.Drawing.Size(420, 400);
-            this.layout.TabIndex = 2;
+            this.layout.TabIndex = 0;
             // 
             // btnYes
             // 
             this.btnYes.Location = new System.Drawing.Point(333, 365);
             this.btnYes.Name = "btnYes";
             this.btnYes.Size = new System.Drawing.Size(75, 23);
-            this.btnYes.TabIndex = 4;
+            this.btnYes.TabIndex = 8;
             this.btnYes.Text = "确定";
             this.btnYes.UseVisualStyleBackColor = true;
             this.btnYes.Click += new System.EventHandler(this.btnYes_Click);
             // 
             // gb
             // 
+            this.gb.Controls.Add(this.label2);
+            this.gb.Controls.Add(this.txtInlimit_2number);
+            this.gb.Controls.Add(this.cbxIsinlimit_2);
             this.gb.Controls.Add(this.cbxSysMsgCall);
             this.gb.Controls.Add(this.ckbShowAddress);
             this.gb.Controls.Add(this.ckbShowRealName);
@@ -65,10 +76,41 @@
             this.gb.Controls.Add(this.label1);
             this.gb.Location = new System.Drawing.Point(10, 10);
             this.gb.Name = "gb";
-            this.gb.Size = new System.Drawing.Size(400, 122);
-            this.gb.TabIndex = 2;
+            this.gb.Size = new System.Drawing.Size(400, 201);
+            this.gb.TabIndex = 1;
             this.gb.TabStop = false;
-            this.gb.Text = "来电显示";
+            this.gb.Text = "来电";
+            // 
+            // txtInlimit_2number
+            // 
+            this.txtInlimit_2number.Location = new System.Drawing.Point(176, 110);
+            this.txtInlimit_2number.Name = "txtInlimit_2number";
+            this.txtInlimit_2number.Size = new System.Drawing.Size(180, 21);
+            this.txtInlimit_2number.TabIndex = 7;
+            // 
+            // cbxIsinlimit_2
+            // 
+            this.cbxIsinlimit_2.AutoSize = true;
+            this.cbxIsinlimit_2.Checked = true;
+            this.cbxIsinlimit_2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxIsinlimit_2.Location = new System.Drawing.Point(74, 112);
+            this.cbxIsinlimit_2.Name = "cbxIsinlimit_2";
+            this.cbxIsinlimit_2.Size = new System.Drawing.Size(96, 16);
+            this.cbxIsinlimit_2.TabIndex = 6;
+            this.cbxIsinlimit_2.Text = "开启来电转移";
+            this.cbxIsinlimit_2.UseVisualStyleBackColor = true;
+            // 
+            // cbxSysMsgCall
+            // 
+            this.cbxSysMsgCall.AutoSize = true;
+            this.cbxSysMsgCall.Checked = true;
+            this.cbxSysMsgCall.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbxSysMsgCall.Location = new System.Drawing.Point(74, 90);
+            this.cbxSysMsgCall.Name = "cbxSysMsgCall";
+            this.cbxSysMsgCall.Size = new System.Drawing.Size(96, 16);
+            this.cbxSysMsgCall.TabIndex = 5;
+            this.cbxSysMsgCall.Text = "系统通知来电";
+            this.cbxSysMsgCall.UseVisualStyleBackColor = true;
             // 
             // ckbShowAddress
             // 
@@ -78,7 +120,7 @@
             this.ckbShowAddress.Location = new System.Drawing.Point(74, 68);
             this.ckbShowAddress.Name = "ckbShowAddress";
             this.ckbShowAddress.Size = new System.Drawing.Size(108, 16);
-            this.ckbShowAddress.TabIndex = 8;
+            this.ckbShowAddress.TabIndex = 4;
             this.ckbShowAddress.Text = "显示号码归属地";
             this.ckbShowAddress.UseVisualStyleBackColor = true;
             // 
@@ -90,7 +132,7 @@
             this.ckbShowRealName.Location = new System.Drawing.Point(74, 46);
             this.ckbShowRealName.Name = "ckbShowRealName";
             this.ckbShowRealName.Size = new System.Drawing.Size(108, 16);
-            this.ckbShowRealName.TabIndex = 7;
+            this.ckbShowRealName.TabIndex = 3;
             this.ckbShowRealName.Text = "显示联系人姓名";
             this.ckbShowRealName.UseVisualStyleBackColor = true;
             // 
@@ -102,7 +144,7 @@
             this.ckbShowNumber.Location = new System.Drawing.Point(74, 24);
             this.ckbShowNumber.Name = "ckbShowNumber";
             this.ckbShowNumber.Size = new System.Drawing.Size(96, 16);
-            this.ckbShowNumber.TabIndex = 6;
+            this.ckbShowNumber.TabIndex = 2;
             this.ckbShowNumber.Text = "显示电话号码";
             this.ckbShowNumber.UseVisualStyleBackColor = true;
             // 
@@ -114,18 +156,14 @@
             this.label1.Size = new System.Drawing.Size(0, 12);
             this.label1.TabIndex = 1;
             // 
-            // cbxSysMsgCall
+            // label2
             // 
-            this.cbxSysMsgCall.AutoSize = true;
-            this.cbxSysMsgCall.Checked = true;
-            this.cbxSysMsgCall.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbxSysMsgCall.Location = new System.Drawing.Point(74, 90);
-            this.cbxSysMsgCall.Name = "cbxSysMsgCall";
-            this.cbxSysMsgCall.Size = new System.Drawing.Size(96, 16);
-            this.cbxSysMsgCall.TabIndex = 9;
-            this.cbxSysMsgCall.Text = "系统通知来电";
-            this.cbxSysMsgCall.UseVisualStyleBackColor = true;
-            this.cbxSysMsgCall.CheckedChanged += new System.EventHandler(this.cbxSysMsgCall_CheckedChanged);
+            this.label2.ForeColor = System.Drawing.Color.Red;
+            this.label2.Location = new System.Drawing.Point(72, 134);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(284, 37);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "该来电转移设定的优先级小于拨号限制中的呼叫内转号码，且系统管理员需指定好呼叫转移的网关以及配置好网关上的呼叫转移端口组及路由";
             // 
             // Args_CallerDisplay
             // 
@@ -153,5 +191,8 @@
         private System.Windows.Forms.CheckBox ckbShowAddress;
         private System.Windows.Forms.CheckBox ckbShowRealName;
         private System.Windows.Forms.CheckBox cbxSysMsgCall;
+        private System.Windows.Forms.CheckBox cbxIsinlimit_2;
+        private System.Windows.Forms.TextBox txtInlimit_2number;
+        private System.Windows.Forms.Label label2;
     }
 }

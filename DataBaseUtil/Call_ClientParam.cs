@@ -541,5 +541,60 @@ namespace DataBaseUtil {
             }
         }
         #endregion
+
+        #region ***是否开启呼叫转移
+        private static bool? _m_bisinlimit_2;
+        public static bool m_bisinlimit_2
+        {
+            get
+            {
+                try
+                {
+                    if (_m_bisinlimit_2 == null)
+                    {
+                        _m_bisinlimit_2 = Call_ClientParamUtil.GetParamValueByName("_m_bisinlimit_2".Replace("_m_b", "").Replace("m_b", "")) == "1";
+                    }
+                    return _m_bisinlimit_2.Value;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("_m_bisinlimit_2".Replace("_m_b", "").Replace("m_b", ""), value ? "1" : "0");
+                _m_bisinlimit_2 = value;
+            }
+        }
+        #endregion
+
+        #region ***呼叫转移号码
+        private static string _m_sinlimit_2number;
+
+        public static string m_sinlimit_2number
+        {
+            get
+            {
+                try
+                {
+                    if (_m_sinlimit_2number == null)
+                    {
+                        _m_sinlimit_2number = Call_ClientParamUtil.GetParamValueByName("inlimit_2number");
+                    }
+                    return _m_sinlimit_2number;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("inlimit_2number", value);
+                _m_sinlimit_2number = value;
+            }
+        }
+        #endregion
     }
 }

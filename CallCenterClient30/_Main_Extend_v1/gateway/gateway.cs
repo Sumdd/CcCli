@@ -109,6 +109,8 @@ namespace CenoCC
             this.list.Columns.Add(new ColumnHeader() { Name = "a.gwtype", Text = "网关类型", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.remark", Text = "网关名称", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.gw_name", Text = "网关IP及端口", Width = 160, ImageIndex = 1, Tag = "asc" });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.isinlimit_2", Text = "支持呼叫转移", Width = 120, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "a.inlimit_2caller", Text = "转移规则前缀", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "gwstate", Text = "网关时态", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "gwstatus", Text = "网关状态", Width = 160, ImageIndex = 0 });
             this.list.EndUpdate();
@@ -186,6 +188,8 @@ namespace CenoCC
 	`a`.`gw_name`,
 	`a`.`remark`,
 	`a`.`gwtype`,
+	`a`.`isinlimit_2`,
+	`a`.`inlimit_2caller`,
 	`a`.`UniqueID`,
 	{m_sGatewayFieldSQL}
 FROM
@@ -220,6 +224,24 @@ FROM
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "gwtype", Text = dr["gwtype"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "remark", Text = dr["remark"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "gw_name", Text = dr["gw_name"].ToString() });
+                            ///呼叫转移
+                            ListViewItem.ListViewSubItem isinlimit_2 = new ListViewItem.ListViewSubItem();
+                            int m_uisinlimit_2 = Convert.ToInt32(dr["isinlimit_2"]);
+                            switch (m_uisinlimit_2)
+                            {
+                                case 1:
+                                    isinlimit_2.Name = "isinlimit_2";
+                                    isinlimit_2.Text = $"是";
+                                    isinlimit_2.ForeColor = Color.Green;
+                                    break;
+                                default:
+                                    isinlimit_2.Name = "isinlimit_2";
+                                    isinlimit_2.Text = $"否";
+                                    isinlimit_2.ForeColor = Color.Red;
+                                    break;
+                            }
+                            listViewItem.SubItems.Add(isinlimit_2);
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "inlimit_2caller", Text = dr["inlimit_2caller"].ToString() });
                             ListViewItem.ListViewSubItem gwstate = new ListViewItem.ListViewSubItem();
                             string m_sGwstate = dr["gwstate"].ToString();
                             switch (m_sGwstate)

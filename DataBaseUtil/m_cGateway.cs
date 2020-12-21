@@ -25,11 +25,13 @@ CASE
 		`gw_name` 
 		WHEN `remark` = '' THEN
 		`gw_name` ELSE CONCAT( `remark`, ' ', `gw_name` ) 
-	END AS `rgw` 
+	END AS `rgw`, 
+	`call_gateway`.`isinlimit_2`,
+	`call_gateway`.`inlimit_2caller`     
 FROM
 	`call_gateway`
 WHERE
-	1 =1
+	1 = 1
     {(!string.IsNullOrWhiteSpace(m_sID) ? $" AND `uniqueid` = '{m_sID}' LIMIT 1 " : "")}
     {(!string.IsNullOrWhiteSpace(m_sID) ? "" : m_sPopedomSQL)}
 ;";

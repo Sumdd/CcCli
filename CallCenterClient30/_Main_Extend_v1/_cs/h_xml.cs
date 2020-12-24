@@ -206,7 +206,36 @@ WHERE
                     int m_uCount = Convert.ToInt32(MySQL_Method.ExecuteScalar(m_sSQL1));
                     if (m_uCount <= 0)
                     {
-                        var as_sql = $"INSERT INTO `call_gateway` VALUES (DEFAULT(id), '{uuid}', '{m_sIP}:{m_sPort}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "非鉴权网关" : m_sName)}', 'external', '{Common.AgentInfo.AgentID}', '{m_dtNow}');";
+                        var as_sql = $@"INSERT INTO `call_gateway` (
+	`ID`,
+	`UniqueID`,
+	`gw_name`,
+	`username`,
+	`password`,
+	`realm`,
+	`from_user`,
+	`from_domain`,
+	`extension`,
+	`proxy`,
+	`register_proxy`,
+	`expire_seconds`,
+	`register`,
+	`register_transport`,
+	`retry_seconds`,
+	`caller_id_in_from`,
+	`contact_params`,
+	`ping`,
+	`rfc_5626`,
+	`reg_id`,
+	`remark`,
+	`gwtype`,
+	`adduser`,
+	`addtime`,
+	`isinlimit_2`,
+	`inlimit_2caller` 
+)
+VALUES
+	( DEFAULT(id), '{uuid}', '{m_sIP}:{m_sPort}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "非鉴权网关" : m_sName)}', 'external', '{Common.AgentInfo.AgentID}', '{m_dtNow}', 0, '' );";
                         i = MySQL_Method.ExecuteNonQuery(as_sql);
                     }
                 }
@@ -224,7 +253,36 @@ WHERE
                     int m_uCount = Convert.ToInt32(MySQL_Method.ExecuteScalar(m_sSQL1));
                     if (m_uCount <= 0)
                     {
-                        var as_sql = $"INSERT INTO `call_gateway` VALUES (DEFAULT(id), '{uuid}', '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "IMS" : m_sName)}', 'gateway', '{Common.AgentInfo.AgentID}', '{m_dtNow}');";
+                        var as_sql = $@"INSERT INTO `call_gateway` (
+	`ID`,
+	`UniqueID`,
+	`gw_name`,
+	`username`,
+	`password`,
+	`realm`,
+	`from_user`,
+	`from_domain`,
+	`extension`,
+	`proxy`,
+	`register_proxy`,
+	`expire_seconds`,
+	`register`,
+	`register_transport`,
+	`retry_seconds`,
+	`caller_id_in_from`,
+	`contact_params`,
+	`ping`,
+	`rfc_5626`,
+	`reg_id`,
+	`remark`,
+	`gwtype`,
+	`adduser`,
+	`addtime`,
+	`isinlimit_2`,
+	`inlimit_2caller` 
+)
+VALUES
+	( DEFAULT(id), '{uuid}', '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "IMS" : m_sName)}', 'gateway', '{Common.AgentInfo.AgentID}', '{m_dtNow}', 0, '' );";
                         i = MySQL_Method.ExecuteNonQuery(as_sql);
                     }
                 }

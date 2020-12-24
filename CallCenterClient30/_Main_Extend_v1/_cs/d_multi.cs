@@ -165,7 +165,36 @@ WHERE
                             }
                         }
 
-                        var as_sql = $"INSERT INTO `call_gateway` VALUES (DEFAULT(id), uuid(), '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{m_sRemark}', '{(!string.IsNullOrWhiteSpace(gwOName) ? gwOName : gwType)}', '{Common.AgentInfo.AgentID}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', {isinlimit_2}, '{inlimit_2caller}');";
+                        var as_sql = $@"INSERT INTO `call_gateway` (
+	`ID`,
+	`UniqueID`,
+	`gw_name`,
+	`username`,
+	`password`,
+	`realm`,
+	`from_user`,
+	`from_domain`,
+	`extension`,
+	`proxy`,
+	`register_proxy`,
+	`expire_seconds`,
+	`register`,
+	`register_transport`,
+	`retry_seconds`,
+	`caller_id_in_from`,
+	`contact_params`,
+	`ping`,
+	`rfc_5626`,
+	`reg_id`,
+	`remark`,
+	`gwtype`,
+	`adduser`,
+	`addtime`,
+	`isinlimit_2`,
+	`inlimit_2caller` 
+)
+VALUES
+	( DEFAULT(id), uuid(), '{gwName}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{m_sRemark}', '{(!string.IsNullOrWhiteSpace(gwOName) ? gwOName : gwType)}', '{Common.AgentInfo.AgentID}', '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}', {isinlimit_2}, '{inlimit_2caller}');";
                         i = MySQL_Method.ExecuteNonQuery(as_sql);
                         m_sErrMsg = "添加成功";
                     }

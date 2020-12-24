@@ -41,11 +41,13 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnSearchOpen = new System.Windows.Forms.Button();
+            this.btnText = new System.Windows.Forms.Button();
             this.layout.SuspendLayout();
             this.SuspendLayout();
             // 
             // layout
             // 
+            this.layout.Controls.Add(this.btnText);
             this.layout.Controls.Add(this.btnReload);
             this.layout.Controls.Add(this.btnDelete);
             this.layout.Controls.Add(this.btnEdit);
@@ -168,6 +170,17 @@
             this.btnSearchOpen.UseVisualStyleBackColor = true;
             this.btnSearchOpen.Click += new System.EventHandler(this.btnSearchOpen_Click);
             // 
+            // btnText
+            // 
+            this.btnText.Location = new System.Drawing.Point(402, 10);
+            this.btnText.Name = "btnText";
+            this.btnText.Size = new System.Drawing.Size(40, 23);
+            this.btnText.TabIndex = 15;
+            this.btnText.Tag = "wblist_reload";
+            this.btnText.Text = "文本";
+            this.btnText.UseVisualStyleBackColor = true;
+            this.btnText.Click += new System.EventHandler(this.btnText_Click);
+            // 
             // wblist
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -195,5 +208,6 @@
         private System.Windows.Forms.Button btnDelete;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.Button btnText;
     }
 }

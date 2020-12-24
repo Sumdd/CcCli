@@ -88,7 +88,7 @@ namespace CenoCC
                 ///添加时默认值
                 if (m_uID == -1)
                 {
-                    this.cbxWblimittype.SelectedValue = 4;
+                    this.cbxWblimittype.SelectedValue = 3;
                 }
             }
 

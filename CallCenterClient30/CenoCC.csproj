@@ -394,6 +394,12 @@
     <Compile Include="_Main_Extend_v1\wblist\wblist.Designer.cs">
       <DependentUpon>wblist.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistOpText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\wblist\wblistOpText.Designer.cs">
+      <DependentUpon>wblistOpText.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Main_Extend_v1\wblist\wblistOp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -767,6 +773,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\wblist\wblist.resx">
       <DependentUpon>wblist.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\wblist\wblistOpText.resx">
+      <DependentUpon>wblistOpText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\wblist\wblistOp.resx">
       <DependentUpon>wblistOp.cs</DependentUpon>

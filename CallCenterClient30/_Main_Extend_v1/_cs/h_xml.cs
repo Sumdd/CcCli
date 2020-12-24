@@ -235,7 +235,7 @@ WHERE
 	`inlimit_2caller` 
 )
 VALUES
-	( DEFAULT(id), '{uuid}', '{m_sIP}:{m_sPort}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "非鉴权网关" : m_sName)}', 'external', '{Common.AgentInfo.AgentID}', '{m_dtNow}', 0, '' );";
+	( DEFAULT(id), '{uuid}', '{m_sIP}{(string.IsNullOrWhiteSpace(m_sPort) ? null : $":{m_sPort}")}', '', '', '', null, null, null, null, null, '3600', '1', 'udp', '30', '0', 'tport=tcp', '25', '1', '1', '{(string.IsNullOrWhiteSpace(m_sName) ? "非鉴权网关" : m_sName)}', 'external', '{Common.AgentInfo.AgentID}', '{m_dtNow}', 0, '' );";
                         i = MySQL_Method.ExecuteNonQuery(as_sql);
                     }
                 }

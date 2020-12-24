@@ -99,10 +99,10 @@ namespace CenoCC
             this.list.Columns.Add(new ColumnHeader() { Name = "wbnumber", Text = "号码表达式", Width = 135, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "wbtype", Text = "类型", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "wblimittype", Text = "限制类型", Width = 100, ImageIndex = 0 });
-            this.list.Columns.Add(new ColumnHeader() { Name = "ordernum", Text = "唯一索引", Width = 90, ImageIndex = 1, Tag = "asc" });
+            this.list.Columns.Add(new ColumnHeader() { Name = "ordernum", Text = "唯一索引", Width = 90, ImageIndex = 2, Tag = "asc" });
             this.list.EndUpdate();
             this.ucPager.pager.field = "ordernum";
-            this.ucPager.pager.type = "asc";
+            this.ucPager.pager.type = "desc";
         }
         /// <summary>
         /// 加载列表内容
@@ -342,6 +342,14 @@ WHERE
             ///让服务器加载上即可,直接把黑白名单加载到服务器缓存中,提高查询速度
             WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadWbList"));
             MessageBox.Show(this, "发送黑白名单重载命令完成");
+        }
+
+        private void btnText_Click(object sender, EventArgs e)
+        {
+            ///添加
+            wblistOpText m = new wblistOpText(-1);
+            m.SearchEvent = this.GetListBody;
+            m.ShowDialog(this);
         }
     }
 }

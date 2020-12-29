@@ -358,5 +358,13 @@ WHERE
             WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadInrule"));
             MessageBox.Show(this, "发送内呼规则重载命令完成");
         }
+
+        private void btnText_Click(object sender, EventArgs e)
+        {
+            ///文本添加
+            inruleOpText m = new inruleOpText(-1);
+            m.SearchEvent = this.GetListBody;
+            m.Show(this);
+        }
     }
 }

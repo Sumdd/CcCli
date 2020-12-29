@@ -21,9 +21,6 @@ namespace CenoCC
         {
             InitializeComponent();
 
-            ///操作权限
-            this.m_fLoadOperatePower(this.Controls);
-
             ///直接加载文本格式
             new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {
@@ -57,32 +54,6 @@ ORDER BY
             })).Start();
         }
 
-        #region ***操作权限
-        private void m_fLoadOperatePower(Control.ControlCollection m_lControls)
-        {
-            foreach (var item in m_lControls)
-            {
-                if (item.GetType() == typeof(Button))
-                {
-                    Button m_pButton = (Button)item;
-                    if (m_pButton.Tag == null)
-                        continue;
-                    if (string.IsNullOrWhiteSpace(m_pButton.Tag.ToString()))
-                        continue;
-                    if (m_cPower.Has(m_pButton.Tag.ToString()))
-                        m_pButton.Enabled = true;
-                    else
-                        m_pButton.Enabled = false;
-                }
-                else if (item.GetType() == typeof(Panel))
-                {
-                    Panel m_pPanel = (Panel)item;
-                    this.m_fLoadOperatePower(m_pPanel.Controls);
-                }
-            }
-        }
-        #endregion
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -95,7 +66,7 @@ ORDER BY
 
                 string m_sBooks = this.txtText.Text;
 
-                List<m_mWblist> m_lWblistTable = new List<m_mWblist>();
+                List<Model_v1.m_mWblist> m_lWblistTable = new List<Model_v1.m_mWblist>();
 
                 ///验证电话薄规则
                 if (!string.IsNullOrWhiteSpace(m_sBooks))
@@ -109,7 +80,7 @@ ORDER BY
                         string[] m_lPages = item.Split(' ');
                         if (m_lPages.Length == 4)
                         {
-                            m_mWblist _m_mWblist = new m_mWblist();
+                            Model_v1.m_mWblist _m_mWblist = new Model_v1.m_mWblist();
                             _m_mWblist.ordernum = float.Parse(m_lPages[0]);
                             _m_mWblist.wbname = m_lPages[1];
                             _m_mWblist.wbnumber = m_lPages[2];
@@ -132,7 +103,7 @@ ORDER BY
                         List<string> m_lSQL = new List<string>();
                         if (m_lWblistTable.Count > 0)
                         {
-                            foreach (m_mWblist item in m_lWblistTable)
+                            foreach (Model_v1.m_mWblist item in m_lWblistTable)
                             {
                                 string m_sInsertSQL = $@"
 INSERT INTO `call_wblist` ( `wbname`, `wbnumber`, `wbtype`, `addtime`, `adduser`, `ordernum`, `wblimittype` )
@@ -174,13 +145,5 @@ FROM
                 this.m_bDoing = false;
             }
         }
-    }
-
-    public class m_mWblist
-    {
-        public float ordernum { get; set; }
-        public string wbname { get; set; }
-        public string wbnumber { get; set; }
-        public int wblimittype { get; set; }
     }
 }

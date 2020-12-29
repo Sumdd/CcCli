@@ -343,4 +343,25 @@ namespace Model_v1
         public string inrulebooktkey { get; set; }
         public float inrulebookordernum { get; set; }
     }
+
+    public class m_mWblist
+    {
+        public float ordernum { get; set; }
+        public string wbname { get; set; }
+        public string wbnumber { get; set; }
+        public int wblimittype { get; set; }
+    }
+
+    public class m_mInrule
+    {
+        public int inruleid { get; set; }
+        public string inrulename { get; set; }
+        public string inruleip { get; set; }
+        public string inrulesuffix { get; set; }
+        public float ordernum { get; set; }
+        public int inruleport { get; set; }
+        public string inruleua { get; set; }
+        public int inrulemain { get; set; }
+        public List<m_mBook> m_lBook { get; set; }
+    }
 }

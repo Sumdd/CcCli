@@ -596,5 +596,89 @@ namespace DataBaseUtil {
             }
         }
         #endregion
+
+        #region ***呼叫转移开始时间
+        private static string _m_sinlimit_2starttime;
+
+        public static string m_sinlimit_2starttime
+        {
+            get
+            {
+                try
+                {
+                    if (_m_sinlimit_2starttime == null)
+                    {
+                        _m_sinlimit_2starttime = Call_ClientParamUtil.GetParamValueByName("inlimit_2starttime");
+                    }
+                    return _m_sinlimit_2starttime;
+                }
+                catch
+                {
+                    return "19:00:00";
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("inlimit_2starttime", value);
+                _m_sinlimit_2starttime = value;
+            }
+        }
+        #endregion
+
+        #region ***呼叫转移结束时间
+        private static string _m_sinlimit_2endtime;
+
+        public static string m_sinlimit_2endtime
+        {
+            get
+            {
+                try
+                {
+                    if (_m_sinlimit_2endtime == null)
+                    {
+                        _m_sinlimit_2endtime = Call_ClientParamUtil.GetParamValueByName("inlimit_2endtime");
+                    }
+                    return _m_sinlimit_2endtime;
+                }
+                catch
+                {
+                    return "08:00:00";
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("inlimit_2endtime", value);
+                _m_sinlimit_2endtime = value;
+            }
+        }
+        #endregion
+
+        #region ***呼叫转移星期
+        private static string _m_sinlimit_2whatday;
+
+        public static int m_uinlimit_2whatday
+        {
+            get
+            {
+                try
+                {
+                    if (_m_sinlimit_2whatday == null)
+                    {
+                        _m_sinlimit_2whatday = Call_ClientParamUtil.GetParamValueByName("inlimit_2whatday");
+                    }
+                    return int.Parse(_m_sinlimit_2whatday);
+                }
+                catch
+                {
+                    return 127;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("inlimit_2whatday", value);
+                _m_sinlimit_2whatday = value.ToString();
+            }
+        }
+        #endregion
     }
 }

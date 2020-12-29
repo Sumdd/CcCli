@@ -65,7 +65,18 @@ namespace CenoCC {
             foreach(var id in idlist) {
                 as_list.Add($"select {id} as id");
             }
-            var as_del_sql = $"delete from dial_limit\r\nwhere id in ({string.Join("\r\nunion\r\n", as_list.ToArray())}) ";
+            var as_del_sql = $@"
+DELETE 
+FROM
+	`dial_limit` 
+WHERE
+	`dial_limit`.`id` IN ({string.Join(" union ", as_list.ToArray())});
+DELETE 
+FROM
+	`dial_inlimit_2` 
+WHERE
+	`inlimit_2id` IN ({string.Join(" union ", as_list.ToArray())});
+";
             return MySQL_Method.ExecuteNonQuery(as_del_sql);
         }
 

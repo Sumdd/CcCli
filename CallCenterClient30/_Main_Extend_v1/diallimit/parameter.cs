@@ -62,7 +62,11 @@ namespace CenoCC {
 	                                       ifnull((select v from dial_parameter where k='limitduration' limit 1),0) as limitduration,
 	                                       ifnull((select v from dial_parameter where k='limitthecount' limit 1),0) as limitthecount,
 	                                       ifnull((select v from dial_parameter where k='limittheduration' limit 1),3600) as limittheduration,
-	                                       ifnull((select v from dial_parameter where k='limitthedial' limit 1),5) as limitthedial;";
+	                                       ifnull((select v from dial_parameter where k='limitthedial' limit 1),5) as limitthedial,
+	                                       ifnull((select v from dial_parameter where k='inlimit_2starttime' limit 1),'00:00:00') as inlimit_2starttime,
+	                                       ifnull((select v from dial_parameter where k='inlimit_2endtime' limit 1),'00:00:00') as inlimit_2endtime,
+	                                       ifnull((select v from dial_parameter where k='inlimit_2whatday' limit 1),127) as inlimit_2whatday
+;";
                     var dt = MySQL_Method.BindTable(as_sql);
                     if(dt.Rows.Count > 0) {
                         this.limitcountValue.Value = Convert.ToDecimal(dt.Rows[0]["limitcount"]);
@@ -70,12 +74,31 @@ namespace CenoCC {
                         this.limitthecountValue.Value = Convert.ToDecimal(dt.Rows[0]["limitthecount"]);
                         this.limitthedurationValue.Value = Convert.ToDecimal(dt.Rows[0]["limittheduration"]);
                         this.limitthedialValue.Value = Convert.ToDecimal(dt.Rows[0]["limitthedial"]);
+                        this.inlimit_2starttime.Text = dt.Rows[0]["inlimit_2starttime"]?.ToString();
+                        this.inlimit_2endtime.Text = dt.Rows[0]["inlimit_2endtime"]?.ToString();
+
+                        ///设定星期几
+                        int m_uWhatDay = Convert.ToInt32(dt.Rows[0]["inlimit_2whatday"]);
+                        for (int i = 0; i < this.inlimit_2whatday.Items.Count; i++)
+                        {
+                            this.inlimit_2whatday.SetItemChecked(i, (m_uWhatDay & (int)(Math.Pow(2, i))) > 0 ? true : false);
+                        }
+
                     } else {
                         this.limitcountValue.Value = 0;
                         this.limitdurationValue.Value = 0;
                         this.limitthecountValue.Value = 0;
                         this.limitthedurationValue.Value = 3600;
                         this.limitthedialValue.Value = 5;
+
+                        this.inlimit_2starttime.Text = "00:00:00";
+                        this.inlimit_2endtime.Text = "00:00:00";
+
+                        ///默认勾选所有星期
+                        for (int i = 0; i < this.inlimit_2whatday.Items.Count; i++)
+                        {
+                            this.inlimit_2whatday.SetItemChecked(i, true);
+                        }
                     }
                 } catch(Exception ex) {
                     Log.Instance.Error($"parameter init error:{ex.Message}");
@@ -92,13 +115,27 @@ namespace CenoCC {
                 return;
             new System.Threading.Thread(new System.Threading.ThreadStart(() => {
                 this._update_ = true;
+
+                ///得到选中的星期的代数和
+                int m_uWhatDay = 0;
+                for (int i = 0; i < this.inlimit_2whatday.Items.Count; i++)
+                {
+                    if (this.inlimit_2whatday.GetItemChecked(i))
+                    {
+                        m_uWhatDay += (int)(Math.Pow(2, i));
+                    }
+                }
+
                 try {
                     var as_sql = ""
                         + $"update dial_parameter set v={this.limitcountValue.Value} where k='limitcount';\r\n"
                         + $"update dial_parameter set v={this.limitdurationValue.Value} where k='limitduration';\r\n"
                         + $"update dial_parameter set v={this.limitthecountValue.Value} where k='limitthecount';\r\n"
                         + $"update dial_parameter set v={this.limitthedurationValue.Value} where k='limittheduration';\r\n"
-                        + $"update dial_parameter set v={this.limitthedialValue.Value} where k='limitthedial';"
+                        + $"update dial_parameter set v={this.limitthedialValue.Value} where k='limitthedial';\r\n"
+                        + $"update dial_parameter set v='{this.inlimit_2starttime.Text}' where k='inlimit_2starttime';\r\n"
+                        + $"update dial_parameter set v='{this.inlimit_2endtime.Text}' where k='inlimit_2endtime';\r\n"
+                        + $"update dial_parameter set v={m_uWhatDay} where k='inlimit_2whatday';\r\n"
                         ;
                     this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "修改");
                 } catch(Exception ex) {

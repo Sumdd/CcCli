@@ -346,10 +346,10 @@ WHERE
 
         private void btnText_Click(object sender, EventArgs e)
         {
-            ///添加
+            ///文本添加
             wblistOpText m = new wblistOpText(-1);
             m.SearchEvent = this.GetListBody;
-            m.ShowDialog(this);
+            m.Show(this);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace CenoCC
 {
-    partial class wblistOpText
+    partial class inruleOpText
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(wblistOpText));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(inruleOpText));
             this.btnSave = new System.Windows.Forms.Button();
             this.txtText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -37,7 +37,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(197, 441);
+            this.btnSave.Location = new System.Drawing.Point(306, 516);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 12;
@@ -51,7 +51,7 @@
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtText.Size = new System.Drawing.Size(259, 336);
+            this.txtText.Size = new System.Drawing.Size(368, 336);
             this.txtText.TabIndex = 13;
             // 
             // label1
@@ -59,23 +59,23 @@
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(13, 356);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(259, 82);
+            this.label1.Size = new System.Drawing.Size(368, 157);
             this.label1.TabIndex = 14;
-            this.label1.Text = "索引 名称 表达式 限制类型\r\n0 浦发 123456 3\r\n1 民生 654321 3\r\n限制类型：1呼入2呼出3呼入呼出";
+            this.label1.Text = resources.GetString("label1.Text");
             // 
-            // wblistOpText
+            // inruleOpText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 476);
+            this.ClientSize = new System.Drawing.Size(393, 551);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtText);
             this.Controls.Add(this.btnSave);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "wblistOpText";
+            this.Name = "inruleOpText";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "路由文本";
+            this.Text = "内呼规则文本";
             this.ResumeLayout(false);
             this.PerformLayout();
 

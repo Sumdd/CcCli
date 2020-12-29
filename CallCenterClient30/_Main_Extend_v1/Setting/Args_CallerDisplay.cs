@@ -53,6 +53,15 @@ namespace CenoCC
             ///呼叫转移
             this.cbxIsinlimit_2.Checked = Call_ClientParamUtil.m_bisinlimit_2;
             this.txtInlimit_2number.Text = Call_ClientParamUtil.m_sinlimit_2number;
+            this.inlimit_2starttime.Text = Call_ClientParamUtil.m_sinlimit_2starttime;
+            this.inlimit_2endtime.Text = Call_ClientParamUtil.m_sinlimit_2endtime;
+
+            ///设定星期几
+            int m_uWhatDay = Call_ClientParamUtil.m_uinlimit_2whatday;
+            for (int i = 0; i < this.inlimit_2whatday.Items.Count; i++)
+            {
+                this.inlimit_2whatday.SetItemChecked(i, (m_uWhatDay & (int)(Math.Pow(2, i))) > 0 ? true : false);
+            }
 
             m_bFirst = false;
         }
@@ -95,9 +104,25 @@ namespace CenoCC
                 ///呼叫转移
                 Call_ClientParamUtil.m_bisinlimit_2 = this.cbxIsinlimit_2.Checked;
                 Call_ClientParamUtil.m_sinlimit_2number = this.txtInlimit_2number.Text;
+                Call_ClientParamUtil.m_sinlimit_2starttime = this.inlimit_2starttime.Text;
+                Call_ClientParamUtil.m_sinlimit_2endtime = this.inlimit_2endtime.Text;
 
-                Cmn.MsgOK($"修改成功!");
-                Log.Instance.Success($"[CenoCC][Args_CallerDisplay][btnYes_Click][修改成功:{m_sStrings}]");
+                ///得到选中的星期的代数和
+                int m_uWhatDay = 0;
+                for (int i = 0; i < this.inlimit_2whatday.Items.Count; i++)
+                {
+                    if (this.inlimit_2whatday.GetItemChecked(i))
+                    {
+                        m_uWhatDay += (int)(Math.Pow(2, i));
+                    }
+                }
+                Call_ClientParamUtil.m_uinlimit_2whatday = m_uWhatDay;
+
+                ///需要修改对应人员的内容内转缓存
+                WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh($"UpdUa_{Common.AgentInfo.AgentID}"));
+
+                Cmn.MsgOK($"修改及发送内转缓存更新命令成功");
+                Log.Instance.Success($"[CenoCC][Args_CallerDisplay][btnYes_Click][修改及发送内转缓存更新命令成功:{m_sStrings}]");
             }
             else
             {

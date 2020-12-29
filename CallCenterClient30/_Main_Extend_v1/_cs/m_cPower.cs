@@ -66,6 +66,11 @@ WHERE
             {
                 Log.Instance.Error($"[CenoCC][m_cPower][m_fGetOperatePower][Exception][{ex.Message}]");
             }
+            finally
+            {
+                ///由于全号显示的引入,让一键拨号可以受到此操作权限的控制
+                WebSocket_v1.InWebSocketMain.Send(CenoSocket.M_Send._zdwh("ReloadO"));
+            }
         }
 
         public static bool Has(string m_sOperate)

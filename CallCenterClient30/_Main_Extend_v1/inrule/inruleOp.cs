@@ -93,7 +93,7 @@ FROM
 WHERE
 	`call_inrulebook`.`inruleid` = {m_uID} 
 ORDER BY
-	`call_inrulebook`.`inrulebookordernum` ASC;
+	`call_inrulebook`.`inrulebookordernum` DESC;
 ";
                             DataSet ds = DataBaseUtil.MySQL_Method.ExecuteDataSet(m_sSQL);
                             if (ds != null && ds.Tables.Count == 2)
@@ -178,6 +178,10 @@ ORDER BY
                         {
                             Model_v1.m_mBook _m_mBook = new Model_v1.m_mBook();
                             _m_mBook.inrulebookordernum = float.Parse(m_lPages[0]);
+
+                            ///索引不可重复
+                            if (m_lBookTable.Where(x => x.inrulebookordernum == _m_mBook.inrulebookordernum)?.Count() > 0) throw new Exception($"行:{m_uRow};数据:{item},索引{_m_mBook.inrulebookordernum}已存在");
+
                             _m_mBook.inrulebookname = m_lPages[1];
                             _m_mBook.inrulebookfkey = m_lPages[2];
                             _m_mBook.inrulebooktkey = m_lPages[3];

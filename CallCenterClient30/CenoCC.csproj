@@ -292,6 +292,12 @@
     <Compile Include="_Main_Extend_v1\inrule\inruleSearch.Designer.cs">
       <DependentUpon>inruleSearch.cs</DependentUpon>
     </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleOpText.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="_Main_Extend_v1\inrule\inruleOpText.Designer.cs">
+      <DependentUpon>inruleOpText.cs</DependentUpon>
+    </Compile>
     <Compile Include="_Main_Extend_v1\play\MediaPlayerFrm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -663,6 +669,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\inrule\inruleSearch.resx">
       <DependentUpon>inruleSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_Main_Extend_v1\inrule\inruleOpText.resx">
+      <DependentUpon>inruleOpText.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="_Main_Extend_v1\play\MediaPlayerFrm.resx">
       <DependentUpon>MediaPlayerFrm.cs</DependentUpon>

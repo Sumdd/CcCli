@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(wblist));
             this.layout = new System.Windows.Forms.Panel();
+            this.btnText = new System.Windows.Forms.Button();
             this.btnReload = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -41,7 +42,6 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnSearchOpen = new System.Windows.Forms.Button();
-            this.btnText = new System.Windows.Forms.Button();
             this.layout.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,6 +62,17 @@
             this.layout.Name = "layout";
             this.layout.Size = new System.Drawing.Size(982, 476);
             this.layout.TabIndex = 0;
+            // 
+            // btnText
+            // 
+            this.btnText.Location = new System.Drawing.Point(402, 10);
+            this.btnText.Name = "btnText";
+            this.btnText.Size = new System.Drawing.Size(40, 23);
+            this.btnText.TabIndex = 15;
+            this.btnText.Tag = "wblist_text";
+            this.btnText.Text = "文本";
+            this.btnText.UseVisualStyleBackColor = true;
+            this.btnText.Click += new System.EventHandler(this.btnText_Click);
             // 
             // btnReload
             // 
@@ -169,17 +180,6 @@
             this.btnSearchOpen.Text = "搜索条件";
             this.btnSearchOpen.UseVisualStyleBackColor = true;
             this.btnSearchOpen.Click += new System.EventHandler(this.btnSearchOpen_Click);
-            // 
-            // btnText
-            // 
-            this.btnText.Location = new System.Drawing.Point(402, 10);
-            this.btnText.Name = "btnText";
-            this.btnText.Size = new System.Drawing.Size(40, 23);
-            this.btnText.TabIndex = 15;
-            this.btnText.Tag = "wblist_reload";
-            this.btnText.Text = "文本";
-            this.btnText.UseVisualStyleBackColor = true;
-            this.btnText.Click += new System.EventHandler(this.btnText_Click);
             // 
             // wblist
             // 

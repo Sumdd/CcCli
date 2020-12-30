@@ -47,6 +47,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cbxNetwork = new System.Windows.Forms.ComboBox();
+            this.cbxKvp = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -233,11 +234,23 @@
             this.cbxNetwork.TabIndex = 103;
             this.cbxNetwork.SelectedIndexChanged += new System.EventHandler(this.cbxNetwork_SelectedIndexChanged);
             // 
+            // cbxKvp
+            // 
+            this.cbxKvp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxKvp.Font = new System.Drawing.Font("幼圆", 9F, System.Drawing.FontStyle.Bold);
+            this.cbxKvp.FormattingEnabled = true;
+            this.cbxKvp.Location = new System.Drawing.Point(23, 228);
+            this.cbxKvp.Name = "cbxKvp";
+            this.cbxKvp.Size = new System.Drawing.Size(254, 20);
+            this.cbxKvp.TabIndex = 104;
+            this.cbxKvp.SelectedIndexChanged += new System.EventHandler(this.cbxKvp_SelectedIndexChanged);
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(300, 515);
+            this.Controls.Add(this.cbxKvp);
             this.Controls.Add(this.cbxNetwork);
             this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.pictureBox2);
@@ -288,5 +301,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.ComboBox cbxNetwork;
+        private System.Windows.Forms.ComboBox cbxKvp;
     }
 }

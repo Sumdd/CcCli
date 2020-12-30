@@ -50,6 +50,13 @@ namespace CenoCC
 
             this.cbxSysMsgCall.Checked = Call_ClientParamUtil.m_bIsSysMsgCall;
 
+            ///有必要刷新
+            Call_ClientParamUtil._m_bisinlimit_2 = null;
+            Call_ClientParamUtil._m_sinlimit_2number = null;
+            Call_ClientParamUtil._m_sinlimit_2starttime = null;
+            Call_ClientParamUtil._m_sinlimit_2endtime = null;
+            Call_ClientParamUtil._m_sinlimit_2whatday = null;
+
             ///呼叫转移
             this.cbxIsinlimit_2.Checked = Call_ClientParamUtil.m_bisinlimit_2;
             this.txtInlimit_2number.Text = Call_ClientParamUtil.m_sinlimit_2number;

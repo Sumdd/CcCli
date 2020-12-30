@@ -543,7 +543,7 @@ namespace DataBaseUtil {
         #endregion
 
         #region ***是否开启呼叫转移
-        private static bool? _m_bisinlimit_2;
+        public static bool? _m_bisinlimit_2;
         public static bool m_bisinlimit_2
         {
             get
@@ -570,7 +570,7 @@ namespace DataBaseUtil {
         #endregion
 
         #region ***呼叫转移号码
-        private static string _m_sinlimit_2number;
+        public static string _m_sinlimit_2number;
 
         public static string m_sinlimit_2number
         {
@@ -598,7 +598,7 @@ namespace DataBaseUtil {
         #endregion
 
         #region ***呼叫转移开始时间
-        private static string _m_sinlimit_2starttime;
+        public static string _m_sinlimit_2starttime;
 
         public static string m_sinlimit_2starttime
         {
@@ -626,7 +626,7 @@ namespace DataBaseUtil {
         #endregion
 
         #region ***呼叫转移结束时间
-        private static string _m_sinlimit_2endtime;
+        public static string _m_sinlimit_2endtime;
 
         public static string m_sinlimit_2endtime
         {
@@ -654,7 +654,7 @@ namespace DataBaseUtil {
         #endregion
 
         #region ***呼叫转移星期
-        private static string _m_sinlimit_2whatday;
+        public static string _m_sinlimit_2whatday;
 
         public static int m_uinlimit_2whatday
         {

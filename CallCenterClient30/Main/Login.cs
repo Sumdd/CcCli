@@ -57,6 +57,14 @@ namespace CenoCC
             //下拉框值,可变动
             {
                 this.cbxServer.DataSource = m_cProfile.m_lServerIP;
+
+                ///绑定
+                this.cbxKvp.BeginUpdate();
+                this.cbxKvp.DataSource = m_cProfile.m_lServerName?.Select(x => { return new Model_v1.M_kv { key = x.Key, value = x.Value.Value }; })?.ToList();
+                this.cbxKvp.ValueMember = "key";
+                this.cbxKvp.DisplayMember = "value";
+                this.cbxKvp.EndUpdate();
+
                 if (m_cProfile.m_lServerIP != null && m_cProfile.m_lServerIP.Length > 0)
                 {
                     if (!string.IsNullOrWhiteSpace(m_cProfile.server) && m_cProfile.m_lServerIP.Contains(m_cProfile.server))
@@ -67,6 +75,9 @@ namespace CenoCC
                     {
                         this.cbxServer.SelectedIndex = 0;
                     }
+
+                    ///对绑
+                    this.cbxKvp.SelectedValue = this.cbxServer.Text;
                 }
                 this.txtDatabase.Text = m_cProfile.database;
                 this.txtDuid.Text = m_cProfile.uid;
@@ -347,6 +358,23 @@ namespace CenoCC
             catch (Exception ex)
             {
                 Log.Instance.Error($"[CenoCC][Login][cbxNetwork_SelectedIndexChanged][Exception][{ex.Message}]");
+            }
+        }
+
+        private void cbxKvp_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.m_bIsLoad) return;
+
+                ///联动选择
+                this.cbxServer.SelectedItem = this.cbxKvp.SelectedValue;
+
+                Log.Instance.Success($"[CenoCC][Login][cbxKvp_SelectedIndexChanged][{this.m_pIPv4?.tag}]");
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][Login][cbxKvp_SelectedIndexChanged][Exception][{ex.Message}]");
             }
         }
     }

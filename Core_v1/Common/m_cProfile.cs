@@ -169,6 +169,8 @@ namespace Core_v1
         #endregion
 
         #region ***处理后的服务器IP列表
+        public static SortedDictionary<string, KeyValuePair<string, string>> m_lServerName = new SortedDictionary<string, KeyValuePair<string, string>>();
+
         private static string[] _m_lServerIP;
         public static string[] m_lServerIP
         {
@@ -184,9 +186,24 @@ namespace Core_v1
                             string[] m_lString = m_cProfile.serverip.Split(',');
                             foreach (var item in m_lString)
                             {
-                                if (!string.IsNullOrWhiteSpace(item) && !m_pSortedDictionary.ContainsKey(item))
+                                if (!string.IsNullOrWhiteSpace(item))
                                 {
-                                    m_pSortedDictionary.Add(item, item);
+                                    ///分割名与值
+                                    string[] m_lKvp = item.Split('|');
+                                    string k = item;
+                                    string v = item;
+                                    if (m_lKvp.Length > 1)
+                                    {
+                                        k = m_lKvp[0];
+                                        v = m_lKvp[1];
+                                    }
+                                    ///绑定
+                                    if (!m_pSortedDictionary.ContainsKey(v))
+                                    {
+                                        m_pSortedDictionary.Add(v, v);
+                                        if (k != v) m_lServerName.Add(v, new KeyValuePair<string, string>(k, $"{k}({v})"));
+                                        else m_lServerName.Add(v, new KeyValuePair<string, string>(v, v));
+                                    }
                                 }
                             }
                             _m_lServerIP = m_pSortedDictionary.Select(x => x.Value).ToArray();
@@ -207,20 +224,34 @@ namespace Core_v1
         {
             try
             {
-                SortedDictionary<string, string> m_pSortedDictionary = new SortedDictionary<string, string>();
+                SortedDictionary<string, KeyValuePair<string, string>> m_pSortedDictionary = new SortedDictionary<string, KeyValuePair<string, string>>();
                 string[] m_lString = m_cProfile.serverip.Split(',');
                 foreach (var item in m_lString)
                 {
-                    if (!string.IsNullOrWhiteSpace(item) && !m_pSortedDictionary.ContainsKey(item))
+                    if (!string.IsNullOrWhiteSpace(item))
                     {
-                        m_pSortedDictionary.Add(item, item);
+                        ///分割名与值
+                        string[] m_lKvp = item.Split('|');
+                        string k = item;
+                        string v = item;
+                        if (m_lKvp.Length > 1)
+                        {
+                            k = m_lKvp[0];
+                            v = m_lKvp[1];
+                        }
+                        ///绑定
+                        if (!m_pSortedDictionary.ContainsKey(v))
+                        {
+                            if (k != v) m_pSortedDictionary.Add(v, new KeyValuePair<string, string>(k, $"{k}({v})"));
+                            else m_pSortedDictionary.Add(v, new KeyValuePair<string, string>(v, v));
+                        }
                     }
                 }
                 if (!m_pSortedDictionary.ContainsKey(m_cProfile.server))
                 {
-                    m_pSortedDictionary.Add(m_cProfile.server, m_cProfile.server);
+                    m_pSortedDictionary.Add(m_cProfile.server, new KeyValuePair<string, string>(m_cProfile.server, m_cProfile.server));
                 }
-                m_cProfile.serverip = string.Join(",", m_pSortedDictionary.Select(x => x.Value).ToArray());
+                m_cProfile.serverip = string.Join(",", m_pSortedDictionary.Select(x => $"{(x.Value.Key == x.Key ? $"{x.Key}" : $"{x.Value.Key}|{x.Key}")}").ToArray());
                 m_cProfile.m_fSet("D", "server", m_cProfile.server);
                 m_cProfile.m_fSet("D", "database", m_cProfile.database);
                 m_cProfile.m_fSet("D", "uid", m_cProfile.uid);

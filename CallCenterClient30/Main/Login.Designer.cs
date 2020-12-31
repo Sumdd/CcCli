@@ -239,7 +239,7 @@
             this.cbxKvp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKvp.Font = new System.Drawing.Font("幼圆", 9F, System.Drawing.FontStyle.Bold);
             this.cbxKvp.FormattingEnabled = true;
-            this.cbxKvp.Location = new System.Drawing.Point(23, 245);
+            this.cbxKvp.Location = new System.Drawing.Point(23, 248);
             this.cbxKvp.Name = "cbxKvp";
             this.cbxKvp.Size = new System.Drawing.Size(254, 20);
             this.cbxKvp.TabIndex = 4;
@@ -250,7 +250,7 @@
             this.label1.Font = new System.Drawing.Font("幼圆", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.Location = new System.Drawing.Point(21, 230);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(256, 12);
+            this.label1.Size = new System.Drawing.Size(256, 15);
             this.label1.TabIndex = 105;
             this.label1.Text = "选择呼叫中心服务器";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

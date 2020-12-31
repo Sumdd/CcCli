@@ -48,6 +48,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cbxNetwork = new System.Windows.Forms.ComboBox();
             this.cbxKvp = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -112,8 +113,7 @@
             this.btnSetting.Location = new System.Drawing.Point(212, 277);
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(65, 30);
-            this.btnSetting.TabIndex = 4;
-            this.btnSetting.TabStop = false;
+            this.btnSetting.TabIndex = 5;
             this.btnSetting.Tag = "1";
             this.btnSetting.Text = "精简";
             this.btnSetting.UseVisualStyleBackColor = true;
@@ -126,7 +126,7 @@
             this.cbxServer.Location = new System.Drawing.Point(127, 333);
             this.cbxServer.Name = "cbxServer";
             this.cbxServer.Size = new System.Drawing.Size(150, 27);
-            this.cbxServer.TabIndex = 5;
+            this.cbxServer.TabIndex = 6;
             // 
             // txtDatabase
             // 
@@ -134,7 +134,7 @@
             this.txtDatabase.Location = new System.Drawing.Point(127, 366);
             this.txtDatabase.Name = "txtDatabase";
             this.txtDatabase.Size = new System.Drawing.Size(150, 28);
-            this.txtDatabase.TabIndex = 6;
+            this.txtDatabase.TabIndex = 7;
             this.txtDatabase.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtDuid
@@ -143,7 +143,7 @@
             this.txtDuid.Location = new System.Drawing.Point(127, 400);
             this.txtDuid.Name = "txtDuid";
             this.txtDuid.Size = new System.Drawing.Size(150, 28);
-            this.txtDuid.TabIndex = 7;
+            this.txtDuid.TabIndex = 8;
             this.txtDuid.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtDpwd
@@ -152,7 +152,7 @@
             this.txtDpwd.Location = new System.Drawing.Point(127, 434);
             this.txtDpwd.Name = "txtDpwd";
             this.txtDpwd.Size = new System.Drawing.Size(150, 28);
-            this.txtDpwd.TabIndex = 8;
+            this.txtDpwd.TabIndex = 9;
             this.txtDpwd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtDpwd.UseSystemPasswordChar = true;
             // 
@@ -231,7 +231,7 @@
             this.cbxNetwork.Location = new System.Drawing.Point(23, 468);
             this.cbxNetwork.Name = "cbxNetwork";
             this.cbxNetwork.Size = new System.Drawing.Size(254, 20);
-            this.cbxNetwork.TabIndex = 103;
+            this.cbxNetwork.TabIndex = 10;
             this.cbxNetwork.SelectedIndexChanged += new System.EventHandler(this.cbxNetwork_SelectedIndexChanged);
             // 
             // cbxKvp
@@ -239,17 +239,28 @@
             this.cbxKvp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxKvp.Font = new System.Drawing.Font("幼圆", 9F, System.Drawing.FontStyle.Bold);
             this.cbxKvp.FormattingEnabled = true;
-            this.cbxKvp.Location = new System.Drawing.Point(23, 228);
+            this.cbxKvp.Location = new System.Drawing.Point(23, 245);
             this.cbxKvp.Name = "cbxKvp";
             this.cbxKvp.Size = new System.Drawing.Size(254, 20);
-            this.cbxKvp.TabIndex = 104;
+            this.cbxKvp.TabIndex = 4;
             this.cbxKvp.SelectedIndexChanged += new System.EventHandler(this.cbxKvp_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.Font = new System.Drawing.Font("幼圆", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(21, 230);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(256, 12);
+            this.label1.TabIndex = 105;
+            this.label1.Text = "选择呼叫中心服务器";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(300, 515);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cbxKvp);
             this.Controls.Add(this.cbxNetwork);
             this.Controls.Add(this.pictureBox3);
@@ -302,5 +313,6 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.ComboBox cbxNetwork;
         private System.Windows.Forms.ComboBox cbxKvp;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -90,11 +90,11 @@
             // lblTip
             // 
             this.lblTip.AutoSize = true;
-            this.lblTip.Font = new System.Drawing.Font("幼圆", 14F);
+            this.lblTip.Font = new System.Drawing.Font("幼圆", 12F, System.Drawing.FontStyle.Bold);
             this.lblTip.ForeColor = System.Drawing.Color.Red;
-            this.lblTip.Location = new System.Drawing.Point(19, 230);
+            this.lblTip.Location = new System.Drawing.Point(20, 285);
             this.lblTip.Name = "lblTip";
-            this.lblTip.Size = new System.Drawing.Size(0, 19);
+            this.lblTip.Size = new System.Drawing.Size(0, 16);
             this.lblTip.TabIndex = 100;
             // 
             // label2

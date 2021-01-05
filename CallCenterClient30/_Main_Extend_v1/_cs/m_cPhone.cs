@@ -14,7 +14,7 @@ namespace CenoCC
     public class m_cPhone
     {
         ///修改规则,如果尾缀有*1000等格式则判断为内呼,并兼容内呼规则
-        public static Regex m_rRegex = new Regex("(.*)[*][0-9][0-9][0-9][0-9]$");
+        public static Regex m_rRegex = new Regex("(.*)[*](\\d{4,})$");
         public static Regex m_rRegex2 = new Regex("^(\\*?)[7][0178][\\*](\\d*)$");
         public static List<string> m_fGetPhoneNumberMemo(string m_sPhoneNumber, out bool m_bIsNeedGetContact, out string m_sDt, out string m_sCardType, out string m_sZipCode)
         {
@@ -65,7 +65,8 @@ namespace CenoCC
                      */
 
                     case '*':
-                        if (m_rRegex.IsMatch(m_sPhoneNumber))
+                        ///兼容新内呼规则及呼叫前转的判断
+                        if (m_rRegex.IsMatch(m_sPhoneNumber) && !m_sPhoneNumber.StartsWith("*57*"))
                         {
                             m_sFirstChar = Special.Star;
                             m_sRealPhoneNumberStr = m_sPhoneNumber.Substring(1);
@@ -86,8 +87,8 @@ namespace CenoCC
                     case '0':
                     default:
                         m_sFirstChar = Special.Zero;
-
-                        if (m_rRegex.IsMatch(m_sPhoneNumber))
+                        ///兼容新内呼规则及呼叫前转的判断
+                        if (m_rRegex.IsMatch(m_sPhoneNumber) && !m_sPhoneNumber.StartsWith("0*57*"))
                         {
                             ///判断为内呼,并兼容内呼规则
                             m_sFirstChar = Special.Star;

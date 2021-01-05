@@ -117,7 +117,8 @@ namespace CenoCC
                 /// ]]>
                 if (Call_ClientParamUtil.m_bIsUseShare)
                 {
-                    this.m_pThread = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                    BackgroundWorker m_pBackgroundWorker = new BackgroundWorker();
+                    m_pBackgroundWorker.DoWork += (a, b) =>
                     {
                         try
                         {
@@ -138,14 +139,7 @@ namespace CenoCC
 
                                 if (m_lListViewItem != null && m_lListViewItem.Count > 0)
                                 {
-                                    ListViewGroup m_pShareListViewGroup = new ListViewGroup("共享号码");
-                                    ListViewItem[] _m_lListViewItem = m_lListViewItem.ToArray();
-                                    this.BeginInvoke(new MethodInvoker(() =>
-                                    {
-                                        this.listView.Groups.Add(m_pShareListViewGroup);
-                                        m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
-                                        this.listView.Items.AddRange(_m_lListViewItem);
-                                    }));
+                                    b.Result = m_lListViewItem;
                                 }
                             }
                         }
@@ -153,9 +147,19 @@ namespace CenoCC
                         {
                             Core_v1.Log.Instance.Error($"[CenoCC][ShareNumber][m_fGetBody][Thread][Exception][{ex.Message}]");
                         }
-
-                    }));
-                    this.m_pThread.Start();
+                    };
+                    m_pBackgroundWorker.RunWorkerCompleted += (a, b) =>
+                    {
+                        if (b.Result != null)
+                        {
+                            ListViewGroup m_pShareListViewGroup = new ListViewGroup("共享号码");
+                            ListViewItem[] _m_lListViewItem = (b.Result as List<ListViewItem>).ToArray();
+                            this.listView.Groups.Add(m_pShareListViewGroup);
+                            m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
+                            this.listView.Items.AddRange(_m_lListViewItem);
+                        }
+                    };
+                    m_pBackgroundWorker.RunWorkerAsync();
                 }
 
                 ///<![CDATA[
@@ -166,7 +170,8 @@ namespace CenoCC
                     if (Call_ParamUtil.m_bUseApply && Call_ClientParamUtil.m_bUseApply)
                     {
                         ///执行api加载号码,这里直接走自己的9464接口api,尽可能少调整客户端即可
-                        new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                        BackgroundWorker m_pBackgroundWorker = new BackgroundWorker();
+                        m_pBackgroundWorker.DoWork += (a, b) =>
                         {
                             try
                             {
@@ -197,14 +202,7 @@ namespace CenoCC
 
                                         if (m_lListViewItem != null && m_lListViewItem.Count > 0)
                                         {
-                                            ListViewGroup m_pShareListViewGroup = new ListViewGroup("独立服务");
-                                            ListViewItem[] _m_lListViewItem = m_lListViewItem.ToArray();
-                                            this.BeginInvoke(new MethodInvoker(() =>
-                                            {
-                                                this.listView.Groups.Add(m_pShareListViewGroup);
-                                                m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
-                                                this.listView.Items.AddRange(_m_lListViewItem);
-                                            }));
+                                            b.Result = m_lListViewItem;
                                         }
                                     }
                                     else m_sErrMsg = _m_mResponseJSON.msg;
@@ -222,7 +220,19 @@ namespace CenoCC
                             {
                                 Log.Instance.Error($"[CenoCC][MinChat][DefWndProc][WM_DRAWCLIPBOARD][ShareApi][Exception][{ex.Message}]");
                             }
-                        })).Start();
+                        };
+                        m_pBackgroundWorker.RunWorkerCompleted += (a, b) =>
+                        {
+                            if (b.Result != null)
+                            {
+                                ListViewGroup m_pShareListViewGroup = new ListViewGroup("独立服务");
+                                ListViewItem[] _m_lListViewItem = (b.Result as List<ListViewItem>).ToArray();
+                                this.listView.Groups.Add(m_pShareListViewGroup);
+                                m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
+                                this.listView.Items.AddRange(_m_lListViewItem);
+                            }
+                        };
+                        m_pBackgroundWorker.RunWorkerAsync();
                     }
                     #endregion
                 }

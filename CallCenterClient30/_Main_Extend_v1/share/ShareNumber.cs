@@ -140,7 +140,7 @@ namespace CenoCC
                                 {
                                     ListViewGroup m_pShareListViewGroup = new ListViewGroup("共享号码");
                                     ListViewItem[] _m_lListViewItem = m_lListViewItem.ToArray();
-                                    this.Invoke(new MethodInvoker(() =>
+                                    this.BeginInvoke(new MethodInvoker(() =>
                                     {
                                         this.listView.Groups.Add(m_pShareListViewGroup);
                                         m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);
@@ -199,7 +199,7 @@ namespace CenoCC
                                         {
                                             ListViewGroup m_pShareListViewGroup = new ListViewGroup("独立服务");
                                             ListViewItem[] _m_lListViewItem = m_lListViewItem.ToArray();
-                                            this.Invoke(new MethodInvoker(() =>
+                                            this.BeginInvoke(new MethodInvoker(() =>
                                             {
                                                 this.listView.Groups.Add(m_pShareListViewGroup);
                                                 m_pShareListViewGroup.Items.AddRange(_m_lListViewItem);

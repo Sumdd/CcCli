@@ -65,8 +65,8 @@ namespace CenoCC
                      */
 
                     case '*':
-                        ///兼容新内呼规则及呼叫前转的判断
-                        if (m_rRegex.IsMatch(m_sPhoneNumber) && !m_sPhoneNumber.StartsWith("*57*"))
+                        ///如果*开头未加0,默认都走内呼,也就是基本不会出现业务
+                        if (m_rRegex.IsMatch(m_sPhoneNumber))
                         {
                             m_sFirstChar = Special.Star;
                             m_sRealPhoneNumberStr = m_sPhoneNumber.Substring(1);
@@ -80,7 +80,7 @@ namespace CenoCC
                             m_sPhoneAddressStr = "业务";
                             m_sDealWithStr = Special.Complete;
 
-                            ///验证业务性
+                            ///验证本地业务性
                             if (m_rRegex2.IsMatch(m_sPhoneNumber)) m_sFirstChar = Special.Star;
                         }
                         break;
@@ -88,7 +88,9 @@ namespace CenoCC
                     default:
                         m_sFirstChar = Special.Zero;
                         ///兼容新内呼规则及呼叫前转的判断
-                        if (m_rRegex.IsMatch(m_sPhoneNumber) && !m_sPhoneNumber.StartsWith("0*57*"))
+                        if (m_rRegex.IsMatch(m_sPhoneNumber) &&
+                            ///除去运营商的业务性
+                            !m_sPhoneNumber.StartsWith("0*") && !m_sPhoneNumber.StartsWith("0#") && !m_sPhoneNumber.StartsWith("#"))
                         {
                             ///判断为内呼,并兼容内呼规则
                             m_sFirstChar = Special.Star;
@@ -109,7 +111,7 @@ namespace CenoCC
                             m_sPhoneAddressStr = "业务";
                             m_sDealWithStr = Special.Complete;
 
-                            ///验证业务性
+                            ///验证本地业务性
                             if (m_rRegex2.IsMatch(m_sPhoneNumber)) m_sFirstChar = Special.Star;
                         }
                         else

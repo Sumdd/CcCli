@@ -9,10 +9,11 @@ namespace CenoCC
 {
 	partial class Main_Frm
 	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+        public static FormWindowState lastFormWindowState = FormWindowState.Normal;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
 		/// <summary>
 		/// Clean up any resources being used.
@@ -495,10 +496,16 @@ namespace CenoCC
 
 		private void panel19_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (this.WindowState == FormWindowState.Maximized)
-				this.WindowState = FormWindowState.Normal;
-			else
-				this.WindowState = FormWindowState.Maximized;
+            if (this.WindowState == FormWindowState.Maximized)
+            {
+                this.WindowState = FormWindowState.Normal;
+                Main_Frm.lastFormWindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Maximized;
+                Main_Frm.lastFormWindowState = FormWindowState.Maximized;
+            }
 		}
 
 		private void panel20_MouseClick(object sender, MouseEventArgs e)

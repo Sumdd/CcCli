@@ -776,7 +776,10 @@ namespace CenoCC {
             }
             else
             {
-                MinChat.MainBrowserForm.WindowState = FormWindowState.Normal;
+                if (MinChat.MainBrowserForm.WindowState == FormWindowState.Minimized)
+                {
+                    MinChat.MainBrowserForm.WindowState = Main_Frm.lastFormWindowState;
+                }
                 MinChat.MainBrowserForm.Visible = true;
             }
             MinChat.MainBrowserForm.BringToFront();

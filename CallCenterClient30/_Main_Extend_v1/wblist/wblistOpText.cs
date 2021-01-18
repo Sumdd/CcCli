@@ -31,7 +31,8 @@ SELECT
 	`call_wblist`.`ordernum`, 
 	`call_wblist`.`wbname`,
 	`call_wblist`.`wbnumber`,
-	`call_wblist`.`wblimittype`
+	`call_wblist`.`wblimittype`, 
+	`call_wblist`.`wbtype` 
 FROM
 	`call_wblist` 
 ORDER BY
@@ -40,7 +41,7 @@ ORDER BY
                     DataTable m_pDataTable = DataBaseUtil.MySQL_Method.BindTable(m_sSQL);
                     if (m_pDataTable != null && m_pDataTable.Rows.Count > 0)
                     {
-                        this.txtText.Text = string.Join("\r\n", m_pDataTable.AsEnumerable().Select(x => $"{x.Field<object>("ordernum")} {x.Field<object>("wbname")} {x.Field<object>("wbnumber")} {x.Field<object>("wblimittype")}"));
+                        this.txtText.Text = string.Join("\r\n", m_pDataTable.AsEnumerable().Select(x => $"{x.Field<object>("ordernum")} {x.Field<object>("wbname")} {x.Field<object>("wbnumber")} {x.Field<object>("wblimittype")} {x.Field<object>("wbtype")}"));
                     }
                 }
                 catch (Exception ex)
@@ -78,17 +79,19 @@ ORDER BY
                     {
                         m_uRow++;
                         string[] m_lPages = item.Split(' ');
-                        if (m_lPages.Length == 4)
+                        if (m_lPages.Length == 5)
                         {
                             Model_v1.m_mWblist _m_mWblist = new Model_v1.m_mWblist();
                             _m_mWblist.ordernum = float.Parse(m_lPages[0]);
                             _m_mWblist.wbname = m_lPages[1];
                             _m_mWblist.wbnumber = m_lPages[2];
                             _m_mWblist.wblimittype = int.Parse(m_lPages[3]);
+                            _m_mWblist.wbtype = int.Parse(m_lPages[4]);
                             if (_m_mWblist.wblimittype > 3 || _m_mWblist.wblimittype < 1) throw new Exception($"行:{m_uRow};数据:{item},第4列值仅可为1呼入2呼出3呼入呼出");
+                            if (_m_mWblist.wbtype > 2 || _m_mWblist.wblimittype < 1) throw new Exception($"行:{m_uRow};数据:{item},第5列值仅可为1白名单2黑名单");
                             m_lWblistTable.Add(_m_mWblist);
                         }
-                        else throw new Exception($"行:{m_uRow};数据:{item},空格分割后列数为{m_lPages.Length},需4列");
+                        else throw new Exception($"行:{m_uRow};数据:{item},空格分割后列数为{m_lPages.Length},需5列");
                     }
                 }
 
@@ -108,7 +111,7 @@ ORDER BY
                                 string m_sInsertSQL = $@"
 INSERT INTO `call_wblist` ( `wbname`, `wbnumber`, `wbtype`, `addtime`, `adduser`, `ordernum`, `wblimittype` )
 VALUES
-	( '{item.wbname}', '{item.wbnumber}', 2, '{m_sNow}', {Common.AgentInfo.AgentID}, {item.ordernum}, {item.wblimittype} );
+	( '{item.wbname}', '{item.wbnumber}', {item.wbtype}, '{m_sNow}', {Common.AgentInfo.AgentID}, {item.ordernum}, {item.wblimittype} );
 ";
                                 m_lSQL.Add(m_sInsertSQL);
                             }

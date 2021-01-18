@@ -156,7 +156,7 @@
             this.MaximizeBox = false;
             this.Name = "wblistOp";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "路由添加";
+            this.Text = "黑白名单添加或编辑";
             this.ResumeLayout(false);
             this.PerformLayout();
 

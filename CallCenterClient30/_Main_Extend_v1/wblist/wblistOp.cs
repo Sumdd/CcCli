@@ -59,7 +59,8 @@ namespace CenoCC
                     this.cbxWbtype.SelectedValue = 2;
                 }
 
-                this.cbxWbtype.Enabled = false;
+                ///支持白名单的添加
+                ///this.cbxWbtype.Enabled = false;
             }
 
             ///限制类型

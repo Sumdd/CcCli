@@ -61,7 +61,8 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(259, 82);
             this.label1.TabIndex = 14;
-            this.label1.Text = "索引 名称 表达式 限制类型\r\n0 浦发 123456 3\r\n1 民生 654321 3\r\n限制类型：1呼入2呼出3呼入呼出";
+            this.label1.Text = "索引 名称 表达式 限制类型 黑白名单类型\r\n0 浦发 123456 3 1\r\n1 民生 654321 3 2\r\n限制类型：1呼入2呼出3呼入呼出\r\n黑白名单类型" +
+    "：1白名单2黑名单";
             // 
             // wblistOpText
             // 
@@ -75,7 +76,7 @@
             this.MaximizeBox = false;
             this.Name = "wblistOpText";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "路由文本";
+            this.Text = "黑白名单文本";
             this.ResumeLayout(false);
             this.PerformLayout();
 

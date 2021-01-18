@@ -48,6 +48,10 @@
             this.cboTeam = new System.Windows.Forms.ComboBox();
             this.cboRole = new System.Windows.Forms.ComboBox();
             this.lblTips = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.nudLimitTheDial = new System.Windows.Forms.NumericUpDown();
+            this.btnLimitTheDial = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitTheDial)).BeginInit();
             this.SuspendLayout();
             // 
             // txtUa
@@ -234,11 +238,46 @@
             this.lblTips.TabIndex = 20;
             this.lblTips.Text = "-";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 369);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(119, 12);
+            this.label8.TabIndex = 21;
+            this.label8.Text = "同号码限呼(0不限制)";
+            // 
+            // nudLimitTheDial
+            // 
+            this.nudLimitTheDial.Location = new System.Drawing.Point(152, 367);
+            this.nudLimitTheDial.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudLimitTheDial.Name = "nudLimitTheDial";
+            this.nudLimitTheDial.Size = new System.Drawing.Size(120, 21);
+            this.nudLimitTheDial.TabIndex = 22;
+            // 
+            // btnLimitTheDial
+            // 
+            this.btnLimitTheDial.Location = new System.Drawing.Point(197, 394);
+            this.btnLimitTheDial.Name = "btnLimitTheDial";
+            this.btnLimitTheDial.Size = new System.Drawing.Size(75, 23);
+            this.btnLimitTheDial.TabIndex = 23;
+            this.btnLimitTheDial.Tag = "user_baseinfo_limitthedial";
+            this.btnLimitTheDial.Text = "确定";
+            this.btnLimitTheDial.UseVisualStyleBackColor = true;
+            this.btnLimitTheDial.Click += new System.EventHandler(this.btnLimitTheDial_Click);
+            // 
             // userBaseInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 371);
+            this.ClientSize = new System.Drawing.Size(284, 439);
+            this.Controls.Add(this.btnLimitTheDial);
+            this.Controls.Add(this.nudLimitTheDial);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.lblTips);
             this.Controls.Add(this.cboRole);
             this.Controls.Add(this.cboTeam);
@@ -261,6 +300,7 @@
             this.Controls.Add(this.txtUa);
             this.Name = "userBaseInfo";
             this.Text = "基本信息";
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitTheDial)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -288,5 +328,8 @@
         private System.Windows.Forms.ComboBox cboTeam;
         private System.Windows.Forms.ComboBox cboRole;
         private System.Windows.Forms.Label lblTips;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown nudLimitTheDial;
+        private System.Windows.Forms.Button btnLimitTheDial;
     }
 }

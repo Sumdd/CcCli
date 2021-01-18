@@ -350,6 +350,7 @@ namespace Model_v1
         public string wbname { get; set; }
         public string wbnumber { get; set; }
         public int wblimittype { get; set; }
+        public int wbtype { get; set; }
     }
 
     public class m_mInrule

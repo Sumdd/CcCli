@@ -80,6 +80,7 @@ namespace CenoCC
                         string m_sTeam = string.Empty;
                         string m_sRole = string.Empty;
                         int m_sID = -1;
+                        int m_uLimitTheDial = 0;
                         if (this._entity?.list?.SelectedItems?.Count == 1)
                         {
                             ListViewItem m_pListViewItem = this._entity?.list?.SelectedItems[0];
@@ -88,7 +89,17 @@ namespace CenoCC
                             m_sTeam = m_pListViewItem.SubItems["teamid"].Text;
                             m_sRole = m_pListViewItem.SubItems["roleid"].Text;
                             m_sID = Convert.ToInt32(m_pListViewItem.SubItems["id"].Text);
+                            m_uLimitTheDial = Convert.ToInt32(m_pListViewItem.SubItems["limitthedial"].Text);
                         }
+
+                        ///查询出当前默认的同号码限呼设定值
+                        string m_sSQL = $@"
+SELECT
+	IFNULL( ( SELECT `dial_parameter`.`v` FROM `dial_parameter` WHERE `dial_parameter`.`k` = 'limitthedial' LIMIT 1 ), 0 ) AS `limitthedial`;
+";
+                        int m_uDefLimittTheDial = 0;
+                        DataTable m_pDataTable = MySQL_Method.BindTable(m_sSQL);
+                        if (m_pDataTable != null && m_pDataTable.Rows.Count > 0) m_uDefLimittTheDial = Convert.ToInt32(m_pDataTable.Rows[0]["limitthedial"]);
 
                         if (m_uID == -1)
                         {
@@ -98,9 +109,13 @@ namespace CenoCC
                             this.btnLoginName.Enabled = false;
                             ///密码不可批量更改
                             this.btnPassword.Enabled = false;
+                            ///赋值默认
+                            this.nudLimitTheDial.Value = m_uDefLimittTheDial;
                         }
                         else
                         {
+                            this.nudLimitTheDial.Value = m_uLimitTheDial;
+
                             if (m_sID == 1000)
                             {
                                 ///姓名不可更改
@@ -716,6 +731,103 @@ SELECT
             catch (Exception ex)
             {
                 Log.Instance.Error($"[CenoCC][userBaseInfo][btnPassword_Click][Exception][{ex.Message}]");
+            }
+        }
+
+        private void btnLimitTheDial_Click(object sender, EventArgs e)
+        {
+            List<string> m_lID = new List<string>();
+            if (this.m_uID == -1)
+            {
+                if (this._entity?.list?.SelectedItems?.Count > 0)
+                {
+                    foreach (ListViewItem item in this._entity?.list?.SelectedItems)
+                    {
+                        m_lID.Add(item?.SubItems["id"]?.Text);
+                    }
+                }
+            }
+            else
+            {
+                m_lID.Add(this.m_uID.ToString());
+            }
+
+            if (m_lID.Count <= 0)
+            {
+                MessageBox.Show(this, "请至少选择一行进行同号码限呼修改");
+                return;
+            }
+
+            ///同号码限呼次数
+            int m_uLimitTheDial = Convert.ToInt32(this.nudLimitTheDial.Value);
+
+            string m_sCurrentPassword = this.txtCurrentPassword.Text;
+            if (string.IsNullOrWhiteSpace(m_sCurrentPassword))
+            {
+                MessageBox.Show(this, "请输入当前密码");
+                return;
+            }
+            if (this.m_bDoing)
+                return;
+            try
+            {
+                new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+                {
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        try
+                        {
+                            string m_sSQL = $@"
+SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `call_agent` AS `T0` WHERE `T0`.`ID` = '{Common.AgentInfo.AgentID}' AND `T0`.`LoginPassWord` = '{Common.Encrypt.EncryptString(m_sCurrentPassword)}' ), 0 );
+UPDATE `call_clientparam` 
+SET `call_clientparam`.`limitthedial` = {m_uLimitTheDial} 
+WHERE
+	`call_clientparam`.`ID` IN ( SELECT `call_agent`.`ClientParamID` FROM `call_agent` WHERE `call_agent`.`ID` IN ( {string.Join(",", m_lID)} ) ) 
+	AND @m_uCount = 1;
+SELECT
+	@m_uCount AS `status`,
+	ROW_COUNT( ) AS `count`;
+";
+                            DataTable m_pDataTable = MySQL_Method.BindTable(m_sSQL);
+                            if (m_pDataTable != null && m_pDataTable.Rows.Count > 0)
+                            {
+                                int m_uStatus = Convert.ToInt32(m_pDataTable.Rows[0]["status"]);
+                                int m_uCount = Convert.ToInt32(m_pDataTable.Rows[0]["count"]);
+                                if (m_uStatus == 1 && m_uCount > 0)
+                                {
+                                    if (this.SearchEvent != null)
+                                        this.SearchEvent(sender, e);
+                                    MessageBox.Show(this, "修改同号码限呼成功");
+                                }
+                                else if (m_uStatus != 1)
+                                {
+                                    MessageBox.Show(this, "当前密码错误");
+                                }
+                                else
+                                {
+                                    MessageBox.Show(this, "修改同号码限呼完成");
+                                }
+                                return;
+                            }
+                            MessageBox.Show(this, "修改同号码限呼失败");
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Instance.Error($"[CenoCC][userBaseInfo][btnLimitTheDial_Click][Thread][Exception][{ex.Message}]");
+                            MessageBox.Show(this, $"修改同号码限呼时出错:{ex.Message}");
+                        }
+                        finally
+                        {
+                            //this.txtCurrentPassword.Clear();
+                            this.m_bDoing = false;
+                        }
+                    }));
+
+                })).Start();
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][userBaseInfo][btnLimitTheDial_Click][Exception][{ex.Message}]");
             }
         }
     }

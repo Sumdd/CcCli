@@ -105,6 +105,7 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "a.agentname", Text = "姓名", Width = 100, ImageIndex = 1, Tag = "asc" });
             this.list.Columns.Add(new ColumnHeader() { Name = "a.loginname", Text = "登录名", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "`T0`.`numberstate`", Text = "线路状态", Width = 160, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`limitthedial`", Text = "同号码限呼", Width = 105, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.chtype", Text = "通道类型", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.domainname", Text = "分机SIP注册域", Width = 120, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.sipserverip", Text = "分机SIP注册地址", Width = 145, ImageIndex = 0 });
@@ -136,6 +137,7 @@ namespace CenoCC {
 	a.agentname,
 	a.loginname,
     ifnull(`T0`.`numberstate`,'【启:0】【禁:0】【共:0】') as numberstate,
+    `T1`.`limitthedial` AS `limitthedial`, 
     c.id as chid,
 	case when c.chtype = 16 then 'SIP通道'
 			 when c.chtype = 256 then '自动外呼通道'
@@ -175,6 +177,14 @@ WHERE
 GROUP BY
 useuser 
 ) `T0` ON `T0`.`useuser` = a.ID
+LEFT JOIN
+(
+    SELECT
+	    `call_clientparam`.`limitthedial`, 
+	    `call_clientparam`.`ID` 
+    FROM
+	    `call_clientparam` 
+) `T1` ON `T1`.`ID` = `a`.`ClientParamID`
 ";
                     this.qop.pager = this.ucPager.pager;
                     //this.qop.PrimaryKey = "rownum";
@@ -203,6 +213,22 @@ useuser
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "agentname", Text = dr["agentname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "loginname", Text = dr["loginname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "numberstate", Text = dr["numberstate"].ToString() });
+
+                            ///同号码限呼
+                            {
+                                var m_pSubItem = new ListViewItem.ListViewSubItem();
+                                m_pSubItem.Name = "limitthedialname";
+                                if (dr["limitthedial"].ToString() == "0")
+                                {
+                                    m_pSubItem.Text = "不限制";
+                                }
+                                else
+                                {
+                                    m_pSubItem.Text = dr["limitthedial"].ToString();
+                                }
+                                listViewItem.SubItems.Add(m_pSubItem);
+                            }
+
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chtypename", Text = dr["chtypename"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "domainname", Text = dr["domainname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "sipserverip", Text = dr["sipserverip"].ToString() });
@@ -211,28 +237,34 @@ useuser
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chpassword", Text = dr["chpassword"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "sipport", Text = dr["sipport"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "regtime", Text = dr["regtime"].ToString() });
-                            var m_pSubItem = new ListViewItem.ListViewSubItem();
-                            m_pSubItem.Name = "isregister";
-                            if (dr["isregister"].ToString() == "1")
+
+                            ///注册模式
                             {
-                                m_pSubItem.Text = "PC注册";
-                                m_pSubItem.ForeColor = Color.Green;
+                                var m_pSubItem = new ListViewItem.ListViewSubItem();
+                                m_pSubItem.Name = "isregister";
+                                if (dr["isregister"].ToString() == "1")
+                                {
+                                    m_pSubItem.Text = "PC注册";
+                                    m_pSubItem.ForeColor = Color.Green;
+                                }
+                                else if (dr["isregister"].ToString() == "-1")
+                                {
+                                    m_pSubItem.Text = "Web调用";
+                                    m_pSubItem.ForeColor = Color.Red;
+                                }
+                                else
+                                {
+                                    m_pSubItem.Text = "PC非注册";
+                                    m_pSubItem.ForeColor = Color.Red;
+                                }
+                                listViewItem.SubItems.Add(m_pSubItem);
                             }
-                            else if (dr["isregister"].ToString() == "-1")
-                            {
-                                m_pSubItem.Text = "Web调用";
-                                m_pSubItem.ForeColor = Color.Red;
-                            }
-                            else
-                            {
-                                m_pSubItem.Text = "PC非注册";
-                                m_pSubItem.ForeColor = Color.Red;
-                            }
-                            listViewItem.SubItems.Add(m_pSubItem);
+
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "id", Text = dr["id"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chid", Text = dr["chid"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "teamid", Text = dr["teamid"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "roleid", Text = dr["roleid"].ToString() });
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "limitthedial", Text = dr["limitthedial"].ToString() });
                             this.list.Items.Add(listViewItem);
                         }
                         this.list.EndUpdate();

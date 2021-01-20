@@ -56,6 +56,9 @@
             this.cbxPrefixDealFlag = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
             this.btnInlimit_2Reload = new System.Windows.Forms.Button();
+            this.btnF99d999OK = new System.Windows.Forms.Button();
+            this.btnF99d999Reset = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnOK
@@ -352,7 +355,7 @@
             this.label10.Location = new System.Drawing.Point(12, 502);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 12);
-            this.label10.TabIndex = 42;
+            this.label10.TabIndex = 22;
             this.label10.Text = "呼叫内转配置";
             // 
             // btnInlimit_2Reload
@@ -360,17 +363,51 @@
             this.btnInlimit_2Reload.Location = new System.Drawing.Point(197, 497);
             this.btnInlimit_2Reload.Name = "btnInlimit_2Reload";
             this.btnInlimit_2Reload.Size = new System.Drawing.Size(75, 23);
-            this.btnInlimit_2Reload.TabIndex = 43;
+            this.btnInlimit_2Reload.TabIndex = 23;
             this.btnInlimit_2Reload.Tag = "diallimit_common_inlimit_2_reload";
             this.btnInlimit_2Reload.Text = "重载";
             this.btnInlimit_2Reload.UseVisualStyleBackColor = true;
             this.btnInlimit_2Reload.Click += new System.EventHandler(this.btnInlimit_2Reload_Click);
             // 
+            // btnF99d999OK
+            // 
+            this.btnF99d999OK.Location = new System.Drawing.Point(197, 526);
+            this.btnF99d999OK.Name = "btnF99d999OK";
+            this.btnF99d999OK.Size = new System.Drawing.Size(75, 23);
+            this.btnF99d999OK.TabIndex = 26;
+            this.btnF99d999OK.Tag = "diallimit_common_f99d999_ok";
+            this.btnF99d999OK.Text = "首发确定";
+            this.btnF99d999OK.UseVisualStyleBackColor = true;
+            this.btnF99d999OK.Click += new System.EventHandler(this.btnF99d999OK_Click);
+            // 
+            // btnF99d999Reset
+            // 
+            this.btnF99d999Reset.Location = new System.Drawing.Point(116, 526);
+            this.btnF99d999Reset.Name = "btnF99d999Reset";
+            this.btnF99d999Reset.Size = new System.Drawing.Size(75, 23);
+            this.btnF99d999Reset.TabIndex = 25;
+            this.btnF99d999Reset.Tag = "diallimit_common_f99d999_reset";
+            this.btnF99d999Reset.Text = "首发重置";
+            this.btnF99d999Reset.UseVisualStyleBackColor = true;
+            this.btnF99d999Reset.Click += new System.EventHandler(this.btnF99d999Reset_Click);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 531);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(77, 12);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "设置首发号码";
+            // 
             // cmnset
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 541);
+            this.ClientSize = new System.Drawing.Size(284, 558);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.btnF99d999Reset);
+            this.Controls.Add(this.btnF99d999OK);
             this.Controls.Add(this.btnInlimit_2Reload);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.btnPrefixDealFlagAll);
@@ -445,5 +482,8 @@
         private System.Windows.Forms.ComboBox cbxPrefixDealFlag;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Button btnInlimit_2Reload;
+        private System.Windows.Forms.Button btnF99d999OK;
+        private System.Windows.Forms.Button btnF99d999Reset;
+        private System.Windows.Forms.Label label11;
     }
 }

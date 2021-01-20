@@ -134,7 +134,7 @@
             // 
             // btnOrderNum
             // 
-            this.btnOrderNum.Location = new System.Drawing.Point(197, 243);
+            this.btnOrderNum.Location = new System.Drawing.Point(197, 276);
             this.btnOrderNum.Name = "btnOrderNum";
             this.btnOrderNum.Size = new System.Drawing.Size(75, 23);
             this.btnOrderNum.TabIndex = 11;
@@ -148,9 +148,9 @@
             this.label6.ForeColor = System.Drawing.Color.Red;
             this.label6.Location = new System.Drawing.Point(12, 210);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(260, 30);
+            this.label6.Size = new System.Drawing.Size(260, 63);
             this.label6.TabIndex = 12;
-            this.label6.Text = "数值可以为正负9999.999之间,正序排列,如果想使用的号码靠前排序请合理填写此数值即可";
+            this.label6.Text = "数值可以为负99.998到正99.999之间,正序排列,如果想使用的号码靠前排序请合理填写此数值即可。其中-99.999是首发态值，不可再在此处设定";
             // 
             // btnOkSame
             // 
@@ -167,7 +167,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 278);
+            this.ClientSize = new System.Drawing.Size(284, 311);
             this.Controls.Add(this.btnOkSame);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.btnOrderNum);

@@ -106,6 +106,7 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "a.loginname", Text = "登录名", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "`T0`.`numberstate`", Text = "线路状态", Width = 160, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`limitthedial`", Text = "同号码限呼", Width = 105, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`f99d999`", Text = "首发模式", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.chtype", Text = "通道类型", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.domainname", Text = "分机SIP注册域", Width = 120, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.sipserverip", Text = "分机SIP注册地址", Width = 145, ImageIndex = 0 });
@@ -138,6 +139,7 @@ namespace CenoCC {
 	a.loginname,
     ifnull(`T0`.`numberstate`,'【启:0】【禁:0】【共:0】') as numberstate,
     `T1`.`limitthedial` AS `limitthedial`, 
+    `T1`.`f99d999` AS `f99d999`, 
     c.id as chid,
 	case when c.chtype = 16 then 'SIP通道'
 			 when c.chtype = 256 then '自动外呼通道'
@@ -181,6 +183,7 @@ LEFT JOIN
 (
     SELECT
 	    `call_clientparam`.`limitthedial`, 
+	    `call_clientparam`.`f99d999`, 
 	    `call_clientparam`.`ID` 
     FROM
 	    `call_clientparam` 
@@ -229,6 +232,26 @@ LEFT JOIN
                                 listViewItem.SubItems.Add(m_pSubItem);
                             }
 
+                            ///首发模式
+                            {
+                                var m_pSubItem = new ListViewItem.ListViewSubItem();
+                                m_pSubItem.Name = "f99d999name";
+                                int m_uF99d999 = Convert.ToInt32(dr["f99d999"]);
+                                switch (m_uF99d999)
+                                {
+                                    case 0:
+                                        m_pSubItem.Text = "优先";
+                                        break;
+                                    case 1:
+                                        m_pSubItem.Text = "仅用首发";
+                                        break;
+                                    default:
+                                        m_pSubItem.Text = "Err模式";
+                                        break;
+                                }
+                                listViewItem.SubItems.Add(m_pSubItem);
+                            }
+
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chtypename", Text = dr["chtypename"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "domainname", Text = dr["domainname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "sipserverip", Text = dr["sipserverip"].ToString() });
@@ -265,6 +288,7 @@ LEFT JOIN
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "teamid", Text = dr["teamid"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "roleid", Text = dr["roleid"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "limitthedial", Text = dr["limitthedial"].ToString() });
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "f99d999", Text = dr["f99d999"].ToString() });
                             this.list.Items.Add(listViewItem);
                         }
                         this.list.EndUpdate();

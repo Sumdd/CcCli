@@ -296,26 +296,43 @@ WHERE
             return m_sResult;
         }
 
-        public static string m_fUpdateOrderNum(string m_sID, string m_sOrderNum)
+        public static string m_fUpdateOrderNum(string m_sID, string m_sOrderNum, out int status)
         {
+            status = 0;
             string m_sResult = string.Empty;
             try
             {
                 string m_sAsUpdateSQL = $@"
+SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `dial_limit` AS `T0` WHERE `T0`.`ID` = {m_sID} AND `T0`.`ordernum` = -99.999 ), 0 );
 UPDATE `dial_limit` 
 SET `ordernum` = '{m_sOrderNum}' 
 WHERE
-	`id` = {m_sID};
+	`id` = {m_sID}
+	AND @m_uCount < 1;
+SELECT
+	@m_uCount AS `status`,
+	ROW_COUNT( ) AS `count`;
 ";
-                if (MySQL_Method.ExecuteNonQuery(m_sAsUpdateSQL) > 0)
+                DataTable m_pDataTable = MySQL_Method.BindTable(m_sAsUpdateSQL);
+                if (m_pDataTable != null && m_pDataTable.Rows.Count > 0)
                 {
-                    m_sResult = $"修改排序成功:id:{m_sID}->ordernum:{m_sOrderNum}";
+                    int m_uStatus = Convert.ToInt32(m_pDataTable.Rows[0]["status"]);
+                    int m_uCount = Convert.ToInt32(m_pDataTable.Rows[0]["count"]);
+                    if (m_uStatus < 1 && m_uCount > 0)
+                    {
+                        m_sResult = $"修改排序成功:id:{m_sID}->ordernum:{m_sOrderNum}";
+                        status = 1;
+                    }
+                    else if (m_uStatus == 1)
+                    {
+                        m_sResult = $"修改排序失败:id:{m_sID}->ordernum:{m_sOrderNum},不可再在此处修改首发态数据";
+                    }
+                    else
+                    {
+                        m_sResult = "修改排序成功,但0行受影响!";
+                    }
                 }
-                else
-                {
-                    m_sResult = "修改排序成功,但0行受影响!";
-                }
-
+                else m_sResult = "修改排序失败,无结果集!";
             }
             catch (Exception ex)
             {

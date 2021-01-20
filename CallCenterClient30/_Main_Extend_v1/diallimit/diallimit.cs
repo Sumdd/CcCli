@@ -405,7 +405,24 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                                     break;
                             }
                             listViewItem.SubItems.Add(_prefixdealflag);
-                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ordernum", Text = dr["ordernum"].ToString() });
+
+                            ///排序首发态
+                            {
+                                ListViewItem.ListViewSubItem m_pOrderNumSubItem = new ListViewItem.ListViewSubItem();
+                                m_pOrderNumSubItem.Name = "ordernumname";
+                                float m_fOrderNum = float.Parse(dr["ordernum"].ToString());
+                                if (m_fOrderNum == -99.999f)
+                                {
+                                    m_pOrderNumSubItem.Text = $"首发";
+                                    m_pOrderNumSubItem.ForeColor = Color.Green;
+                                }
+                                else
+                                {
+                                    m_pOrderNumSubItem.Text = $"{m_fOrderNum}";
+                                }
+                                listViewItem.SubItems.Add(m_pOrderNumSubItem);
+                            }
+
                             //dtmf
                             if (dr["dtmf"].ToString() == Call_ParamUtil.inbound)
                             {
@@ -514,6 +531,7 @@ LEFT JOIN `dial_inlimit_2` ON `dial_inlimit_2`.`inlimit_2id` = `a`.`id`
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "usetheduration", Text = dr["usetheduration"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "id", Text = dr["id"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "isshare", Text = dr["isshare"].ToString() });
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "ordernum", Text = dr["ordernum"].ToString() });
                             this.list.Items.Add(listViewItem);
                         }
                         this.list.EndUpdate();

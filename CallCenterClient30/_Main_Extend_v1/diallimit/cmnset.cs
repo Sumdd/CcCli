@@ -502,5 +502,103 @@ namespace CenoCC {
                 Log.Instance.Error($"[CenoCC][cmnset][btnInlimit_2Reload_Click][Exception][{ex.Message}]");
             }
         }
+
+        private void btnF99d999OK_Click(object sender, EventArgs e)
+        {
+            if (this._common_)
+                return;
+            Button btn = (Button)sender;
+            if (this._entity?.list?.SelectedItems?.Count <= 0)
+            {
+                MessageBox.Show("没有任何选中项");
+                return;
+            }
+            string m_sMsgBodyStr = "确定要将选中项设置为首发吗?";
+            if (!Cmn.MsgQ(m_sMsgBodyStr))
+                return;
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                this._common_ = true;
+                try
+                {
+                    var as_sql_append = string.Empty;
+                    if (this._entity != null && this._entity.list.SelectedItems.Count > 0)
+                    {
+                        var idlist = new List<string>();
+                        foreach (ListViewItem item in this._entity.list.SelectedItems)
+                        {
+                            idlist.Add(item.SubItems["id"].Text);
+                        }
+                        as_sql_append = $"and id in ({string.Join(",", idlist.ToArray())})";
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(as_sql_append))
+                    {
+                        var as_sql = $"update dial_limit set ordernum = -99.999 where isdel=0 {as_sql_append};";
+                        this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "将选中项设置为首发");
+                        if (this.SearchEvent != null)
+                            this.SearchEvent(this, null);
+                    }
+                    else this._do_invoke(0, "首发确定时必须选定行");
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"cmnset btnPrefixDealFlag_Click error:{ex.Message}");
+                }
+                finally
+                {
+                    this._common_ = false;
+                }
+            })).Start();
+        }
+
+        private void btnF99d999Reset_Click(object sender, EventArgs e)
+        {
+            if (this._common_)
+                return;
+            Button btn = (Button)sender;
+            if (this._entity?.list?.SelectedItems?.Count <= 0)
+            {
+                MessageBox.Show("没有任何选中项");
+                return;
+            }
+            string m_sMsgBodyStr = "确定要重置选中项的首发状态吗?";
+            if (!Cmn.MsgQ(m_sMsgBodyStr))
+                return;
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                this._common_ = true;
+                try
+                {
+                    var as_sql_append = string.Empty;
+                    if (this._entity != null && this._entity.list.SelectedItems.Count > 0)
+                    {
+                        var idlist = new List<string>();
+                        foreach (ListViewItem item in this._entity.list.SelectedItems)
+                        {
+                            idlist.Add(item.SubItems["id"].Text);
+                        }
+                        as_sql_append = $"and id in ({string.Join(",", idlist.ToArray())})";
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(as_sql_append))
+                    {
+                        var as_sql = $"update dial_limit set ordernum = 0 where isdel=0 {as_sql_append};";
+                        this._do_invoke(MySQL_Method.ExecuteNonQuery(as_sql), "重置选中项的首发状态");
+                        if (this.SearchEvent != null)
+                            this.SearchEvent(this, null);
+                    }
+                    else this._do_invoke(0, "首发重置时必须选定行");
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"cmnset btnPrefixDealFlag_Click error:{ex.Message}");
+                }
+                finally
+                {
+                    this._common_ = false;
+                }
+            })).Start();
+        }
     }
 }

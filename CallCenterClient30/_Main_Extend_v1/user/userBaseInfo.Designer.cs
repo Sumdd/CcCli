@@ -51,6 +51,9 @@
             this.label8 = new System.Windows.Forms.Label();
             this.nudLimitTheDial = new System.Windows.Forms.NumericUpDown();
             this.btnLimitTheDial = new System.Windows.Forms.Button();
+            this.cbxF99d999 = new System.Windows.Forms.ComboBox();
+            this.btnF99d999OK = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudLimitTheDial)).BeginInit();
             this.SuspendLayout();
             // 
@@ -270,11 +273,43 @@
             this.btnLimitTheDial.UseVisualStyleBackColor = true;
             this.btnLimitTheDial.Click += new System.EventHandler(this.btnLimitTheDial_Click);
             // 
+            // cbxF99d999
+            // 
+            this.cbxF99d999.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxF99d999.FormattingEnabled = true;
+            this.cbxF99d999.Location = new System.Drawing.Point(152, 423);
+            this.cbxF99d999.Name = "cbxF99d999";
+            this.cbxF99d999.Size = new System.Drawing.Size(120, 20);
+            this.cbxF99d999.TabIndex = 25;
+            // 
+            // btnF99d999OK
+            // 
+            this.btnF99d999OK.Location = new System.Drawing.Point(197, 449);
+            this.btnF99d999OK.Name = "btnF99d999OK";
+            this.btnF99d999OK.Size = new System.Drawing.Size(75, 23);
+            this.btnF99d999OK.TabIndex = 26;
+            this.btnF99d999OK.Tag = "user_baseinfo_f99d999_ok";
+            this.btnF99d999OK.Text = "确定";
+            this.btnF99d999OK.UseVisualStyleBackColor = true;
+            this.btnF99d999OK.Click += new System.EventHandler(this.btnF99d999OK_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(12, 426);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(53, 12);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "首发模式";
+            // 
             // userBaseInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 439);
+            this.ClientSize = new System.Drawing.Size(284, 480);
+            this.Controls.Add(this.cbxF99d999);
+            this.Controls.Add(this.btnF99d999OK);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.btnLimitTheDial);
             this.Controls.Add(this.nudLimitTheDial);
             this.Controls.Add(this.label8);
@@ -331,5 +366,8 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown nudLimitTheDial;
         private System.Windows.Forms.Button btnLimitTheDial;
+        private System.Windows.Forms.ComboBox cbxF99d999;
+        private System.Windows.Forms.Button btnF99d999OK;
+        private System.Windows.Forms.Label label9;
     }
 }

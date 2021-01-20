@@ -152,23 +152,33 @@ namespace CenoCC
                 MessageBox.Show(this, "仅能选择一项进行修改");
                 return;
             }
-            Regex m_pRegex = new Regex("^[-+]?[0-9]{1,4}\\.?[0-9]{0,3}$");
+            Regex m_pRegex = new Regex("^[-+]?[0-9]{1,2}\\.?[0-9]{0,3}$");
             if (!m_pRegex.IsMatch(this.txtOrderNum.Text.Trim()))
             {
                 MessageBox.Show(this, "排序数值有误,请重新填写");
                 return;
             }
+
+            ///移除首发态值
+            if (this.txtOrderNum.Text.Trim() == "-99.999")
+            {
+                MessageBox.Show(this, "排序数值有不可为首发态值-99.999,请重新填写");
+                return;
+            }
+
             new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {
                 try
                 {
                     this._ok_ = true;
                     string m_sID = this?._entity?.list?.SelectedItems?[0].SubItems["id"].Text;
-                    string m_sResult = d_multi.m_fUpdateOrderNum(m_sID, this.txtOrderNum.Text.Trim());
+                    int status = 0;
+                    string m_sResult = d_multi.m_fUpdateOrderNum(m_sID, this.txtOrderNum.Text.Trim(), out status);
                     Log.Instance.Success($"update btnOrderNum_Click {m_sResult}");
                     MessageBox.Show(this, m_sResult);
-                    if (this.SearchEvent != null)
-                        this.SearchEvent(sender, e);
+                    if (status == 1)
+                        if (this.SearchEvent != null)
+                            this.SearchEvent(sender, e);
                 }
                 catch (Exception ex)
                 {

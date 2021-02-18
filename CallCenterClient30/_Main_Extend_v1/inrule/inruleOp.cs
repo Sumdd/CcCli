@@ -21,6 +21,8 @@ namespace CenoCC
         {
             InitializeComponent();
 
+            this.txtInrulebook.MaxLength = 0;
+
             m_uID = _m_uID;
 
             if (m_uID == -1)

@@ -21,6 +21,8 @@ namespace CenoCC
         {
             InitializeComponent();
 
+            this.txtText.MaxLength = 0;
+
             ///直接加载文本格式
             new System.Threading.Thread(new System.Threading.ThreadStart(() =>
             {

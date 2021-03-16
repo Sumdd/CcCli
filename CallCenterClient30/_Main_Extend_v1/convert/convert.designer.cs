@@ -133,9 +133,9 @@
             this.label4.ForeColor = System.Drawing.Color.Red;
             this.label4.Location = new System.Drawing.Point(14, 160);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(258, 29);
+            this.label4.Size = new System.Drawing.Size(258, 52);
             this.label4.TabIndex = 9;
-            this.label4.Text = "文件夹路径中不可包含中文字符";
+            this.label4.Text = "1.文件夹路径中不可包含中文字符\r\n2.转换为增加完整命令,可以默认选择,也可手动输入,当判断为完整命令时,也会忽略声道设定";
             // 
             // label5
             // 

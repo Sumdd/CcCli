@@ -53,6 +53,26 @@ namespace CenoCC
             this.m_bIsWaitForExit = this.ckbWaitForExit.Checked;
             this.m_bChildFolder = this.ckbChildFolder.Checked;
             this.m_sExtension = this.cbxTarget.Text;
+
+            ///提示
+            if (!this.m_sExtension.StartsWith("."))
+            {
+                string m_sExt = string.Empty;
+                string[] m_lCmd = this.m_sExtension.Split(' ');
+                foreach (string m_sCmdCut in m_lCmd)
+                {
+                    if (m_sCmdCut.StartsWith("."))
+                    {
+                        m_sExt = m_sCmdCut;
+                    }
+                }
+                if (string.IsNullOrWhiteSpace(m_sExt))
+                {
+                    this.m_fMessageBoxShow("特殊命令最后位必须为扩展名,如“... .mp3”");
+                    return;
+                }
+            }
+
             this.m_sSource = this.m_fPathFmt(this.txtSource.Text, "/");
             this.m_sTarget = this.m_fPathFmt(this.txtTarget.Text, "/");
 
@@ -144,23 +164,35 @@ namespace CenoCC
                         continue;
                     }
 
-                    switch (_m_sExtension)
+                    ///兼容特殊格式,也可以自己写命令
+                    if (!this.m_sExtension.StartsWith("."))
                     {
-                        case ".oga":
-                        case ".pcm":
-                        case ".mp3":
-                        case ".wav":
-                        case ".wma":
-                        case ".amr":
-                        default:
-                            {
-                                if (!Directory.Exists(m_sPath))
+                        if (!Directory.Exists(m_sPath))
+                        {
+                            Directory.CreateDirectory(m_sPath);
+                        }
+                        Core_v1.m_cFfmpeg.m_fInToOut($"{m_pFileInfo.FullName}", $"{m_sPath}/{Path.GetFileNameWithoutExtension(m_pFileInfo.FullName)}", this.m_bIsWaitForExit, this.cbxAc.Text, this.m_sExtension);
+                    }
+                    else
+                    {
+                        switch (_m_sExtension)
+                        {
+                            case ".oga":
+                            case ".pcm":
+                            case ".mp3":
+                            case ".wav":
+                            case ".wma":
+                            case ".amr":
+                            default:
                                 {
-                                    Directory.CreateDirectory(m_sPath);
+                                    if (!Directory.Exists(m_sPath))
+                                    {
+                                        Directory.CreateDirectory(m_sPath);
+                                    }
+                                    Core_v1.m_cFfmpeg.m_fInToOut($"{m_pFileInfo.FullName}", $"{m_sPath}/{Path.GetFileNameWithoutExtension(m_pFileInfo.FullName)}{this.m_sExtension}", this.m_bIsWaitForExit, this.cbxAc.Text);
                                 }
-                                Core_v1.m_cFfmpeg.m_fInToOut($"{m_pFileInfo.FullName}", $"{m_sPath}/{Path.GetFileNameWithoutExtension(m_pFileInfo.FullName)}{this.m_sExtension}", this.m_bIsWaitForExit, this.cbxAc.Text);
-                            }
-                            break;
+                                break;
+                        }
                     }
                 }
             }

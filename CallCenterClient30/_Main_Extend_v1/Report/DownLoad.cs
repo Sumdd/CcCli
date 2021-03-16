@@ -548,48 +548,70 @@ namespace CenoCC {
             //检测是否需要格式转换
             _m_sOut = string.Empty;
             var _m_sSwitch = m_sSwitch?.ToLower();
-            switch (_m_sSwitch)
+            if (!string.IsNullOrWhiteSpace(_m_sSwitch) && !_m_sSwitch.StartsWith("."))
             {
-                //增加oga
-                case ".oga":
-                case ".pcm":
-                case ".mp3":
-                case ".wav":
-                case ".wma":
-                case ".amr":
-                    {
-                        if (!Path.GetExtension(m_sIn).Equals(_m_sSwitch, StringComparison.OrdinalIgnoreCase))
-                        {
-                            _m_sOut = $"{m_sOut.Remove(m_sOut.Length - 4)}{_m_sSwitch}";
-                            Core_v1.m_cFfmpeg.m_fInToOut(m_sIn, _m_sOut, true);
+                ///兼容特定的转换
+                _m_sOut = $"{m_sOut.Remove(m_sOut.Length - 4)}";
+                bool m_bLoadSuccess = Core_v1.m_cFfmpeg.m_fInToOut(m_sIn, _m_sOut, false, string.Empty, _m_sSwitch);
 
-                            //目前这里只有下载成功,不判断对与错
-                            this.BeginInvoke(new MethodInvoker(() =>
+                //目前这里只有下载成功,不判断对与错
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    listViewItem.ImageIndex = 1;
+                    listViewItem.SubItems["msgTips"].Text = "下载成功";
+                    listViewItem.SubItems["msgTips"].ForeColor = Color.Green;
+                    listViewItem.SubItems["progress"].Text = "100.00%";
+                    listViewItem.SubItems["progress"].ForeColor = Color.Green;
+                    listViewItem.SubItems["status"].Text = "1";
+                }));
+
+                Log.Instance.Warn($"[CenoCC][DownLoad][m_fLoad][文件转换:{_m_sOut}]");
+            }
+            else
+            {
+                switch (_m_sSwitch)
+                {
+                    //增加oga
+                    case ".oga":
+                    case ".pcm":
+                    case ".mp3":
+                    case ".wav":
+                    case ".wma":
+                    case ".amr":
+                        {
+                            if (!Path.GetExtension(m_sIn).Equals(_m_sSwitch, StringComparison.OrdinalIgnoreCase))
                             {
-                                listViewItem.ImageIndex = 1;
-                                listViewItem.SubItems["msgTips"].Text = "下载成功";
-                                listViewItem.SubItems["msgTips"].ForeColor = Color.Green;
-                                listViewItem.SubItems["progress"].Text = "100.00%";
-                                listViewItem.SubItems["progress"].ForeColor = Color.Green;
-                                listViewItem.SubItems["status"].Text = "1";
-                            }));
+                                _m_sOut = $"{m_sOut.Remove(m_sOut.Length - 4)}{_m_sSwitch}";
+                                Core_v1.m_cFfmpeg.m_fInToOut(m_sIn, _m_sOut, true);
 
-                            Log.Instance.Warn($"[CenoCC][DownLoad][m_fLoad][文件转换:{_m_sOut}]");
+                                //目前这里只有下载成功,不判断对与错
+                                this.BeginInvoke(new MethodInvoker(() =>
+                                {
+                                    listViewItem.ImageIndex = 1;
+                                    listViewItem.SubItems["msgTips"].Text = "下载成功";
+                                    listViewItem.SubItems["msgTips"].ForeColor = Color.Green;
+                                    listViewItem.SubItems["progress"].Text = "100.00%";
+                                    listViewItem.SubItems["progress"].ForeColor = Color.Green;
+                                    listViewItem.SubItems["status"].Text = "1";
+                                }));
+
+                                Log.Instance.Warn($"[CenoCC][DownLoad][m_fLoad][文件转换:{_m_sOut}]");
+                            }
+                            else
+                            {
+                                Log.Instance.Warn($"[CenoCC][DownLoad][m_fLoad][文件与目标格式一致,无需转换]");
+                                _m_sOut = m_sOut;
+                                this.m_fLoadThenProgress(listViewItem, m_sIn, m_sOut);
+                            }
                         }
-                        else
+                        break;
+                    default:
                         {
-                            Log.Instance.Warn($"[CenoCC][DownLoad][m_fLoad][文件与目标格式一致,无需转换]");
                             _m_sOut = m_sOut;
                             this.m_fLoadThenProgress(listViewItem, m_sIn, m_sOut);
                         }
-                    }
-                    break;
-                default:
-                    {
-                        _m_sOut = m_sOut;
-                        this.m_fLoadThenProgress(listViewItem, m_sIn, m_sOut);
-                    }
-                    break;
+                        break;
+                }
             }
         }
         #endregion

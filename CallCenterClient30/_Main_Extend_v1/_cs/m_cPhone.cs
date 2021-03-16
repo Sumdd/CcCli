@@ -4,6 +4,7 @@ using DataBaseUtil;
 using Model_v1;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -245,12 +246,19 @@ namespace CenoCC
             }
         }
 
+        private static string m_sLastJobUUID = null;
+
         public static void m_fSetShow(List<string> m_lStrings, bool m_bIsNeedGetContact, string m_sExtension = null)
         {
-            new System.Threading.Thread(() =>
+            string _m_sLastJobUUID = Guid.NewGuid().ToString();
+            m_cPhone.m_sLastJobUUID = _m_sLastJobUUID;
+
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += (a, b) =>
             {
                 try
                 {
+                    #region ***变量
                     string m_sRealPhoneNumberString = m_lStrings[1];
                     string m_sPhoneNumberString = m_lStrings[2];
                     string m_sRealNameString = "未知";
@@ -263,9 +271,11 @@ namespace CenoCC
                     bool m_bIsShowAddress = m_lShowStyleList[2] == "1";
                     bool m_bHasSecretNumber = !string.IsNullOrWhiteSpace(MinChat.m_sSecretNumber);
 
-                    ///是否全好显示
+                    ///是否全号码显示
                     bool m_bSeeNumber = Model_v1.m_mOperate.m_bSeeNumber;
+                    #endregion
 
+                    #region ***查询客户真实名称
                     if (m_bIsNeedGetContact)
                     {
                         if (m_bIsShowRealName && Call_ParamUtil.m_bUseHomeSearch)
@@ -305,10 +315,39 @@ namespace CenoCC
                             m_sRealNameString = Call_AgentUtil.m_fGetAgentName(m_lStrings[1]);
                         }
                     }
+                    #endregion
 
-                    MinChat._MinChat.BeginInvoke(new MethodInvoker(() =>
+                    #region ***根据来电显示配置拼接显示内容
+                    if (m_bIsShowNumber)
                     {
-                        if (m_bIsShowNumber)
+                        ///<![CDATA[
+                        /// 增加号码隐藏逻辑
+                        /// ]]>
+                        if (m_bHasSecretNumber)
+                            m_sShowString = MinChat.m_sSecretNumber;
+                        else
+                        {
+                            ///是否全号显示
+                            if (m_bSeeNumber)
+                                m_sShowString = m_sPhoneNumberString;
+                            else
+                                m_sShowString = Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString);
+                        }
+                    }
+                    if (m_bIsShowRealName)
+                    {
+                        if (m_sRealNameString != "未知")
+                        {
+                            if (!string.IsNullOrWhiteSpace(m_sShowString))
+                            {
+                                m_sShowString += $"({m_sRealNameString})";
+                            }
+                            else
+                            {
+                                m_sShowString = m_sRealNameString;
+                            }
+                        }
+                        else
                         {
                             ///<![CDATA[
                             /// 增加号码隐藏逻辑
@@ -324,82 +363,70 @@ namespace CenoCC
                                     m_sShowString = Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString);
                             }
                         }
-                        if (m_bIsShowRealName)
+                    }
+                    if (m_bIsShowAddress)
+                    {
+                        if (m_sPhoneAddressString != "未知")
                         {
-                            if (m_sRealNameString != "未知")
-                            {
-                                if (!string.IsNullOrWhiteSpace(m_sShowString))
-                                {
-                                    m_sShowString += $"({m_sRealNameString})";
-                                }
-                                else
-                                {
-                                    m_sShowString = m_sRealNameString;
-                                }
-                            }
-                            else
-                            {
-                                ///<![CDATA[
-                                /// 增加号码隐藏逻辑
-                                /// ]]>
-                                if (m_bHasSecretNumber)
-                                    m_sShowString = MinChat.m_sSecretNumber;
-                                else
-                                {
-                                    ///是否全号显示
-                                    if (m_bSeeNumber)
-                                        m_sShowString = m_sPhoneNumberString;
-                                    else
-                                        m_sShowString = Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString);
-                                }
-                            }
+                            m_sShowString += $"({m_sPhoneAddressString})";
                         }
-                        if (m_bIsShowAddress)
-                        {
-                            if (m_sPhoneAddressString != "未知")
-                            {
-                                m_sShowString += $"({m_sPhoneAddressString})";
-                            }
-                        }
+                    }
+                    #endregion
 
-                        MinChat._MinChat.PhoneNum_Contact_Lbl.Text = m_sShowString;
-                        StringBuilder m_sbTipMsg = new StringBuilder();
+                    #region ***准备鼠标悬停的提示信息
+                    StringBuilder m_sbTipMsg = new StringBuilder();
 
-                        string m_sNumberType = "去　电：";
-                        if (CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == 2)
-                        {
-                            m_sNumberType = "来　电：";
-                        }
-                        if (!string.IsNullOrWhiteSpace(m_sExtension))
-                        {
-                            m_sbTipMsg.AppendLine($"分机号：{m_sExtension}");
-                        }
+                    string m_sNumberType = "去　电：";
+                    if (CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == 2)
+                    {
+                        m_sNumberType = "来　电：";
+                    }
+                    if (!string.IsNullOrWhiteSpace(m_sExtension))
+                    {
+                        m_sbTipMsg.AppendLine($"分机号：{m_sExtension}");
+                    }
 
-                        ///<![CDATA[
-                        /// 增加号码隐藏逻辑
-                        /// ]]>
-                        if (m_bHasSecretNumber)
-                            m_sShowString = MinChat.m_sSecretNumber;
+                    ///<![CDATA[
+                    /// 增加号码隐藏逻辑
+                    /// ]]>
+                    if (m_bHasSecretNumber)
+                        m_sShowString = MinChat.m_sSecretNumber;
+                    else
+                    {
+                        ///是否全号显示
+                        if (m_bSeeNumber)
+                            m_sbTipMsg.AppendLine($"{m_sNumberType}{m_sPhoneNumberString}");
                         else
-                        {
-                            ///是否全号显示
-                            if (m_bSeeNumber)
-                                m_sbTipMsg.AppendLine($"{m_sNumberType}{m_sPhoneNumberString}");
-                            else
-                                m_sbTipMsg.AppendLine($"{m_sNumberType}{Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString)}");
-                        }
+                            m_sbTipMsg.AppendLine($"{m_sNumberType}{Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString)}");
+                    }
 
-                        m_sbTipMsg.AppendLine($"联系人：{m_sRealNameString}");
-                        m_sbTipMsg.AppendLine($"归属地：{m_sPhoneAddressString}");
-                        MinChat._MinChat.PhoneAddress_TT.SetToolTip(MinChat._MinChat.PhoneNum_Contact_Lbl, m_sbTipMsg.ToString());
-                    }));
+                    m_sbTipMsg.AppendLine($"联系人：{m_sRealNameString}");
+                    m_sbTipMsg.AppendLine($"归属地：{m_sPhoneAddressString}");
+                    #endregion
+
+                    b.Result = Tuple.Create<int, string, string, string>(1, "成功", m_sShowString, m_sbTipMsg.ToString());
                 }
                 catch (Exception ex)
                 {
-                    Log.Instance.Error($"[CenoCC][H_Phone][m_fSetShow][{ex.Message}]");
+                    b.Result = Tuple.Create<int, string, string, string>(1, $"错误:{ex.Message}", string.Empty, string.Empty);
                 }
-
-            }).Start();
+            };
+            bw.RunWorkerCompleted += (a, b) =>
+            {
+                if (!b.Cancelled && m_cPhone.m_sLastJobUUID == _m_sLastJobUUID)
+                {
+                    if (b.Result != null)
+                    {
+                        Tuple<int, string, string, string> Result = (Tuple<int, string, string, string>)b.Result;
+                        if (Result.Item1 == 1)
+                        {
+                            MinChat._MinChat.PhoneNum_Contact_Lbl.Text = Result.Item3;
+                            MinChat._MinChat.PhoneAddress_TT.SetToolTip(MinChat._MinChat.PhoneNum_Contact_Lbl, Result.Item4);
+                        }
+                    }
+                }
+            };
+            bw.RunWorkerAsync();
         }
     }
 }

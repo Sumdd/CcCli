@@ -17,9 +17,10 @@ namespace CenoCC
         ///修改规则,如果尾缀有*1000等格式则判断为内呼,并兼容内呼规则
         public static Regex m_rRegex = new Regex("(.*)[*](\\d{4,})$");
         public static Regex m_rRegex2 = new Regex("^(\\*?)[7][0178][\\*](\\d*)$");
-        public static List<string> m_fGetPhoneNumberMemo(string m_sPhoneNumber, out bool m_bIsNeedGetContact, out string m_sDt, out string m_sCardType, out string m_sZipCode)
+        public static List<string> m_fGetPhoneNumberMemo(string m_sPhoneNumber, out bool m_bIsNeedGetContact, out string m_sDt, out string m_sCardType, out string m_sZipCode, out string _m_sLastJobUUID)
         {
-
+            _m_sLastJobUUID = Guid.NewGuid().ToString();
+            m_cPhone.m_sLastJobUUID = _m_sLastJobUUID;
             /*
              * 精简一下
              * 解决一:由于多号码的引入,是否需要加0出局要通过真正的线路来决定
@@ -235,10 +236,11 @@ namespace CenoCC
                 string m_sDt = string.Empty;
                 string m_sCardType = string.Empty;
                 string m_sZipCode = string.Empty;
-                List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(m_sPhoneNumberString, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode);
+                string _m_sLastJobUUID = string.Empty;
+                List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(m_sPhoneNumberString, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode, out _m_sLastJobUUID);
                 m_lStrings.Insert(0, AgentInfo.AgentID);
                 m_sPhoneAddress = m_lStrings[4];
-                m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact, m_sExtension);
+                m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact, _m_sLastJobUUID, m_sExtension);
             }
             catch (Exception ex)
             {
@@ -248,11 +250,8 @@ namespace CenoCC
 
         private static string m_sLastJobUUID = null;
 
-        public static void m_fSetShow(List<string> m_lStrings, bool m_bIsNeedGetContact, string m_sExtension = null)
+        public static void m_fSetShow(List<string> m_lStrings, bool m_bIsNeedGetContact, string _m_sLastJobUUID, string m_sExtension)
         {
-            string _m_sLastJobUUID = Guid.NewGuid().ToString();
-            m_cPhone.m_sLastJobUUID = _m_sLastJobUUID;
-
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (a, b) =>
             {
@@ -347,22 +346,6 @@ namespace CenoCC
                                 m_sShowString = m_sRealNameString;
                             }
                         }
-                        else
-                        {
-                            ///<![CDATA[
-                            /// 增加号码隐藏逻辑
-                            /// ]]>
-                            if (m_bHasSecretNumber)
-                                m_sShowString = MinChat.m_sSecretNumber;
-                            else
-                            {
-                                ///是否全号显示
-                                if (m_bSeeNumber)
-                                    m_sShowString = m_sPhoneNumberString;
-                                else
-                                    m_sShowString = Cmn_v1.Cmn.m_fSecret(m_sPhoneNumberString);
-                            }
-                        }
                     }
                     if (m_bIsShowAddress)
                     {
@@ -408,7 +391,7 @@ namespace CenoCC
                 }
                 catch (Exception ex)
                 {
-                    b.Result = Tuple.Create<int, string, string, string>(1, $"错误:{ex.Message}", string.Empty, string.Empty);
+                    b.Result = Tuple.Create<int, string, string, string>(0, $"错误:{ex.Message}", string.Empty, string.Empty);
                 }
             };
             bw.RunWorkerCompleted += (a, b) =>
@@ -423,6 +406,7 @@ namespace CenoCC
                             MinChat._MinChat.PhoneNum_Contact_Lbl.Text = Result.Item3;
                             MinChat._MinChat.PhoneAddress_TT.SetToolTip(MinChat._MinChat.PhoneNum_Contact_Lbl, Result.Item4);
                         }
+                        else Log.Instance.Fail($"[CenoCC][m_cPhone][m_fSetShow][RunWorkerCompleted][{Result.Item2}]");
                     }
                 }
             };

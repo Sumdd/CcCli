@@ -1026,7 +1026,8 @@ namespace CenoCC {
             string m_sCardType = string.Empty;
             string m_sZipCode = string.Empty;
 
-            List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(_number, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode);
+            string _m_sLastJobUUID = string.Empty;
+            List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(_number, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode, out _m_sLastJobUUID);
             m_lStrings.Insert(0, AgentInfo.AgentID);
 
             ///<![CDATA[
@@ -1037,7 +1038,7 @@ namespace CenoCC {
 
             string m_sPhoneAddressStr = m_lStrings[4];
             MinChat.m_PhoneNumber = m_lStrings[2];
-            m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact);
+            m_cPhone.m_fSetShow(m_lStrings, m_bIsNeedGetContact, _m_sLastJobUUID, null);
 
             ///是否自己查询联系人姓名
             int m_uName = Call_ClientParamUtil.m_bName ? 1 : 0;

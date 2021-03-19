@@ -621,8 +621,8 @@ namespace CenoCC {
 
                     #region 强制退出
                     case (int)ChannelInfo.APP_USER_STATUS.US_DO_EXIT: {
-                            Cmn.MsgWran($"呼叫中心客户端检测到:{Cmn.Its(m.LParam)}", "强制退出");
-                            Application.Exit();
+                            Program.m_sExitMsg = Cmn.Its(m.LParam);
+                            MinChat._MinChat.Close();
                         }
                         break;
                     #endregion

@@ -101,7 +101,16 @@ namespace CenoCC {
                 {
                     MinChat minchat = new MinChat();
                     Application.Run(minchat);
-                    minchat.Close();
+
+                    ///修改退出,防止卡住不好关闭
+                    if (m_sExitMsg != null)
+                    {
+                        Cmn.MsgWran($"呼叫中心客户端检测到:{m_sExitMsg}", $"强制退出:{DateTime.Now.ToString("yyyy年MM月dd日 HH时mm分ss")}");
+                    }
+                    else
+                    {
+                        minchat.Close();
+                    }
                 }
             }
             catch { }
@@ -112,6 +121,8 @@ namespace CenoCC {
             }
             #endregion
         }
+
+        public static string m_sExitMsg = null;
 
         private static string _load_update() {
             var _updateJsonModel = H_Json.DescUpdateJsonModel(H_Web.Get($"{Call_ParamUtil.SystemUpgradelPath}/client_update.json"));

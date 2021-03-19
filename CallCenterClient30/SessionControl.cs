@@ -131,7 +131,8 @@ namespace CenoCC {
             string m_sDt = string.Empty;
             string m_sCardType = string.Empty;
             string m_sZipCode = string.Empty;
-            List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(_PhoneNum, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode);
+            string _m_sLastJobUUID = string.Empty;
+            List<string> m_lStrings = m_cPhone.m_fGetPhoneNumberMemo(_PhoneNum, out m_bIsNeedGetContact, out m_sDt, out m_sCardType, out m_sZipCode, out _m_sLastJobUUID);
             string PhoneAddress = m_lStrings[3];
             e.Result = string.IsNullOrEmpty(PhoneAddress) ? "未知" : PhoneAddress;
             e.Result += ";" + Call_PhoneAddressUtil.GetContactName(_PhoneNum);

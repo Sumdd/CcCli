@@ -205,6 +205,7 @@ namespace CenoCC {
                             }
 
                             string m_sPhoneAddress = "未知";
+
                             m_cPhone.m_fSetShow(m_sCaller, out m_sPhoneAddress, m_sCallee);
 
                             if (Call_ClientParamUtil.m_bIsSysMsgCall)
@@ -260,6 +261,9 @@ namespace CenoCC {
                     case (int)ChannelInfo.APP_USER_STATUS.US_STATUS_HUNGUP: {
                             if(CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
                                 return;
+
+                            ///挂断时清空密文
+                            MinChat.m_sSecretNumber = string.Empty;
 
                             #region ***号码池页面关闭
                             if (MinChat.m_pShareNumber != null && !MinChat.m_pShareNumber.IsDisposed)

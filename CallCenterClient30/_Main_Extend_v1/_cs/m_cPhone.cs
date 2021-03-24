@@ -373,7 +373,9 @@ namespace CenoCC
                     /// 增加号码隐藏逻辑
                     /// ]]>
                     if (m_bHasSecretNumber)
-                        m_sShowString = MinChat.m_sSecretNumber;
+                    {
+                        m_sbTipMsg.AppendLine($"{m_sNumberType}{MinChat.m_sSecretNumber}");
+                    }
                     else
                     {
                         ///是否全号显示

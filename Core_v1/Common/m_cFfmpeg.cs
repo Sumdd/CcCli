@@ -96,7 +96,7 @@ namespace Core_v1
             using (var proc = new Process())
             {
                 proc.StartInfo = info;
-                proc.Start();
+                ///先监听
                 proc.ErrorDataReceived += (a, b) =>
                 {
                     if (b != null && b.Data != null)
@@ -104,6 +104,8 @@ namespace Core_v1
                         m_sData += $"{b.Data}\r\n";
                     }
                 };
+                ///再启动
+                proc.Start();
                 proc.BeginErrorReadLine();
                 if (m_bIsWaitForExit)
                 {

@@ -262,8 +262,12 @@ namespace CenoCC {
                             if(CCFactory.ChInfo[CCFactory.CurrentCh].chStatus == ChannelInfo.APP_USER_STATUS.US_STATUS_IDLE)
                                 return;
 
-                            ///挂断时清空密文
-                            MinChat.m_sSecretNumber = string.Empty;
+                            ///挂断时如果存在密文,清空密文和上次的可拨号码
+                            if (!string.IsNullOrWhiteSpace(MinChat.m_sSecretNumber))
+                            {
+                                MinChat.m_sSecretNumber = string.Empty;
+                                MinChat.m_PhoneNumber = string.Empty;
+                            }
 
                             #region ***号码池页面关闭
                             if (MinChat.m_pShareNumber != null && !MinChat.m_pShareNumber.IsDisposed)

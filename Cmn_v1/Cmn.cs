@@ -230,14 +230,20 @@ namespace Cmn_v1 {
         public static string m_fSecretRec(string m_sString)
         {
             if (string.IsNullOrWhiteSpace(m_sString)) return null;
-
-            List<string> m_lString1 = m_sString.Split('_').ToList();
-            int m_uLast = m_lString1.Count - 1;
-            List<string> m_lString2 = m_lString1[m_uLast].Split('.').ToList();
-            string m_sNumber = m_lString2[0];
-            m_lString2[0] = Cmn.m_fSecret(m_sNumber);
-            m_lString1.RemoveAt(m_uLast);
-            return $"{string.Join("_", m_lString1)}_{m_lString2[0]}.{m_lString2[1]}";
+            try
+            {
+                List<string> m_lString1 = m_sString.Split('_').ToList();
+                int m_uLast = m_lString1.Count - 1;
+                List<string> m_lString2 = m_lString1[m_uLast].Split('.').ToList();
+                string m_sNumber = m_lString2[0];
+                m_lString2[0] = Cmn.m_fSecret(m_sNumber);
+                m_lString1.RemoveAt(m_uLast);
+                return $"{string.Join("_", m_lString1)}_{m_lString2[0]}.{m_lString2[1]}";
+            }
+            catch
+            {
+                return "-Err录音名非法";
+            }
         }
     }
 }

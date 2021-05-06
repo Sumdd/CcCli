@@ -12,6 +12,8 @@ using DataBaseUtil;
 using WebSocket_v1;
 using CenoSocket;
 using Common;
+using Model_v1;
+using System.IO;
 
 namespace CenoCC
 {
@@ -65,6 +67,11 @@ namespace CenoCC
                     Panel m_pPanel = (Panel)item;
                     this.m_fLoadOperatePower(m_pPanel.Controls);
                 }
+                else if (item.GetType() == typeof(GroupBox))
+                {
+                    GroupBox m_pGroupBox = (GroupBox)item;
+                    this.m_fLoadOperatePower(m_pGroupBox.Controls);
+                }
             }
         }
         #endregion
@@ -92,6 +99,7 @@ namespace CenoCC
                             m_sID = Convert.ToInt32(m_pListViewItem.SubItems["id"].Text);
                             m_uLimitTheDial = Convert.ToInt32(m_pListViewItem.SubItems["limitthedial"].Text);
                             m_uF99d999 = Convert.ToInt32(m_pListViewItem.SubItems["f99d999"].Text);
+                            this.txtNoMusic.Text = m_pListViewItem.SubItems["no_answer_music"].Text;
                         }
 
                         ///查询出当前默认的同号码限呼设定值
@@ -229,7 +237,7 @@ SELECT
             })).Start();
         }
 
-        public void m_fSetSelectInfo(string m_sUa, string m_sLoginName, string m_sTeamID, string m_sRoleID, int m_sID)
+        public void m_fSetSelectInfo(string m_sUa, string m_sLoginName, string m_sTeamID, string m_sRoleID, int m_sID, string m_sNoMusic)
         {
             ///如果模式为直接进入,可以批量编辑部门与角色
             if (this.m_uID == -1) return;
@@ -241,6 +249,7 @@ SELECT
             this.txtLoginName.Text = m_sLoginName;
             this.cboTeam.SelectedValue = m_sTeamID;
             this.cboRole.SelectedValue = m_sRoleID;
+            this.txtNoMusic.Text = m_sNoMusic;
 
             ///根据ID以及当前登录人来判断是否可以更改超级管理员的信息
             if (m_sID == 1000)
@@ -953,6 +962,268 @@ SELECT
             {
                 Log.Instance.Error($"[CenoCC][userBaseInfo][btnF99d999OK_Click][Exception][{ex.Message}]");
             }
+        }
+
+        private void txtNoMusic_DoubleClick(object sender, EventArgs e)
+        {
+            ///选择一个wav文件
+            OpenFileDialog m_pOpenFileDialog = new OpenFileDialog();
+            m_pOpenFileDialog.Filter = "WAV|*.wav";
+            m_pOpenFileDialog.Multiselect = false;
+            if (m_pOpenFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                ///替换XML内容
+                this.txtNoMusic.Text = m_pOpenFileDialog.FileName;
+            }
+        }
+
+        private void btnNoAnswerMusicOK_Click(object sender, EventArgs e)
+        {
+            List<string> m_lID = new List<string>();
+            if (this.m_uID == -1)
+            {
+                if (this._entity?.list?.SelectedItems?.Count > 0)
+                {
+                    foreach (ListViewItem item in this._entity?.list?.SelectedItems)
+                    {
+                        m_lID.Add(item?.SubItems["id"]?.Text);
+                    }
+                }
+            }
+            else
+            {
+                m_lID.Add(this.m_uID.ToString());
+            }
+
+            if (m_lID.Count <= 0)
+            {
+                MessageBox.Show(this, "请至少选择一行进行超时放音绑定");
+                return;
+            }
+
+            if (this.m_bDoing)
+            {
+                MessageBox.Show("有任务正在执行,请稍后");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(this.txtNoMusic.Text))
+            {
+                MessageBox.Show("超时放音文件非空");
+                return;
+            }
+
+            if (!this.txtNoMusic.Text.Contains(":"))
+            {
+                MessageBox.Show("该超时放音文件已绑定");
+                return;
+            }
+
+            string m_sCurrentPassword = this.txtCurrentPassword.Text;
+            if (string.IsNullOrWhiteSpace(m_sCurrentPassword))
+            {
+                MessageBox.Show(this, "请输入当前密码");
+                return;
+            }
+
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+
+                try
+                {
+                    this.m_bDoing = true;
+
+                    string m_sName = Path.GetFileNameWithoutExtension(this.txtNoMusic.Text);
+                    string m_sExt = Path.GetExtension(this.txtNoMusic.Text);
+                    string m_sBase64 = string.Empty;
+                    using (System.IO.FileStream fileStream = new System.IO.FileStream(this.txtNoMusic.Text, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                    {
+                        byte[] bt = new byte[fileStream.Length];
+                        // 调用read读取方法  
+                        fileStream.Read(bt, 0, bt.Length);
+                        m_sBase64 = Convert.ToBase64String(bt);
+                    }
+
+                    object m_oObject = new
+                    {
+                        m_sName = m_sName,
+                        m_sExt = m_sExt,
+                        m_sBase64 = m_sBase64
+                    };
+
+                    bool m_bSave = false;
+
+                    ///提交
+                    m_mResponseJSON _m_mResponseJSON = InWebSocketMain.SendAsyncObject(Newtonsoft.Json.JsonConvert.SerializeObject(m_oObject), m_cFileCmdType._m_sFileCreate, m_mWebSocketJsonPrefix._m_sFileCmd, 60 * 5);
+                    if (_m_mResponseJSON.status < 0)
+                    {
+                        string m_sErrMsg = $"超时放音绑定失败:{_m_mResponseJSON.result ?? _m_mResponseJSON.msg}";
+                        Cmn_v1.Cmn.MsgWran(m_sErrMsg);
+                    }
+                    else if (_m_mResponseJSON.status == 1)
+                    {
+                        ///询问后续操作
+                        //DialogResult dr = MessageBox.Show("文件已经存在,是否覆盖", Cmn.dobSpace("确认"), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                        //if (dr == DialogResult.Yes)
+                        //{
+                        //    m_bSave = true;
+                        //}
+                        //else if (dr == DialogResult.No)
+                        //{
+                        //    m_bSave = true;
+                        //}
+                        m_bSave = true;
+                    }
+                    else
+                    {
+                        m_bSave = true;
+                    }
+
+                    if (m_bSave)
+                    {
+                        ///Cmn_v1.Cmn.MsgWran("超时放音绑定成功");
+                        string m_sMySQL = $@"
+SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `call_agent` AS `T0` WHERE `T0`.`ID` = '{Common.AgentInfo.AgentID}' AND `T0`.`LoginPassWord` = '{Common.Encrypt.EncryptString(m_sCurrentPassword)}' ), 0 );
+UPDATE `call_clientparam` 
+SET `call_clientparam`.`no_answer_music` = '{m_sName}' 
+WHERE
+	`call_clientparam`.`ID` IN ( SELECT `call_agent`.`ClientParamID` FROM `call_agent` WHERE `call_agent`.`ID` IN ( {string.Join(",", m_lID)} ) ) 
+	AND @m_uCount = 1;
+SELECT
+	@m_uCount AS `status`,
+	ROW_COUNT( ) AS `count`;
+";
+                        DataTable m_pDataTable = MySQL_Method.BindTable(m_sMySQL);
+                        if (m_pDataTable != null && m_pDataTable.Rows.Count > 0)
+                        {
+                            int m_uStatus = Convert.ToInt32(m_pDataTable.Rows[0]["status"]);
+                            int m_uCount = Convert.ToInt32(m_pDataTable.Rows[0]["count"]);
+                            if (m_uStatus == 1 && m_uCount > 0)
+                            {
+                                if (this.SearchEvent != null)
+                                    this.SearchEvent(sender, e);
+                                this.txtNoMusic.Text = m_sName;
+                                MessageBox.Show(this, "超时放音绑定成功");
+                            }
+                            else if (m_uStatus != 1)
+                            {
+                                MessageBox.Show(this, "当前密码错误");
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "超时放音绑定完成");
+                            }
+                            return;
+                        }
+                        MessageBox.Show(this, "超时放音绑定失败");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"[CenoCC][userBaseInfo][btnNoAnswerMusicOK_Click][Exception][{ex.Message}]");
+                }
+                finally
+                {
+                    this.m_bDoing = false;
+                }
+
+            })).Start();
+        }
+
+        private void btnNoAnswerMusicClear_Click(object sender, EventArgs e)
+        {
+            List<string> m_lID = new List<string>();
+            if (this.m_uID == -1)
+            {
+                if (this._entity?.list?.SelectedItems?.Count > 0)
+                {
+                    foreach (ListViewItem item in this._entity?.list?.SelectedItems)
+                    {
+                        m_lID.Add(item?.SubItems["id"]?.Text);
+                    }
+                }
+            }
+            else
+            {
+                m_lID.Add(this.m_uID.ToString());
+            }
+
+            if (m_lID.Count <= 0)
+            {
+                MessageBox.Show(this, "请至少选择一行进行超时放音清除");
+                return;
+            }
+
+            if (this.m_bDoing)
+            {
+                MessageBox.Show("有任务正在执行,请稍后");
+                return;
+            }
+
+            string m_sCurrentPassword = this.txtCurrentPassword.Text;
+            if (string.IsNullOrWhiteSpace(m_sCurrentPassword))
+            {
+                MessageBox.Show(this, "请输入当前密码");
+                return;
+            }
+
+            new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+
+                try
+                {
+                    this.m_bDoing = true;
+
+                    bool m_bSave = true;
+                    if (m_bSave)
+                    {
+                        ///Cmn_v1.Cmn.MsgWran("超时放音绑定成功");
+                        string m_sMySQL = $@"
+SET @m_uCount = IFNULL( ( SELECT COUNT( 1 ) FROM `call_agent` AS `T0` WHERE `T0`.`ID` = '{Common.AgentInfo.AgentID}' AND `T0`.`LoginPassWord` = '{Common.Encrypt.EncryptString(m_sCurrentPassword)}' ), 0 );
+UPDATE `call_clientparam` 
+SET `call_clientparam`.`no_answer_music` = '' 
+WHERE
+	`call_clientparam`.`ID` IN ( SELECT `call_agent`.`ClientParamID` FROM `call_agent` WHERE `call_agent`.`ID` IN ( {string.Join(",", m_lID)} ) ) 
+	AND @m_uCount = 1;
+SELECT
+	@m_uCount AS `status`,
+	ROW_COUNT( ) AS `count`;
+";
+                        DataTable m_pDataTable = MySQL_Method.BindTable(m_sMySQL);
+                        if (m_pDataTable != null && m_pDataTable.Rows.Count > 0)
+                        {
+                            int m_uStatus = Convert.ToInt32(m_pDataTable.Rows[0]["status"]);
+                            int m_uCount = Convert.ToInt32(m_pDataTable.Rows[0]["count"]);
+                            if (m_uStatus == 1 && m_uCount > 0)
+                            {
+                                if (this.SearchEvent != null)
+                                    this.SearchEvent(sender, e);
+                                this.txtNoMusic.Text = string.Empty;
+                                MessageBox.Show(this, "超时放音清除成功");
+                            }
+                            else if (m_uStatus != 1)
+                            {
+                                MessageBox.Show(this, "当前密码错误");
+                            }
+                            else
+                            {
+                                MessageBox.Show(this, "超时放音清除完成");
+                            }
+                            return;
+                        }
+                        MessageBox.Show(this, "超时放音清除失败");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Error($"[CenoCC][userBaseInfo][btnNoAnswerMusicClear_Click][Exception][{ex.Message}]");
+                }
+                finally
+                {
+                    this.m_bDoing = false;
+                }
+
+            })).Start();
         }
     }
 }

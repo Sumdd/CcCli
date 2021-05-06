@@ -54,7 +54,13 @@
             this.cbxF99d999 = new System.Windows.Forms.ComboBox();
             this.btnF99d999OK = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnNoAnswerMusicClear = new System.Windows.Forms.Button();
+            this.btnNoAnswerMusicOK = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtNoMusic = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudLimitTheDial)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // txtUa
@@ -302,11 +308,65 @@
             this.label9.TabIndex = 24;
             this.label9.Text = "首发模式";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnNoAnswerMusicClear);
+            this.groupBox1.Controls.Add(this.btnNoAnswerMusicOK);
+            this.groupBox1.Controls.Add(this.label10);
+            this.groupBox1.Controls.Add(this.txtNoMusic);
+            this.groupBox1.Location = new System.Drawing.Point(278, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(294, 460);
+            this.groupBox1.TabIndex = 27;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "坐席参数";
+            // 
+            // btnNoAnswerMusicClear
+            // 
+            this.btnNoAnswerMusicClear.Location = new System.Drawing.Point(132, 59);
+            this.btnNoAnswerMusicClear.Name = "btnNoAnswerMusicClear";
+            this.btnNoAnswerMusicClear.Size = new System.Drawing.Size(75, 23);
+            this.btnNoAnswerMusicClear.TabIndex = 29;
+            this.btnNoAnswerMusicClear.Tag = "user_baseinfo_no_answer_music_clear";
+            this.btnNoAnswerMusicClear.Text = "清除";
+            this.btnNoAnswerMusicClear.UseVisualStyleBackColor = true;
+            this.btnNoAnswerMusicClear.Click += new System.EventHandler(this.btnNoAnswerMusicClear_Click);
+            // 
+            // btnNoAnswerMusicOK
+            // 
+            this.btnNoAnswerMusicOK.Location = new System.Drawing.Point(213, 59);
+            this.btnNoAnswerMusicOK.Name = "btnNoAnswerMusicOK";
+            this.btnNoAnswerMusicOK.Size = new System.Drawing.Size(75, 23);
+            this.btnNoAnswerMusicOK.TabIndex = 28;
+            this.btnNoAnswerMusicOK.Tag = "user_baseinfo_no_answer_music_ok";
+            this.btnNoAnswerMusicOK.Text = "确定";
+            this.btnNoAnswerMusicOK.UseVisualStyleBackColor = true;
+            this.btnNoAnswerMusicOK.Click += new System.EventHandler(this.btnNoAnswerMusicOK_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(6, 17);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(191, 12);
+            this.label10.TabIndex = 28;
+            this.label10.Text = "超时放音(仅限wav格式的音频文件)";
+            // 
+            // txtNoMusic
+            // 
+            this.txtNoMusic.Location = new System.Drawing.Point(6, 32);
+            this.txtNoMusic.Name = "txtNoMusic";
+            this.txtNoMusic.ReadOnly = true;
+            this.txtNoMusic.Size = new System.Drawing.Size(282, 21);
+            this.txtNoMusic.TabIndex = 0;
+            this.txtNoMusic.DoubleClick += new System.EventHandler(this.txtNoMusic_DoubleClick);
+            // 
             // userBaseInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 480);
+            this.ClientSize = new System.Drawing.Size(584, 480);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbxF99d999);
             this.Controls.Add(this.btnF99d999OK);
             this.Controls.Add(this.label9);
@@ -336,6 +396,8 @@
             this.Name = "userBaseInfo";
             this.Text = "基本信息";
             ((System.ComponentModel.ISupportInitialize)(this.nudLimitTheDial)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,5 +431,10 @@
         private System.Windows.Forms.ComboBox cbxF99d999;
         private System.Windows.Forms.Button btnF99d999OK;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox txtNoMusic;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnNoAnswerMusicClear;
+        private System.Windows.Forms.Button btnNoAnswerMusicOK;
     }
 }

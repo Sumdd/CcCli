@@ -71,6 +71,54 @@ namespace WebSocket_v1 {
                     return;
                 }
 
+                ///<![CDATA[
+                /// 文件命令
+                /// ]]>
+                if (message != null &&
+                    message.Length >= Model_v1.m_mWebSocketJsonPrefix._m_sFileCmd.Length &&
+                    message.StartsWith(Model_v1.m_mWebSocketJsonPrefix._m_sFileCmd))
+                {
+
+                    ///解析返回
+                    string m_sMsg = message.Substring(Model_v1.m_mWebSocketJsonPrefix._m_sFileCmd.Length);
+                    try
+                    {
+                        JObject m_pJObject = JObject.Parse(m_sMsg);
+                        string m_sUse = m_pJObject["m_sUse"].ToString();
+
+                        switch (m_sUse)
+                        {
+                            case m_cFileCmdType._m_sFileCreate:
+                            case m_cFileCmdType._m_sFileDelete:
+                                #region ***文件命令
+                                {
+                                    string m_sUUID = m_pJObject["m_oObject"]["m_sUUID"].ToString();
+                                    int m_sStatus = Convert.ToInt32(m_pJObject["m_oObject"]["m_sStatus"]);
+                                    string m_sResultMessage = m_pJObject["m_oObject"]["m_sResultMessage"].ToString();
+                                    lock (InWebSocketMain.m_oLock)
+                                    {
+                                        var _m_lSendAsync = InWebSocketMain.m_lSendAsync.FindAll(x => x.m_sUUID == m_sUUID);
+                                        if (_m_lSendAsync != null && _m_lSendAsync.Count > 0)
+                                        {
+                                            foreach (Model_v1.m_mSendAsync _m_mSendAsync in _m_lSendAsync)
+                                            {
+                                                _m_mSendAsync.m_iStatus = m_sStatus;
+                                                _m_mSendAsync.m_oObject = m_sResultMessage;
+                                            }
+                                        }
+                                    }
+                                }
+                                #endregion
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Instance.Error($"[WebSocket_v1][InWebSocketDo][MainStep][Exception][{m_sMsg}:{ex.Message}]");
+                    }
+                    return;
+                }
+
                 Log.Instance.Success($"[WebSocket_v1][InWebSocketDo][MainStep][{message}]");
                 ArrayList arrayList = SocketParam.CutSocketData(message);
                 if(arrayList == null)

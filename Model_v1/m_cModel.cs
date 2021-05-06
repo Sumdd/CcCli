@@ -140,6 +140,7 @@ namespace Model_v1
         public const string _m_sHttpCmd = "{JSON-HTTP-CMD}";
         public const string _m_sP2PMsgCmd = "{JSON-P2PMSG-CMD}";
         public const string _m_sFSCmd = "{JSON-FS-CMD}";
+        public const string _m_sFileCmd = "{JSON-FILE-CMD}";
     }
 
     public class m_mSendAsync
@@ -279,6 +280,22 @@ namespace Model_v1
         /// </summary>
         public const string _m_sDeleteGateway = "DeleteGateway";
 
+    }
+
+    public class m_cFileCmdType
+    {
+        /// <summary>
+        /// 上传文件的相对目录
+        /// </summary>
+        public const string _m_sFilePath = "fload";
+        /// <summary>
+        /// 创建文件
+        /// </summary>
+        public const string _m_sFileCreate = "FileCreate";
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        public const string _m_sFileDelete = "FileDelete";
     }
 
     public class m_mGatewayType

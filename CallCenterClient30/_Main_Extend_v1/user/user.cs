@@ -116,6 +116,7 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "c.sipport", Text = "SIP端口", Width = 100, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.regtime", Text = "SIP注册时间", Width = 110, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.isregister", Text = "PC注册方式", Width = 100, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`no_answer_music`", Text = "超时放音", Width = 300, ImageIndex = 0 });
             this.list.EndUpdate();
             this.ucPager.pager.field = "a.agentname";
             this.ucPager.pager.type = "asc";
@@ -140,6 +141,7 @@ namespace CenoCC {
     ifnull(`T0`.`numberstate`,'【启:0】【禁:0】【共:0】') as numberstate,
     `T1`.`limitthedial` AS `limitthedial`, 
     `T1`.`f99d999` AS `f99d999`, 
+    `T1`.`no_answer_music` AS `no_answer_music`, 
     c.id as chid,
 	case when c.chtype = 16 then 'SIP通道'
 			 when c.chtype = 256 then '自动外呼通道'
@@ -184,6 +186,7 @@ LEFT JOIN
     SELECT
 	    `call_clientparam`.`limitthedial`, 
 	    `call_clientparam`.`f99d999`, 
+	    `call_clientparam`.`no_answer_music`, 
 	    `call_clientparam`.`ID` 
     FROM
 	    `call_clientparam` 
@@ -282,7 +285,7 @@ LEFT JOIN
                                 }
                                 listViewItem.SubItems.Add(m_pSubItem);
                             }
-
+                            listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "no_answer_music", Text = dr["no_answer_music"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "id", Text = dr["id"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chid", Text = dr["chid"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "teamid", Text = dr["teamid"].ToString() });
@@ -651,6 +654,7 @@ SELECT
 	CONCAT( '\'', `call_agent`.`AgentName` ) AS `真实姓名`,
 	CONCAT( '\'', `dial_limit`.`number` ) AS `号码`,
 	CONCAT( '\'', `dial_limit`.`tnumber` ) AS `真实号码`,
+	CONCAT( '\'', `dial_limit`.`isuse` ) AS `号码状态`,
 	CONCAT( '\'', `call_channel`.`ChNum` ) AS `分机号`,
 	CONCAT( '\'', `call_channel`.`SipServerIp` ) AS `分机SIP注册地址`,
 	CONCAT( '\'', `call_channel`.`ChPassword` ) AS `分机密码` 
@@ -663,6 +667,10 @@ ORDER BY
 ";
                         DataSet m_pDataSet = DataBaseUtil.MySQL_Method.ExecuteDataSet(m_sAsSQL);
                         m_cExcel.m_fExport(m_pDataSet, sfd.FileName);
+
+                        ///选中
+                        Cmn_v1.Cmn.OpenFolderAndSelect(sfd.FileName);
+
                         _export_ = false;
                     }
                     catch (Exception ex)
@@ -769,7 +777,7 @@ ORDER BY
             if (this.m_pUserBaseInfo != null && !m_pUserBaseInfo.IsDisposed && this.list?.SelectedItems?.Count == 1)
             {
                 var m_pSelectItem = this.list?.SelectedItems[0];
-                this.m_pUserBaseInfo.m_fSetSelectInfo(m_pSelectItem.SubItems["agentname"].Text, m_pSelectItem.SubItems["loginname"].Text, m_pSelectItem.SubItems["teamid"].Text, m_pSelectItem.SubItems["roleid"].Text, Convert.ToInt32(m_pSelectItem.SubItems["id"].Text));
+                this.m_pUserBaseInfo.m_fSetSelectInfo(m_pSelectItem.SubItems["agentname"].Text, m_pSelectItem.SubItems["loginname"].Text, m_pSelectItem.SubItems["teamid"].Text, m_pSelectItem.SubItems["roleid"].Text, Convert.ToInt32(m_pSelectItem.SubItems["id"].Text), m_pSelectItem.SubItems["no_answer_music"].Text);
             }
         }
 

@@ -232,12 +232,13 @@ namespace WebSocket_v1 {
         /// <param name="m_sPrefix"></param>
         /// <param name="msg"></param>
         /// <returns></returns>
-        public static m_mResponseJSON SendAsyncObject(string msg, string m_sUse, string m_sPrefix = Model_v1.m_mWebSocketJsonPrefix._m_sFSCmd)
+        public static m_mResponseJSON SendAsyncObject(string msg, string m_sUse, string m_sPrefix = Model_v1.m_mWebSocketJsonPrefix._m_sFSCmd, int m_uTimeout = 15)
         {
             m_mResponseJSON _m_mResponseJSON = new m_mResponseJSON();
             try
             {
                 m_mSendAsync _m_mSendAsync = new m_mSendAsync();
+                _m_mSendAsync.m_uTimeout = m_uTimeout;
                 lock (InWebSocketMain.m_oLock)
                 {
                     var _m_lSendAsync = InWebSocketMain.m_lSendAsync.FindAll(x => x.m_sUUID == _m_mSendAsync.m_sUUID);

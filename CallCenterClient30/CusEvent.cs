@@ -166,6 +166,10 @@ namespace CenoCC {
 
                     #region 来电、本地响铃
                     case (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING: {
+
+                            ///必须清除脱敏号码缓存
+                            MinChat.m_sSecretNumber = string.Empty;
+
                             string m_sCaller = Marshal.PtrToStringAnsi(m.WParam);
                             string m_sCallee = Marshal.PtrToStringAnsi(m.LParam);
                             if (_MainChat.InvokeRequired) {

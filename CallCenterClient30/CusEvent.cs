@@ -170,11 +170,24 @@ namespace CenoCC {
                             ///必须清除脱敏号码缓存
                             MinChat.m_sSecretNumber = string.Empty;
 
-                            string m_sCaller = Marshal.PtrToStringAnsi(m.WParam);
-                            string m_sCallee = Marshal.PtrToStringAnsi(m.LParam);
+                            string m_sCallerAndee = Marshal.PtrToStringAnsi(m.WParam);
+
+                            //拆分
+                            string[] m_lCallerAndee = m_sCallerAndee.Split('|');
+                            string m_sCaller = m_lCallerAndee[0];
+                            string m_sCallee = m_lCallerAndee[1];
+
+                            //是否自动接听Y
+                            string X_ALegAutoAccept = Marshal.PtrToStringAnsi(m.LParam);
+                            string m_sStatusText = "来电";
+                            if (X_ALegAutoAccept.Equals("Y"))
+                            {
+                                m_sStatusText = "通话中";
+                            }
+
                             if (_MainChat.InvokeRequired) {
                                 _MainChat.BeginInvoke(new MethodInvoker(() => {
-                                    _MainChat.CallStatus_Lbl.Text = "来电";
+                                    _MainChat.CallStatus_Lbl.Text = m_sStatusText;
                                     MinChat.CallTimeLength = 0;
                                     _MainChat.PhoneNum_Contact_Lbl.Text = m_sCaller;
                                     _MainChat.CallInfo_Pnl.Visible = true;
@@ -191,7 +204,7 @@ namespace CenoCC {
                                     _MainChat.ShowDialPad_TSMI.Enabled = true;
                                 }));
                             } else {
-                                _MainChat.CallStatus_Lbl.Text = "来电";
+                                _MainChat.CallStatus_Lbl.Text = m_sStatusText;
                                 MinChat.CallTimeLength = 0;
                                 _MainChat.PhoneNum_Contact_Lbl.Text = m_sCaller;
                                 _MainChat.CallInfo_Pnl.Visible = true;
@@ -218,11 +231,23 @@ namespace CenoCC {
                                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_DO_ALTER, (IntPtr)0, Cmn.Sti(m_sLParam));
                             }
 
-                            CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING;
-                            CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder(m_sCaller);
-                            SipMain.Stop();
-                            SipMain.Play("Audio\\a_ring.wav", 20);
-                            Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][来电][{m_sCaller}]");
+                            //是否自动接听的分支
+                            if (X_ALegAutoAccept.Equals("Y"))
+                            {
+                                CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_TALKING;
+                                CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder(m_sCaller);
+                                SipMain.Stop();
+                                SipParam.m_pCall.AcceptCall();
+                                Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][来电][{m_sCaller},并自动接听]");
+                            }
+                            else
+                            {
+                                CCFactory.ChInfo[CCFactory.CurrentCh].chStatus = ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING;
+                                CCFactory.ChInfo[CCFactory.CurrentCh].szCallerId = new StringBuilder(m_sCaller);
+                                SipMain.Stop();
+                                SipMain.Play("Audio\\a_ring.wav", 20);
+                                Log.Instance.Success($"[CenoCC][CusEvent][Cusdoo][来电][{m_sCaller}]");
+                            }
                         }
                         break;
                     #endregion

@@ -327,9 +327,15 @@ namespace CenoSip {
 
                             Log.Instance.Success($"[CenoSip][SipStack][m_pStack_RequestReceived][媒体协商成功]");
 
+                            Log.Instance.Debug(e.Request.ToString());
+                            //是否自动接听逻辑
+                            string m_sAutoAccept = "N";
+                            SIP_HeaderField X_ALegAutoAccept = e.Request.Header.GetFirst("X_ALegAutoAccept:");
+                            if (X_ALegAutoAccept != null) m_sAutoAccept = X_ALegAutoAccept.Value;
+
                             if(CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == -1) {
                                 CCFactory.ChInfo[CCFactory.CurrentCh].uCallType = 2;
-                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING, Marshal.StringToHGlobalAnsi(m_sCaller), Marshal.StringToHGlobalAnsi(m_sCallee));
+                                Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGING, Marshal.StringToHGlobalAnsi($"{m_sCaller}|{m_sCallee}"), Marshal.StringToHGlobalAnsi(m_sAutoAccept));
                             } else {
                                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_STATUS_RINGBACK, (IntPtr)0, (IntPtr)0);
                             }

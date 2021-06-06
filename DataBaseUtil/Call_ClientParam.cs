@@ -680,5 +680,32 @@ namespace DataBaseUtil {
             }
         }
         #endregion
+
+        #region ***是否开启一键拨号自动接听
+        public static bool? _m_bApiAutoAccept;
+        public static bool m_bApiAutoAccept
+        {
+            get
+            {
+                try
+                {
+                    if (_m_bApiAutoAccept == null)
+                    {
+                        _m_bApiAutoAccept = Call_ClientParamUtil.GetParamValueByName("_m_bApiAutoAccept".Replace("_m_b", "").Replace("m_b", "")) == "1";
+                    }
+                    return _m_bApiAutoAccept.Value;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                Call_ClientParamUtil.SetParamValueByName("_m_bApiAutoAccept".Replace("_m_b", "").Replace("m_b", ""), value ? "1" : "0");
+                _m_bApiAutoAccept = value;
+            }
+        }
+        #endregion
     }
 }

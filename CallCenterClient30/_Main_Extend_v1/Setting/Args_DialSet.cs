@@ -35,6 +35,7 @@ namespace CenoCC
             {
                 this.ckbUseApply.Text = $"{this.ckbUseApply.Text}(该项服务未启用)";
             }
+            this.cbxApiAutoAccept.Checked = Call_ClientParamUtil.m_bApiAutoAccept;
             m_bFirst = false;
         }
 
@@ -171,6 +172,20 @@ namespace CenoCC
             catch (Exception ex)
             {
                 Log.Instance.Error($"[CenoCC][Args_DialSet][ckbUseApply_CheckedChanged][Exception][{ex.Message}]");
+            }
+        }
+
+        private void cbxApiAutoAccept_CheckedChanged(object sender, EventArgs e)
+        {
+            if (m_bFirst) return;
+            try
+            {
+                Call_ClientParamUtil.m_bApiAutoAccept = this.cbxApiAutoAccept.Checked;
+                Log.Instance.Success($"[CenoCC][Args_DialSet][cbxApiAutoAccept_CheckedChanged][{(Call_ClientParamUtil.m_bApiAutoAccept ? "启用" : "禁用")}一键拨号自动接听]");
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Error($"[CenoCC][Args_DialSet][cbxApiAutoAccept_CheckedChanged][Exception][{ex.Message}]");
             }
         }
     }

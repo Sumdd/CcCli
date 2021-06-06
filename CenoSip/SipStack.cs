@@ -22,6 +22,7 @@ using System.IO;
 using Core_v1;
 using Model_v1;
 using Cmn_v1;
+using DataBaseUtil;
 
 namespace CenoSip {
     /// <summary>
@@ -330,8 +331,11 @@ namespace CenoSip {
                             Log.Instance.Debug(e.Request.ToString());
                             //是否自动接听逻辑
                             string m_sAutoAccept = "N";
-                            SIP_HeaderField X_ALegAutoAccept = e.Request.Header.GetFirst("X_ALegAutoAccept:");
-                            if (X_ALegAutoAccept != null) m_sAutoAccept = X_ALegAutoAccept.Value;
+                            if (Call_ClientParamUtil.m_bApiAutoAccept)
+                            {
+                                SIP_HeaderField X_ALegAutoAccept = e.Request.Header.GetFirst("X_ALegAutoAccept:");
+                                if (X_ALegAutoAccept != null) m_sAutoAccept = X_ALegAutoAccept.Value;
+                            }
 
                             if(CCFactory.ChInfo[CCFactory.CurrentCh].uCallType == -1) {
                                 CCFactory.ChInfo[CCFactory.CurrentCh].uCallType = 2;

@@ -36,6 +36,7 @@
             this.ckbAutoAddDialNumFlag = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.cbxApiAutoAccept = new System.Windows.Forms.CheckBox();
             this.layout.SuspendLayout();
             this.gb.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nupWait)).BeginInit();
@@ -52,6 +53,7 @@
             // 
             // gb
             // 
+            this.gb.Controls.Add(this.cbxApiAutoAccept);
             this.gb.Controls.Add(this.ckbUseApply);
             this.gb.Controls.Add(this.ckbQNRegexNumber);
             this.gb.Controls.Add(this.cbxIsUseCopyNumber);
@@ -64,7 +66,7 @@
             this.gb.Controls.Add(this.label1);
             this.gb.Location = new System.Drawing.Point(10, 10);
             this.gb.Name = "gb";
-            this.gb.Size = new System.Drawing.Size(400, 252);
+            this.gb.Size = new System.Drawing.Size(400, 262);
             this.gb.TabIndex = 2;
             this.gb.TabStop = false;
             this.gb.Text = "拨号设置";
@@ -183,6 +185,17 @@
             this.label1.Size = new System.Drawing.Size(0, 12);
             this.label1.TabIndex = 1;
             // 
+            // cbxApiAutoAccept
+            // 
+            this.cbxApiAutoAccept.AutoSize = true;
+            this.cbxApiAutoAccept.Location = new System.Drawing.Point(74, 227);
+            this.cbxApiAutoAccept.Name = "cbxApiAutoAccept";
+            this.cbxApiAutoAccept.Size = new System.Drawing.Size(120, 16);
+            this.cbxApiAutoAccept.TabIndex = 15;
+            this.cbxApiAutoAccept.Text = "一键拨号自动接听";
+            this.cbxApiAutoAccept.UseVisualStyleBackColor = true;
+            this.cbxApiAutoAccept.CheckedChanged += new System.EventHandler(this.cbxApiAutoAccept_CheckedChanged);
+            // 
             // Args_DialSet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -214,5 +227,6 @@
         private System.Windows.Forms.CheckBox cbxIsUseCopyNumber;
         private System.Windows.Forms.CheckBox ckbQNRegexNumber;
         private System.Windows.Forms.CheckBox ckbUseApply;
+        private System.Windows.Forms.CheckBox cbxApiAutoAccept;
     }
 }

@@ -328,7 +328,6 @@ namespace CenoSip {
 
                             Log.Instance.Success($"[CenoSip][SipStack][m_pStack_RequestReceived][媒体协商成功]");
 
-                            Log.Instance.Debug(e.Request.ToString());
                             //是否自动接听逻辑
                             string m_sAutoAccept = "N";
                             if (Call_ClientParamUtil.m_bApiAutoAccept)

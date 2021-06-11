@@ -392,6 +392,12 @@ namespace CenoCC {
             }
             #endregion
 
+            ///线程每次获取的任务数
+            int m_uThreadCount = 512;
+
+            ///记录索引位置
+            int m_uIndex = 0;
+
             #region ***多线程处理
             for (int i = 0; i < m_uThread; i++)
             {
@@ -406,11 +412,18 @@ namespace CenoCC {
                                 //页退出
                                 if (m_breakThread) break;
 
-                                ListViewItem listViewItem = null;
+                                //任务缓存
+                                List<ListViewItem> m_lListViewItem = new List<ListViewItem>();
+
                                 lock (this.m_oLock)
                                 {
-                                    foreach (ListViewItem m_plistViewItem in this.list.Items)
+                                    for (int k = m_uIndex; k < this.list.Items.Count; k++)
                                     {
+                                        //索引增加
+                                        m_uIndex++;
+
+                                        ListViewItem m_plistViewItem = this.list.Items[k];
+
                                         if (m_plistViewItem.SubItems["status"].Text == "0")
                                         {
                                             this.Invoke(new MethodInvoker(() =>
@@ -419,8 +432,11 @@ namespace CenoCC {
                                                 m_plistViewItem.SubItems["msgTips"].Text = "下载中...";
                                             }));
 
-                                            listViewItem = m_plistViewItem;
-                                            break;
+                                            //放入集合
+                                            m_lListViewItem.Add(m_plistViewItem);
+
+                                            //判断是否达到缓存上限
+                                            if (m_lListViewItem.Count >= m_uThreadCount) break;
                                         }
 
                                         if (m_plistViewItem.SubItems["status"].Text == "2")
@@ -438,88 +454,93 @@ namespace CenoCC {
                                     }
                                 }
 
-                                //无任务,退出下载
-                                if (listViewItem == null) break;
-
-                                #region ***Http的下载逻辑,直接对100进行处理,其余的不再做处理
-                                string _recordFile = listViewItem.SubItems["fileName"].Text;
-                                try
+                                //跳出循环
+                                if (m_lListViewItem.Count <= 0) break;
+                                for (int j = 0; j < m_lListViewItem.Count(); j++)
                                 {
-                                    this.BeginInvoke(new MethodInvoker(() =>
-                                    {
-                                        listViewItem.SubItems["msgTips"].Text = "下载中";
-                                    }));
+                                    ///处理行,看下速度快不快
+                                    ListViewItem listViewItem = m_lListViewItem[j];
 
-                                    Log.Instance.Success($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},开始下载...]");
-                                    string m_sInsertFolder = "";
-                                    string m_sInsertFile = "";
-                                    #region ***增加要求,分文件夹、填充文件名等要求
+                                    #region ***Http的下载逻辑,直接对100进行处理,其余的不再做处理
+                                    string _recordFile = listViewItem.SubItems["fileName"].Text;
+                                    try
                                     {
-                                        string m_sType = listViewItem.SubItems["m_sType"]?.Text;
-                                        switch (m_sType)
+                                        this.BeginInvoke(new MethodInvoker(() =>
                                         {
-                                            case ">":
-                                                m_sInsertFolder = listViewItem.SubItems["m_sPrefix"]?.Text;
-                                                break;
-                                            case "<":
-                                                m_sInsertFile = listViewItem.SubItems["m_sPrefix"]?.Text?.Replace("\\", "_")?.Replace("/", "_");
-                                                if (!string.IsNullOrWhiteSpace(m_sInsertFile)) m_sInsertFile = $"{m_sInsertFile}_";
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                    }
-                                    #endregion
-                                    string _recordPath = Cmn.PathFmt($"{_saveRecordPath}{m_sInsertFolder}/{m_sInsertFile}{Path.GetFileName(_recordFile)}");
-                                    H_IO.CreateDir(_recordPath);
-                                    string _storePath = Call_ParamUtil.ReplacePath(_recordFile);
-                                    string m_sHttp = m_sDialTaskRecDownLoadHTTP;
-                                    #region ***替换IP地址
-                                    {
-                                        string m_sIP = listViewItem.SubItems["m_sIP"]?.Text;
-                                        if (!string.IsNullOrWhiteSpace(m_sIP))
+                                            listViewItem.SubItems["msgTips"].Text = "下载中";
+                                        }));
+
+                                        Log.Instance.Success($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},开始下载...]");
+                                        string m_sInsertFolder = "";
+                                        string m_sInsertFile = "";
+                                        #region ***增加要求,分文件夹、填充文件名等要求
                                         {
-                                            string[] m_lHttp = m_sDialTaskRecDownLoadHTTP.Split(':');
-                                            if (m_lHttp.Length >= 2)
+                                            string m_sType = listViewItem.SubItems["m_sType"]?.Text;
+                                            switch (m_sType)
                                             {
-                                                m_sHttp = $"{m_sDialTaskRecDownLoadHTTP.Replace(m_lHttp[1], $"//{m_sIP}")}";
+                                                case ">":
+                                                    m_sInsertFolder = listViewItem.SubItems["m_sPrefix"]?.Text;
+                                                    break;
+                                                case "<":
+                                                    m_sInsertFile = listViewItem.SubItems["m_sPrefix"]?.Text?.Replace("\\", "_")?.Replace("/", "_");
+                                                    if (!string.IsNullOrWhiteSpace(m_sInsertFile)) m_sInsertFile = $"{m_sInsertFile}_";
+                                                    break;
+                                                default:
+                                                    break;
                                             }
                                         }
-                                        else
+                                        #endregion
+                                        string _recordPath = Cmn.PathFmt($"{_saveRecordPath}{m_sInsertFolder}/{m_sInsertFile}{Path.GetFileName(_recordFile)}");
+                                        H_IO.CreateDir(_recordPath);
+                                        string _storePath = Call_ParamUtil.ReplacePath(_recordFile);
+                                        string m_sHttp = m_sDialTaskRecDownLoadHTTP;
+                                        #region ***替换IP地址
                                         {
-                                            var m_sFreeSWITCHIPv4 = listViewItem.SubItems["m_sFreeSWITCHIPv4"]?.Text;
-                                            var m_uAgentID = listViewItem.SubItems["m_uAgentID"]?.Text;
-                                            if (m_uAgentID == "-1" && !string.IsNullOrWhiteSpace(m_sFreeSWITCHIPv4))
+                                            string m_sIP = listViewItem.SubItems["m_sIP"]?.Text;
+                                            if (!string.IsNullOrWhiteSpace(m_sIP))
                                             {
                                                 string[] m_lHttp = m_sDialTaskRecDownLoadHTTP.Split(':');
                                                 if (m_lHttp.Length >= 2)
                                                 {
-                                                    m_sHttp = $"{m_sDialTaskRecDownLoadHTTP.Replace(m_lHttp[1], $"//{m_sFreeSWITCHIPv4}")}";
+                                                    m_sHttp = $"{m_sDialTaskRecDownLoadHTTP.Replace(m_lHttp[1], $"//{m_sIP}")}";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                var m_sFreeSWITCHIPv4 = listViewItem.SubItems["m_sFreeSWITCHIPv4"]?.Text;
+                                                var m_uAgentID = listViewItem.SubItems["m_uAgentID"]?.Text;
+                                                if (m_uAgentID == "-1" && !string.IsNullOrWhiteSpace(m_sFreeSWITCHIPv4))
+                                                {
+                                                    string[] m_lHttp = m_sDialTaskRecDownLoadHTTP.Split(':');
+                                                    if (m_lHttp.Length >= 2)
+                                                    {
+                                                        m_sHttp = $"{m_sDialTaskRecDownLoadHTTP.Replace(m_lHttp[1], $"//{m_sFreeSWITCHIPv4}")}";
+                                                    }
                                                 }
                                             }
                                         }
+                                        #endregion
+                                        string m_sSureHttpPath = $"{m_sHttp}/{Cmn.PathFmt(_storePath, "/").TrimStart('/')}";
+                                        string _m_sOut = string.Empty;
+                                        this.m_fLoad(listViewItem, m_sSwitch, m_sSureHttpPath, _recordPath, out _m_sOut);
+                                        Log.Instance.Success($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},下载成功]");
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        this.BeginInvoke(new MethodInvoker(() =>
+                                        {
+                                            listViewItem.ImageIndex = 3;
+                                            listViewItem.SubItems["msgTips"].Text = $"下载失败({ex.Message},{ex.StackTrace})";
+                                            listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
+                                            listViewItem.SubItems["progress"].Text = "0.00%";
+                                            listViewItem.SubItems["progress"].ForeColor = Color.Red;
+                                            listViewItem.SubItems["status"].Text = "3";
+                                        }));
+
+                                        Log.Instance.Fail($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},下载失败,{ex.Message}]");
                                     }
                                     #endregion
-                                    string m_sSureHttpPath = $"{m_sHttp}/{Cmn.PathFmt(_storePath, "/").TrimStart('/')}";
-                                    string _m_sOut = string.Empty;
-                                    this.m_fLoad(listViewItem, m_sSwitch, m_sSureHttpPath, _recordPath, out _m_sOut);
-                                    Log.Instance.Success($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},下载成功]");
                                 }
-                                catch (Exception ex)
-                                {
-                                    this.BeginInvoke(new MethodInvoker(() =>
-                                    {
-                                        listViewItem.ImageIndex = 3;
-                                        listViewItem.SubItems["msgTips"].Text = $"下载失败({ex.Message},{ex.StackTrace})";
-                                        listViewItem.SubItems["msgTips"].ForeColor = Color.Red;
-                                        listViewItem.SubItems["progress"].Text = "0.00%";
-                                        listViewItem.SubItems["progress"].ForeColor = Color.Red;
-                                        listViewItem.SubItems["status"].Text = "3";
-                                    }));
-
-                                    Log.Instance.Fail($"[CenoCC][DownLoad][m_fHttpThreadLoad][Thread][while][{listViewItem.SubItems["index"].Text},{listViewItem.SubItems["ID"].Text},{_recordFile},下载失败,{ex.Message}]");
-                                }
-                                #endregion
                             }
                             catch (Exception ex)
                             {

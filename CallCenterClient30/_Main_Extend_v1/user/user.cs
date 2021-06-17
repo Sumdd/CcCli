@@ -223,7 +223,7 @@ LEFT JOIN
 (
     SELECT
 	    `sip_log`.`sip_auth_user`,
-	    group_concat( DISTINCT `sip_log`.`sip_auth_realm` ) AS `IPs` 
+	    group_concat( DISTINCT `sip_log`.`network_ip` ) AS `IPs` 
     FROM
 	    `sip_log` 
     WHERE

@@ -38,6 +38,8 @@
             this.btnCloseAfterSearch = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
+            this.IPsKey = new CenoCC._queryLeft();
+            this.IPsValue = new System.Windows.Forms.ComboBox();
             this.layout.SuspendLayout();
             this.searchpanel.SuspendLayout();
             this.SuspendLayout();
@@ -60,6 +62,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.searchpanel.AutoScroll = true;
+            this.searchpanel.Controls.Add(this.IPsKey);
+            this.searchpanel.Controls.Add(this.IPsValue);
             this.searchpanel.Controls.Add(this.agentNameValue);
             this.searchpanel.Controls.Add(this.agentNameKey);
             this.searchpanel.Controls.Add(this.chTypeKey);
@@ -187,6 +191,23 @@
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
+            // IPsKey
+            // 
+            this.IPsKey.BackColor = System.Drawing.Color.Transparent;
+            this.IPsKey.Location = new System.Drawing.Point(10, 140);
+            this.IPsKey.Name = "IPsKey";
+            this.IPsKey.Size = new System.Drawing.Size(176, 20);
+            this.IPsKey.TabIndex = 10;
+            // 
+            // IPsValue
+            // 
+            this.IPsValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.IPsValue.FormattingEnabled = true;
+            this.IPsValue.Location = new System.Drawing.Point(192, 140);
+            this.IPsValue.Name = "IPsValue";
+            this.IPsValue.Size = new System.Drawing.Size(180, 20);
+            this.IPsValue.TabIndex = 11;
+            // 
             // userSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -219,5 +240,7 @@
         private _queryLeft agentNameKey;
         private _queryLeft chTypeKey;
         private System.Windows.Forms.ComboBox chTypeValue;
+        private _queryLeft IPsKey;
+        private System.Windows.Forms.ComboBox IPsValue;
     }
 }

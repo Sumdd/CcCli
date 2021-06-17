@@ -53,6 +53,7 @@ namespace CenoCC
             this.chNumKey.thisDefult("分机号", this.chNumKey.Name, "Like", true, ">", ">=", "<", "<=");
             this.agentNameKey.thisDefult("姓名", this.agentNameKey.Name, "Like", true, ">", ">=", "<", "<=");
             this.loginNameKey.thisDefult("登陆名", this.loginNameKey.Name, "Like", true, ">", ">=", "<", "<=");
+            this.IPsKey.thisDefult("IP变化单位", this.IPsKey.Name, "=", false);
         }
         /// <summary>
         /// 加载查询参数默认值
@@ -117,6 +118,39 @@ namespace CenoCC
                 if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("chType"))
                     this.chTypeValue.SelectedValue = this.senderEntity.args["chType"];
             }
+
+            //IP变化单位
+            {
+                var dt = new DataTable();
+                dt.Columns.Add(new DataColumn("id", typeof(string)));
+                dt.Columns.Add(new DataColumn("name", typeof(string)));
+                var dr0 = dt.NewRow();
+                dr0["id"] = -1;
+                dr0["name"] = "不查询IP变化";
+                dt.Rows.Add(dr0);
+                var dr1 = dt.NewRow();
+                dr1["id"] = 1;
+                dr1["name"] = "1小时内";
+                dt.Rows.Add(dr1);
+                var dr2 = dt.NewRow();
+                dr2["id"] = 2;
+                dr2["name"] = "2小时内";
+                dt.Rows.Add(dr2);
+                var dr24 = dt.NewRow();
+                dr24["id"] = 24;
+                dr24["name"] = "1天内";
+                dt.Rows.Add(dr24);
+                this.IPsValue.BeginUpdate();
+                this.IPsValue.DataSource = dt;
+                this.IPsValue.DisplayMember = "name";
+                this.IPsValue.ValueMember = "id";
+                this.IPsValue.EndUpdate();
+
+                //IP变化单位
+                if (this.senderEntity.args != null && this.senderEntity.args.ContainsKey("IPs"))
+                    this.IPsValue.SelectedValue = this.senderEntity.args["IPs"];
+            }
+
             this.chNumValue.Text = string.Empty;
             this.agentNameValue.Text = string.Empty;
             this.loginNameValue.Text = string.Empty;
@@ -194,6 +228,12 @@ namespace CenoCC
             if (!string.IsNullOrWhiteSpace(loginName))
             {
                 this.senderEntity.args.Add("loginName", loginName);
+            }
+            //IP变化单位
+            var IPs = Convert.ToInt32(this.IPsValue.SelectedValue);
+            if (IPs != -1)
+            {
+                this.senderEntity.args.Add("IPs", IPs);
             }
         }
 

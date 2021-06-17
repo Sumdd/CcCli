@@ -92,6 +92,7 @@ namespace CenoCC {
         }
         private void defaultArgs(object sender, EventArgs e) {
             this.args = new Dictionary<string, object>();
+            args.Add("IPs", -1);
         }
 
         /// <summary>
@@ -108,6 +109,7 @@ namespace CenoCC {
             this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`limitthedial`", Text = "同号码限呼", Width = 105, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "`T1`.`f99d999`", Text = "首发模式", Width = 90, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.chtype", Text = "通道类型", Width = 100, ImageIndex = 0 });
+            this.list.Columns.Add(new ColumnHeader() { Name = "`T2`.`IPs`", Text = "IP变化", Width = 188, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.domainname", Text = "分机SIP注册域", Width = 120, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.sipserverip", Text = "分机SIP注册地址", Width = 145, ImageIndex = 0 });
             this.list.Columns.Add(new ColumnHeader() { Name = "c.showname", Text = "分机显示名", Width = 100, ImageIndex = 0 });
@@ -129,6 +131,31 @@ namespace CenoCC {
         private void GetListBody(object sender, EventArgs e) {
             new System.Threading.Thread(new System.Threading.ThreadStart(() => {
                 try {
+
+                    //判断IP变化单位
+                    int m_uIPs = -1;
+                    string m_sIPs = " 1 = 2 ";
+                    if (this.args != null && this.args.ContainsKey("IPs"))
+                    {
+                        int.TryParse(this.args["IPs"].ToString(), out m_uIPs);
+                    }
+                    switch (m_uIPs)
+                    {
+                        case 1:
+                            m_sIPs = " addtime >= DATE_SUB( NOW( ), INTERVAL 1 HOUR ) ";
+                            break;
+                        case 2:
+                            m_sIPs = " addtime >= DATE_SUB( NOW( ), INTERVAL 2 HOUR ) ";
+                            break;
+                        case 24:
+                            m_sIPs = " addtime >= DATE_SUB( NOW( ), INTERVAL 24 HOUR ) ";
+                            break;
+                        case -1:
+                        default:
+                            m_sIPs = " 1 = 2 ";
+                            break;
+                    }
+
                     this.qop = new QueryPager();
                     this.qop.FieldsSqlPart = @"select 
 	a.id,
@@ -147,6 +174,7 @@ namespace CenoCC {
 			 when c.chtype = 256 then '自动外呼通道'
 			 when c.chtype is null then '未设置'
 			 else '未知通道' end as chtypename,
+    `T2`.`IPs`,
     c.domainname,    
     c.sipserverip,
     c.showname,
@@ -155,7 +183,7 @@ namespace CenoCC {
     c.sipport,
     c.regtime,
 	c.isregister ";
-                    this.qop.FromSqlPart = @"from call_agent a
+                    this.qop.FromSqlPart = $@"from call_agent a
 left join call_role b
 on b.id = a.roleid
 left join call_channel c
@@ -191,6 +219,18 @@ LEFT JOIN
     FROM
 	    `call_clientparam` 
 ) `T1` ON `T1`.`ID` = `a`.`ClientParamID`
+LEFT JOIN 
+(
+    SELECT
+	    `sip_log`.`sip_auth_user`,
+	    group_concat( DISTINCT `sip_log`.`sip_auth_realm` ) AS `IPs` 
+    FROM
+	    `sip_log` 
+    WHERE
+	    {m_sIPs}
+    GROUP BY
+	    `sip_log`.`sip_auth_user`
+) `T2` ON `T2`.`sip_auth_user` = `c`.`chnum`
 ";
                     this.qop.pager = this.ucPager.pager;
                     //this.qop.PrimaryKey = "rownum";
@@ -256,6 +296,36 @@ LEFT JOIN
                             }
 
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "chtypename", Text = dr["chtypename"].ToString() });
+
+                            //IP变化（每时）
+                            {
+                                var m_pSubItem = new ListViewItem.ListViewSubItem();
+                                m_pSubItem.Name = "IPs";
+                                string IPs = dr["IPs"].ToString();
+
+                                if (string.IsNullOrWhiteSpace(IPs))
+                                {
+                                    if (m_uIPs == -1)
+                                        m_pSubItem.Text = "-";
+                                    else
+                                        m_pSubItem.Text = "已下线";
+
+                                    m_pSubItem.ForeColor = Color.DarkGray;
+                                }
+                                else if (IPs.Contains(","))
+                                {
+                                    m_pSubItem.Text = $"{IPs}";
+                                    m_pSubItem.ForeColor = Color.Red;
+                                }
+                                else
+                                {
+                                    m_pSubItem.Text = IPs;
+                                    m_pSubItem.ForeColor = Color.Green;
+                                }
+
+                                listViewItem.SubItems.Add(m_pSubItem);
+                            }
+
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "domainname", Text = dr["domainname"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "sipserverip", Text = dr["sipserverip"].ToString() });
                             listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem() { Name = "showname", Text = dr["showname"].ToString() });

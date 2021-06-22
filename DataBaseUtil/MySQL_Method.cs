@@ -47,9 +47,11 @@ namespace DataBaseUtil {
         /// <param name="cmdText">cmdText</param>
         /// <param name="cmdParms">the number of affected rows</param>
         /// <returns></returns>
-        public static int ExecuteNonQuery(string cmdText, bool m_bThrow = false) {
+        public static int ExecuteNonQuery(string cmdText, bool m_bThrow = false, int? CommandTimeout = null) {
             MySqlCommand cmd = new MySqlCommand();
             try {
+                if (CommandTimeout != null)
+                    cmd.CommandTimeout = CommandTimeout.Value;
                 PrepareSqlTextCommand(ref cmd, cmdText, null);
                 int val = cmd.ExecuteNonQuery();
                 return val;

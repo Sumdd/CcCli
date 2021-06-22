@@ -126,7 +126,7 @@ FROM
 	`call_wblist`;
 {(string.Join("\r\n", m_lSQL))}
 ";
-                        int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true);
+                        int m_uCount = DataBaseUtil.MySQL_Method.ExecuteNonQuery(m_sSQL, true, 0);
                         MessageBox.Show(this, $"黑白名单添加成功");
                         this.Close();
                         if (this.SearchEvent != null)

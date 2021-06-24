@@ -225,7 +225,7 @@ namespace CenoCC {
 
                             m_cPhone.m_fSetShow(m_sCaller, out m_sPhoneAddress, m_sCallee);
 
-                            if (Call_ClientParamUtil.m_bIsSysMsgCall)
+                            if (Call_ClientParamUtil.m_bIsSysMsgCall && !X_ALegAutoAccept.Equals("Y"))
                             {
                                 string m_sLParam = $"{m_sCaller},{m_sPhoneAddress},{m_sCallee}";
                                 Win32API.SendMessage(CCFactory.MainHandle, CCFactory.WM_USER + (int)ChannelInfo.APP_USER_STATUS.US_DO_ALTER, (IntPtr)0, Cmn.Sti(m_sLParam));

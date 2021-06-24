@@ -254,12 +254,14 @@ namespace CenoCC {
                    when -2 then concat(b.loginname,'(',b.agentname,')')
                    when 1 then '共享号码'
                    when 2 then '申请式'
+                   when 3 then '新呼出式续联'
                    else        '未知'
     end as loginname,
     case a.isshare when 0 then b.agentname
                    when -2 then '呼叫转移'
                    when 1 then '共享号码'
                    when 2 then '申请式'
+                   when 3 then '新呼出式续联'
                    else        '未知'
     end as realname,
     `dial_inlimit_2`.`inlimit_2number`, 
